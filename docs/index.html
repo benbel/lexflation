@@ -9,50 +9,24 @@
     <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <h1>📖 Évolution des codes législatifs français</h1>
-            <p class="subtitle">
-                Visualisation interactive des modifications apportées aux codes législatifs français au fil du temps.
-                <br>
-                Données issues de <a href="https://git.tricoteuses.fr/codes" target="_blank">git.tricoteuses.fr/codes</a>
-            </p>
-        </div>
-    </header>
-
     <main class="container">
         <div id="loading" class="loading">
             <div class="spinner"></div>
             <p>Chargement des données...</p>
         </div>
 
-        <div id="stats" class="stats" style="display: none;">
-            <div class="stat-card">
-                <span class="stat-value" id="total-codes">-</span>
-                <span class="stat-label">Codes législatifs</span>
-            </div>
-            <div class="stat-card">
-                <span class="stat-value" id="total-commits">-</span>
-                <span class="stat-label">Modifications</span>
-            </div>
-            <div class="stat-card">
-                <span class="stat-value" id="date-range">-</span>
-                <span class="stat-label">Période</span>
-            </div>
-        </div>
-
         <div class="controls" style="display: none;" id="controls">
-            <button id="toggle-mode" class="toggle-button" onclick="toggleMode()" title="Afficher le solde (net)">
-                📊 Mode Net
+            <button id="toggle-scale" class="toggle-button" onclick="toggleScale()" title="Forcer une échelle commune pour tous les graphiques">
+                Échelle par code
             </button>
             <div class="legend">
                 <span class="legend-item">
                     <span class="legend-color" style="background: #2ea043;"></span>
-                    <span id="legend-add">Additions</span>
+                    <span>Additions</span>
                 </span>
                 <span class="legend-item">
                     <span class="legend-color" style="background: #cf222e;"></span>
-                    <span id="legend-del">Délétions</span>
+                    <span>Délétions</span>
                 </span>
             </div>
         </div>
@@ -64,17 +38,7 @@
         </div>
     </main>
 
-    <footer>
-        <div class="container">
-            <p>
-                Données : <a href="https://git.tricoteuses.fr/codes" target="_blank">Tricoteuses</a>
-                | Code source : <a href="https://github.com/benbel/legiquanti" target="_blank">GitHub</a>
-                | Mis à jour : <span id="last-update">-</span>
-            </p>
-        </div>
-    </footer>
-
-    <div id="tooltip" class="tooltip" style="display: none;"></div>
+    <div id="tooltip" class="tooltip"></div>
 
     <script src="js/visualization.js"></script>
 </body>
