@@ -4,6 +4,9 @@ data/raw/
 # Données temporaires
 data/temp/
 
+# Données générées (seront régénérées par GitHub Actions)
+docs/data/codes_data.json
+
 # Python
 __pycache__/
 *.py[cod]
