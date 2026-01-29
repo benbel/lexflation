@@ -31,17 +31,23 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Générer les données
+      - name: Collecter les données
         run: |
-          echo "🔄 Génération des données des codes législatifs..."
+          echo "🔄 Collecte des données des codes législatifs..."
           python3 scripts/fetch_codes_data.py
-          echo "✅ Données générées avec succès"
+          echo "✅ Données collectées"
+
+      - name: Générer le graphique
+        run: |
+          echo "📊 Génération de l'histogramme SVG..."
+          python3 scripts/generate_chart.py
+          echo "✅ Graphique généré"
 
       - name: Vérifier les fichiers générés
         run: |
-          ls -lh docs/data/
-          echo "Taille du fichier JSON:"
+          ls -lh docs/
           du -h docs/data/codes_data.json
+          du -h docs/index.html
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
