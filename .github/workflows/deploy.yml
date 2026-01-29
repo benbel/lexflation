@@ -45,9 +45,15 @@ jobs:
 
       - name: Vérifier les fichiers générés
         run: |
+          echo "📁 Contenu du dossier docs/"
           ls -lh docs/
+          echo ""
+          echo "📊 Tailles des fichiers générés:"
           du -h docs/data/codes_data.json
+          du -h docs/chart.svg
           du -h docs/index.html
+          echo ""
+          echo "✅ Tous les fichiers ont été générés"
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
