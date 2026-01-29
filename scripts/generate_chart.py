@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Génère un histogramme SVG statique à partir des données des codes législatifs.
-Agrège les additions/délétions par mois.
-Produit: chart.svg (autonome) et index.html (page wrapper)
+Génère un histogramme en Block Elements (caractères Unicode) à partir des données des codes législatifs.
+Agrège les additions/délétions par année.
+Produit: index.html (page autonome, pas de SVG)
 """
 
 import json
@@ -18,74 +18,56 @@ def load_data(data_file: Path) -> dict:
         return json.load(f)
 
 
-def aggregate_by_month(data: dict) -> list:
+def aggregate_by_year(data: dict) -> list:
     """
-    Agrège tous les commits de tous les codes par mois.
+    Agrège tous les commits de tous les codes par année.
     Retourne une liste de dicts avec les totaux et les détails par code.
     """
-    monthly = defaultdict(lambda: {
+    yearly = defaultdict(lambda: {
         'add': 0,
         'del': 0,
-        'codes': defaultdict(lambda: {'add': 0, 'del': 0, 'commits': []})
+        'codes': defaultdict(lambda: {'add': 0, 'del': 0, 'commits': 0})
     })
 
     for code in data['codes']:
         code_name = code['name']
-        code_slug = code['slug']
 
         for commit in code['commits']:
             ts = commit['ts']
             dt = datetime.fromtimestamp(ts / 1000)
-            month_key = f"{dt.year}-{dt.month:02d}"
+            year = dt.year
 
-            monthly[month_key]['add'] += commit['add']
-            monthly[month_key]['del'] += commit['del']
-            monthly[month_key]['codes'][code_name]['add'] += commit['add']
-            monthly[month_key]['codes'][code_name]['del'] += commit['del']
-            monthly[month_key]['codes'][code_name]['commits'].append({
-                'url': commit['url'],
-                'msg': commit['msg'],
-                'add': commit['add'],
-                'del': commit['del']
-            })
-            monthly[month_key]['codes'][code_name]['slug'] = code_slug
+            yearly[year]['add'] += commit['add']
+            yearly[year]['del'] += commit['del']
+            yearly[year]['codes'][code_name]['add'] += commit['add']
+            yearly[year]['codes'][code_name]['del'] += commit['del']
+            yearly[year]['codes'][code_name]['commits'] += 1
 
     # Convertir en liste triée
     result = []
-    for month_key in sorted(monthly.keys()):
-        year, month = map(int, month_key.split('-'))
-
+    for year in sorted(yearly.keys()):
         # Trier les codes par nombre de modifications (desc)
         codes_list = []
-        for code_name, code_data in monthly[month_key]['codes'].items():
+        for code_name, code_data in yearly[year]['codes'].items():
             codes_list.append({
                 'name': code_name,
-                'slug': code_data['slug'],
                 'add': code_data['add'],
                 'del': code_data['del'],
                 'commits': code_data['commits']
             })
         codes_list.sort(key=lambda c: c['add'] + c['del'], reverse=True)
 
+        total_commits = sum(c['commits'] for c in codes_list)
+
         result.append({
-            'month_key': month_key,
             'year': year,
-            'month': month,
-            'add': monthly[month_key]['add'],
-            'del': monthly[month_key]['del'],
+            'add': yearly[year]['add'],
+            'del': yearly[year]['del'],
+            'commits': total_commits,
             'codes': codes_list
         })
 
     return result
-
-
-def format_month_name(month: int, year: int) -> str:
-    """Formate le nom du mois en français"""
-    months_fr = [
-        '', 'janvier', 'février', 'mars', 'avril', 'mai', 'juin',
-        'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'
-    ]
-    return f"{months_fr[month]} {year}"
 
 
 def format_number(n: int) -> str:
@@ -93,277 +75,210 @@ def format_number(n: int) -> str:
     return f"{n:,}".replace(',', ' ')
 
 
-def get_svg_styles() -> str:
-    """Retourne le CSS pour le SVG"""
-    return '''
-    <style>
-        .baseline { stroke: #d0d7de; stroke-width: 1; }
-        .grid-line { stroke: #d0d7de; stroke-width: 0.5; stroke-dasharray: 4 4; opacity: 0.5; }
-        .y-label { font: 10px -apple-system, sans-serif; fill: #57606a; text-anchor: end; }
-        .x-label { font: 10px -apple-system, sans-serif; fill: #57606a; text-anchor: end; }
-        .axis-title { font: 12px -apple-system, sans-serif; fill: #57606a; text-anchor: middle; }
-        .bar-add { fill: #2ea043; fill-opacity: 0.7; }
-        .bar-del { fill: #cf222e; fill-opacity: 0.7; }
-        .hit-area { fill: transparent; cursor: pointer; }
-        .bar-group:hover .bar-add { fill-opacity: 1; }
-        .bar-group:hover .bar-del { fill-opacity: 1; }
+def generate_bar(value: int, max_value: int, height: int = 10, up: bool = True) -> list:
+    """
+    Génère les lignes d'une barre verticale en block elements.
+    Retourne une liste de caractères (un par ligne).
+    """
+    if max_value == 0:
+        return [' '] * height
 
-        .tooltip-container { pointer-events: none; overflow: visible; }
-        .tooltip-content {
-            display: none;
-            position: absolute;
-            left: 100%;
-            top: 50px;
-            margin-left: 10px;
-            background: rgba(255, 255, 255, 0.98);
-            border: 1px solid #d0d7de;
-            border-radius: 6px;
-            padding: 12px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-            width: 280px;
-            font: 12px -apple-system, sans-serif;
-            pointer-events: auto;
-        }
-        .bar-group:hover .tooltip-content { display: block; }
-        .tooltip-title { font-weight: 600; font-size: 14px; margin-bottom: 8px; text-transform: capitalize; }
-        .tooltip-stats { display: flex; gap: 16px; margin-bottom: 6px; font-family: monospace; font-size: 13px; }
-        .stat-add { color: #2ea043; font-weight: 600; }
-        .stat-del { color: #cf222e; font-weight: 600; }
-        .tooltip-net { font-family: monospace; font-size: 12px; color: #57606a; padding-bottom: 8px; border-bottom: 1px solid #d0d7de; margin-bottom: 8px; }
-        .net-positive { color: #2ea043; }
-        .net-negative { color: #cf222e; }
-        .tooltip-commits { display: flex; flex-direction: column; gap: 4px; }
-        .tooltip-commit { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 11px; }
-        .tooltip-commit a { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #0969da; text-decoration: none; }
-        .tooltip-commit a:hover { text-decoration: underline; }
-        .commit-stats { font-family: monospace; color: #57606a; font-size: 10px; white-space: nowrap; }
-        .tooltip-more { font-size: 11px; color: #57606a; font-style: italic; margin-top: 4px; }
-    </style>
-    '''
+    # Calculer combien de "blocs" on remplit
+    ratio = value / max_value
+    filled = ratio * height
 
+    full_blocks = int(filled)
+    remainder = filled - full_blocks
 
-def generate_svg(monthly_data: list, width: int = 1200, height: int = 400) -> str:
-    """Génère le fichier SVG autonome"""
+    # Caractères de bloc fractionnaires (du plus petit au plus grand)
+    # Pour le haut (additions): on remplit de bas en haut
+    # Pour le bas (deletions): on remplit de haut en bas
+    blocks_top = [' ', '▁', '▂', '▃', '▄', '▅', '▆', '▇', '█']
+    blocks_bot = [' ', '▔', '▔', '▀', '▀', '▀', '▀', '▀', '█']
 
-    margin = {'top': 20, 'right': 30, 'bottom': 60, 'left': 80}
-    inner_width = width - margin['left'] - margin['right']
-    inner_height = height - margin['top'] - margin['bottom']
+    lines = []
+    for i in range(height):
+        if up:
+            # De haut en bas, les indices vont de height-1 à 0
+            # La barre se remplit de bas en haut
+            pos = height - 1 - i
+            if pos < full_blocks:
+                lines.append('█')
+            elif pos == full_blocks and remainder > 0:
+                idx = int(remainder * 8)
+                lines.append(blocks_top[idx])
+            else:
+                lines.append(' ')
+        else:
+            # De haut en bas, la barre se remplit de haut en bas
+            pos = i
+            if pos < full_blocks:
+                lines.append('█')
+            elif pos == full_blocks and remainder > 0:
+                idx = int(remainder * 8)
+                lines.append(blocks_bot[idx])
+            else:
+                lines.append(' ')
 
-    if not monthly_data:
-        return '<svg xmlns="http://www.w3.org/1999/xhtml"><text>Aucune donnée</text></svg>'
-
-    # Calculer les échelles
-    max_value = max(
-        max(d['add'] for d in monthly_data),
-        max(d['del'] for d in monthly_data)
-    )
-
-    n_bars = len(monthly_data)
-    bar_width = inner_width / n_bars * 0.9
-    bar_gap = inner_width / n_bars * 0.1
-
-    def x_pos(i):
-        return margin['left'] + i * (bar_width + bar_gap)
-
-    def y_pos(value):
-        mid = margin['top'] + inner_height / 2
-        scale = (inner_height / 2) / max_value if max_value > 0 else 1
-        return mid - value * scale
-
-    # Construire le SVG
-    svg_parts = []
-    svg_parts.append(f'<?xml version="1.0" encoding="UTF-8"?>')
-    svg_parts.append(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}">')
-
-    # CSS intégré
-    svg_parts.append(get_svg_styles())
-
-    # Ligne de base (y = 0)
-    baseline_y = y_pos(0)
-    svg_parts.append(f'<line class="baseline" x1="{margin["left"]}" x2="{width - margin["right"]}" y1="{baseline_y}" y2="{baseline_y}"/>')
-
-    # Axe Y - graduations
-    for i in range(5):
-        value = int(max_value * (i + 1) / 5)
-        y_up = y_pos(value)
-        y_down = y_pos(-value)
-
-        svg_parts.append(f'<line class="grid-line" x1="{margin["left"]}" x2="{width - margin["right"]}" y1="{y_up}" y2="{y_up}"/>')
-        svg_parts.append(f'<line class="grid-line" x1="{margin["left"]}" x2="{width - margin["right"]}" y1="{y_down}" y2="{y_down}"/>')
-
-        label = format_number(value)
-        svg_parts.append(f'<text class="y-label" x="{margin["left"] - 10}" y="{y_up + 4}">{label}</text>')
-        svg_parts.append(f'<text class="y-label" x="{margin["left"] - 10}" y="{y_down + 4}">{label}</text>')
-
-    # Label axe Y
-    svg_parts.append(f'<text class="axis-title" transform="rotate(-90)" x="{-height/2}" y="20">Lignes modifiées</text>')
-
-    # Barres et tooltips
-    for i, month in enumerate(monthly_data):
-        x = x_pos(i)
-
-        add_height = (month['add'] / max_value) * (inner_height / 2) if max_value > 0 else 0
-        del_height = (month['del'] / max_value) * (inner_height / 2) if max_value > 0 else 0
-
-        svg_parts.append(f'<g class="bar-group">')
-
-        # Zone interactive
-        svg_parts.append(f'<rect class="hit-area" x="{x}" y="{margin["top"]}" width="{bar_width}" height="{inner_height}"/>')
-
-        # Barres
-        if month['add'] > 0:
-            svg_parts.append(f'<rect class="bar bar-add" x="{x}" y="{baseline_y - add_height}" width="{bar_width}" height="{add_height}"/>')
-        if month['del'] > 0:
-            svg_parts.append(f'<rect class="bar bar-del" x="{x}" y="{baseline_y}" width="{bar_width}" height="{del_height}"/>')
-
-        # Tooltip
-        month_name = format_month_name(month['month'], month['year'])
-        net = month['add'] - month['del']
-        net_class = 'net-positive' if net >= 0 else 'net-negative'
-        net_str = f"+{format_number(net)}" if net >= 0 else format_number(net)
-
-        tooltip_html = f'''<div class="tooltip-content" xmlns="http://www.w3.org/1999/xhtml">
-            <div class="tooltip-title">{escape(month_name)}</div>
-            <div class="tooltip-stats">
-                <span class="stat-add">+{format_number(month['add'])}</span>
-                <span class="stat-del">-{format_number(month['del'])}</span>
-            </div>
-            <div class="tooltip-net {net_class}">Net: {net_str}</div>'''
-
-        # Liens vers les commits
-        all_commits = []
-        for code in month['codes']:
-            for commit in code['commits']:
-                all_commits.append({
-                    'code_name': code['name'],
-                    'url': commit['url'],
-                    'add': commit['add'],
-                    'del': commit['del']
-                })
-        all_commits.sort(key=lambda c: c['add'] + c['del'], reverse=True)
-
-        if all_commits:
-            tooltip_html += '<div class="tooltip-commits">'
-            for commit in all_commits[:8]:
-                tooltip_html += f'''<div class="tooltip-commit">
-                    <a href="{commit['url']}" target="_blank">{escape(commit['code_name'])}</a>
-                    <span class="commit-stats">+{commit['add']}/-{commit['del']}</span>
-                </div>'''
-            if len(all_commits) > 8:
-                tooltip_html += f'<div class="tooltip-more">+{len(all_commits) - 8} autres commits</div>'
-            tooltip_html += '</div>'
-
-        tooltip_html += '</div>'
-
-        svg_parts.append(f'<foreignObject class="tooltip-container" x="{x}" y="0" width="320" height="{height}">{tooltip_html}</foreignObject>')
-        svg_parts.append('</g>')
-
-    # Axe X
-    tick_interval = max(1, len(monthly_data) // 15)
-    for i, month in enumerate(monthly_data):
-        if i % tick_interval == 0:
-            x = x_pos(i) + bar_width / 2
-            label = f"{month['month']:02d}/{month['year']}"
-            svg_parts.append(f'<text class="x-label" x="{x}" y="{height - margin["bottom"] + 20}" transform="rotate(-45 {x} {height - margin["bottom"] + 20})">{label}</text>')
-
-    svg_parts.append('</svg>')
-
-    return '\n'.join(svg_parts)
+    return lines
 
 
-def generate_html(metadata: dict, total_add: int, total_del: int) -> str:
-    """Génère le fichier HTML qui charge le SVG"""
+def generate_html(yearly_data: list, metadata: dict) -> str:
+    """Génère le fichier HTML avec le graphe en block elements"""
 
-    return f'''<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Évolution des codes législatifs français</title>
-    <meta name="description" content="Histogramme mensuel de l'évolution des codes législatifs français">
-    <style>
-* {{ margin: 0; padding: 0; box-sizing: border-box; }}
-body {{ font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; font-size: 14px; line-height: 1.5; color: #24292f; background: #fff; }}
-.container {{ max-width: 1400px; margin: 0 auto; padding: 20px; }}
-.header {{ display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; background: #f6f8fa; border: 1px solid #d0d7de; border-radius: 8px; margin-bottom: 20px; flex-wrap: wrap; gap: 16px; }}
-.page-title {{ font-size: 18px; font-weight: 600; }}
-.legend {{ display: flex; gap: 20px; }}
-.legend-item {{ display: flex; align-items: center; gap: 6px; font-size: 13px; color: #57606a; }}
-.legend-color {{ width: 16px; height: 16px; border-radius: 3px; border: 1px solid #d0d7de; }}
-.legend-color.add {{ background: #2ea043; }}
-.legend-color.del {{ background: #cf222e; }}
-.chart-container {{ background: #fff; border: 1px solid #d0d7de; border-radius: 8px; padding: 20px; }}
-.chart-container object {{ width: 100%; height: auto; display: block; }}
-.footer {{ margin-top: 20px; padding: 12px 16px; background: #f6f8fa; border: 1px solid #d0d7de; border-radius: 8px; font-size: 12px; color: #57606a; }}
-.footer-stats {{ display: flex; gap: 20px; flex-wrap: wrap; }}
-.footer a {{ color: #0969da; text-decoration: none; }}
-.footer a:hover {{ text-decoration: underline; }}
-@media (max-width: 768px) {{ .container {{ padding: 10px; }} .header {{ flex-direction: column; align-items: flex-start; }} .page-title {{ font-size: 16px; }} }}
-    </style>
-</head>
-<body>
-    <main class="container">
-        <header class="header">
-            <h1 class="page-title">Évolution mensuelle des codes législatifs français</h1>
-            <div class="legend">
-                <span class="legend-item"><span class="legend-color add"></span><span>Additions</span></span>
-                <span class="legend-item"><span class="legend-color del"></span><span>Délétions</span></span>
-            </div>
-        </header>
-        <div class="chart-container">
-            <object data="chart.svg" type="image/svg+xml">Graphique non disponible</object>
-        </div>
-        <footer class="footer">
-            <div class="footer-stats">
-                <span>Total: +{format_number(total_add)} / -{format_number(total_del)} lignes</span>
-                <span>{metadata['total_codes']} codes</span>
-                <span>{metadata['total_commits']} commits</span>
-                <span>Données: <a href="https://git.tricoteuses.fr/codes" target="_blank">git.tricoteuses.fr</a></span>
-            </div>
-        </footer>
-    </main>
-</body>
-</html>'''
+    if not yearly_data:
+        return '<html><body>Aucune donnée</body></html>'
+
+    # Calculer les max pour l'échelle
+    max_add = max(d['add'] for d in yearly_data)
+    max_del = max(d['del'] for d in yearly_data)
+    max_value = max(max_add, max_del)
+
+    bar_height = 12  # Nombre de lignes par demi-graphe
+
+    # Totaux
+    total_add = sum(d['add'] for d in yearly_data)
+    total_del = sum(d['del'] for d in yearly_data)
+
+    # Générer le CSS
+    css = '''
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: monospace; font-size: 14px; line-height: 1; color: #222; background: #fff; padding: 20px; }
+.chart { display: inline-block; }
+.row { display: flex; height: 1.2em; }
+.cell { width: 2ch; text-align: center; }
+.bar-col { position: relative; }
+.bar-col:hover { background: #f0f0f0; }
+.year-label { font-size: 11px; writing-mode: vertical-rl; text-orientation: mixed; transform: rotate(180deg); height: 4em; }
+.axis { border-top: 1px solid #222; }
+.info-zone { height: 3em; margin-top: 1em; font-size: 13px; }
+.info { display: none; }
+.bar-col:hover .info { display: block; position: fixed; bottom: 20px; left: 20px; right: 20px; }
+.y-axis { text-align: right; padding-right: 1ch; font-size: 11px; color: #666; width: 10ch; }
+.title { margin-bottom: 1em; }
+.footer { margin-top: 2em; font-size: 12px; color: #666; }
+'''
+
+    # Construire les lignes du graphe
+    # Structure: pour chaque année, on a une colonne avec les additions en haut et les délétions en bas
+
+    # Générer les barres pour chaque année
+    bars_add = []
+    bars_del = []
+    for year_data in yearly_data:
+        bars_add.append(generate_bar(year_data['add'], max_value, bar_height, up=True))
+        bars_del.append(generate_bar(year_data['del'], max_value, bar_height, up=False))
+
+    # Labels Y-axis (on met quelques graduations)
+    y_labels_add = [''] * bar_height
+    y_labels_del = [''] * bar_height
+    for i in [0, bar_height // 2, bar_height - 1]:
+        val = int(max_value * (bar_height - i) / bar_height)
+        y_labels_add[i] = format_number(val)
+    for i in [0, bar_height // 2, bar_height - 1]:
+        val = int(max_value * (i + 1) / bar_height)
+        y_labels_del[i] = format_number(val)
+
+    # Générer le HTML du graphe
+    html_parts = []
+    html_parts.append('<!DOCTYPE html>')
+    html_parts.append('<html lang="fr">')
+    html_parts.append('<head>')
+    html_parts.append('<meta charset="UTF-8">')
+    html_parts.append('<meta name="viewport" content="width=device-width, initial-scale=1.0">')
+    html_parts.append('<title>Lexflation</title>')
+    html_parts.append(f'<style>{css}</style>')
+    html_parts.append('</head>')
+    html_parts.append('<body>')
+    html_parts.append('<div class="title">Évolution des codes législatifs français (lignes modifiées par an)</div>')
+    html_parts.append('<div class="chart">')
+
+    # Partie additions (haut)
+    for row_idx in range(bar_height):
+        html_parts.append('<div class="row">')
+        html_parts.append(f'<div class="y-axis">{y_labels_add[row_idx]}</div>')
+        for col_idx, year_data in enumerate(yearly_data):
+            char = bars_add[col_idx][row_idx]
+            info_html = ''
+            if row_idx == 0:
+                # Info popup pour cette année
+                net = year_data['add'] - year_data['del']
+                net_str = f"+{format_number(net)}" if net >= 0 else format_number(net)
+                top_codes = year_data['codes'][:5]
+                codes_str = ', '.join([f"{c['name']}" for c in top_codes])
+                info_html = f'''<div class="info">{year_data['year']}: +{format_number(year_data['add'])} / -{format_number(year_data['del'])} (net: {net_str}) | {year_data['commits']} commits | Top: {escape(codes_str)}</div>'''
+            html_parts.append(f'<div class="cell bar-col">{char}{info_html}</div>')
+        html_parts.append('</div>')
+
+    # Ligne de base (axe X = 0)
+    html_parts.append('<div class="row axis">')
+    html_parts.append('<div class="y-axis">0</div>')
+    for year_data in yearly_data:
+        html_parts.append('<div class="cell bar-col"> </div>')
+    html_parts.append('</div>')
+
+    # Partie délétions (bas)
+    for row_idx in range(bar_height):
+        html_parts.append('<div class="row">')
+        html_parts.append(f'<div class="y-axis">{y_labels_del[row_idx]}</div>')
+        for col_idx, year_data in enumerate(yearly_data):
+            char = bars_del[col_idx][row_idx]
+            html_parts.append(f'<div class="cell bar-col">{char}</div>')
+        html_parts.append('</div>')
+
+    # Labels années
+    html_parts.append('<div class="row">')
+    html_parts.append('<div class="y-axis"></div>')
+    for year_data in yearly_data:
+        year_short = str(year_data['year'])[2:]  # Juste les 2 derniers chiffres
+        html_parts.append(f'<div class="cell">{year_short}</div>')
+    html_parts.append('</div>')
+
+    html_parts.append('</div>')  # fin chart
+
+    # Zone info (hint)
+    html_parts.append('<div class="info-zone">(survoler une colonne pour voir les détails)</div>')
+
+    # Footer
+    html_parts.append(f'<div class="footer">')
+    html_parts.append(f'Total: +{format_number(total_add)} / -{format_number(total_del)} lignes | ')
+    html_parts.append(f'{metadata["total_codes"]} codes | ')
+    html_parts.append(f'{metadata["total_commits"]} commits | ')
+    html_parts.append(f'<a href="https://git.tricoteuses.fr/codes">git.tricoteuses.fr</a>')
+    html_parts.append('</div>')
+
+    html_parts.append('</body>')
+    html_parts.append('</html>')
+
+    return '\n'.join(html_parts)
 
 
 def main():
     """Fonction principale"""
-    print("📊 Génération de l'histogramme SVG...")
+    print("Génération de l'histogramme en Block Elements...")
 
     script_dir = Path(__file__).parent
     data_file = script_dir.parent / 'docs' / 'data' / 'codes_data.json'
-    svg_file = script_dir.parent / 'docs' / 'chart.svg'
     html_file = script_dir.parent / 'docs' / 'index.html'
 
     # Charger les données
-    print(f"📂 Chargement de {data_file}...")
+    print(f"Chargement de {data_file}...")
     data = load_data(data_file)
-    print(f"   {data['metadata']['total_codes']} codes, {data['metadata']['total_commits']} commits")
+    print(f"  {data['metadata']['total_codes']} codes, {data['metadata']['total_commits']} commits")
 
-    # Agréger par mois
-    print("⚙️  Agrégation par mois...")
-    monthly_data = aggregate_by_month(data)
-    print(f"   {len(monthly_data)} mois de données")
-
-    # Calculer totaux
-    total_add = sum(m['add'] for m in monthly_data)
-    total_del = sum(m['del'] for m in monthly_data)
-
-    # Générer le SVG
-    print("🎨 Génération du SVG...")
-    svg = generate_svg(monthly_data)
-    with open(svg_file, 'w', encoding='utf-8') as f:
-        f.write(svg)
-    print(f"   → {svg_file.name}: {svg_file.stat().st_size / 1024:.1f} Ko")
+    # Agréger par année
+    print("Agrégation par année...")
+    yearly_data = aggregate_by_year(data)
+    print(f"  {len(yearly_data)} années de données")
 
     # Générer le HTML
-    print("📄 Génération du HTML...")
-    html = generate_html(data['metadata'], total_add, total_del)
+    print("Génération du HTML...")
+    html = generate_html(yearly_data, data['metadata'])
     with open(html_file, 'w', encoding='utf-8') as f:
         f.write(html)
-    print(f"   → {html_file.name}: {html_file.stat().st_size / 1024:.1f} Ko")
+    print(f"  -> {html_file.name}: {html_file.stat().st_size / 1024:.1f} Ko")
 
-    print("\n✨ Génération terminée!")
+    print("Terminé!")
 
 
 if __name__ == '__main__':
