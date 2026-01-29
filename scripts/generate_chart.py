@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Génère un histogramme en Block Elements (caractères Unicode) à partir des données des codes législatifs.
-Agrège les additions/délétions par année.
+Agrège les additions/délétions par année, affiche le delta net.
 Produit: index.html (page autonome, pas de SVG)
 """
 
@@ -58,11 +58,13 @@ def aggregate_by_year(data: dict) -> list:
         codes_list.sort(key=lambda c: c['add'] + c['del'], reverse=True)
 
         total_commits = sum(c['commits'] for c in codes_list)
+        net = yearly[year]['add'] - yearly[year]['del']
 
         result.append({
             'year': year,
             'add': yearly[year]['add'],
             'del': yearly[year]['del'],
+            'net': net,
             'commits': total_commits,
             'codes': codes_list
         })
@@ -75,111 +77,51 @@ def format_number(n: int) -> str:
     return f"{n:,}".replace(',', ' ')
 
 
-def generate_bar(value: int, max_value: int, height: int = 10, up: bool = True) -> list:
-    """
-    Génère les lignes d'une barre verticale en block elements.
-    Retourne une liste de caractères (un par ligne).
-    """
-    if max_value == 0:
-        return [' '] * height
-
-    # Calculer combien de "blocs" on remplit
-    ratio = value / max_value
-    filled = ratio * height
-
-    full_blocks = int(filled)
-    remainder = filled - full_blocks
-
-    # Caractères de bloc fractionnaires (du plus petit au plus grand)
-    # Pour le haut (additions): on remplit de bas en haut
-    # Pour le bas (deletions): on remplit de haut en bas
-    blocks_top = [' ', '▁', '▂', '▃', '▄', '▅', '▆', '▇', '█']
-    blocks_bot = [' ', '▔', '▔', '▀', '▀', '▀', '▀', '▀', '█']
-
-    lines = []
-    for i in range(height):
-        if up:
-            # De haut en bas, les indices vont de height-1 à 0
-            # La barre se remplit de bas en haut
-            pos = height - 1 - i
-            if pos < full_blocks:
-                lines.append('█')
-            elif pos == full_blocks and remainder > 0:
-                idx = int(remainder * 8)
-                lines.append(blocks_top[idx])
-            else:
-                lines.append(' ')
-        else:
-            # De haut en bas, la barre se remplit de haut en bas
-            pos = i
-            if pos < full_blocks:
-                lines.append('█')
-            elif pos == full_blocks and remainder > 0:
-                idx = int(remainder * 8)
-                lines.append(blocks_bot[idx])
-            else:
-                lines.append(' ')
-
-    return lines
-
-
 def generate_html(yearly_data: list, metadata: dict) -> str:
     """Génère le fichier HTML avec le graphe en block elements"""
 
     if not yearly_data:
         return '<html><body>Aucune donnée</body></html>'
 
-    # Calculer les max pour l'échelle
-    max_add = max(d['add'] for d in yearly_data)
-    max_del = max(d['del'] for d in yearly_data)
-    max_value = max(max_add, max_del)
+    # Calculer les max pour l'échelle (basé sur le delta net)
+    max_positive = max((d['net'] for d in yearly_data if d['net'] > 0), default=0)
+    max_negative = min((d['net'] for d in yearly_data if d['net'] < 0), default=0)
+    max_abs = max(abs(max_positive), abs(max_negative))
 
-    bar_height = 12  # Nombre de lignes par demi-graphe
+    bar_height = 10  # Nombre de lignes par demi-graphe
 
     # Totaux
     total_add = sum(d['add'] for d in yearly_data)
     total_del = sum(d['del'] for d in yearly_data)
+    total_net = total_add - total_del
 
     # Générer le CSS
     css = '''
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: monospace; font-size: 14px; line-height: 1; color: #222; background: #fff; padding: 20px; }
-.chart { display: inline-block; }
-.row { display: flex; height: 1.2em; }
-.cell { width: 2ch; text-align: center; }
-.bar-col { position: relative; }
-.bar-col:hover { background: #f0f0f0; }
-.year-label { font-size: 11px; writing-mode: vertical-rl; text-orientation: mixed; transform: rotate(180deg); height: 4em; }
-.axis { border-top: 1px solid #222; }
-.info-zone { height: 3em; margin-top: 1em; font-size: 13px; }
-.info { display: none; }
-.bar-col:hover .info { display: block; position: fixed; bottom: 20px; left: 20px; right: 20px; }
-.y-axis { text-align: right; padding-right: 1ch; font-size: 11px; color: #666; width: 10ch; }
+.chart { display: flex; align-items: stretch; }
+.y-axis { display: flex; flex-direction: column; text-align: right; padding-right: 0.5ch; font-size: 11px; color: #666; width: 12ch; }
+.y-axis > div { height: 1.2em; display: flex; align-items: center; justify-content: flex-end; }
+.columns { display: flex; }
+.col { display: flex; flex-direction: column; width: 2ch; position: relative; }
+.col:hover { background: #eee; }
+.cell { height: 1.2em; text-align: center; }
+.pos { color: #2ea043; }
+.neg { color: #cf222e; }
+.axis-line { border-bottom: 1px solid #222; }
+.year-row { display: flex; margin-left: 12ch; }
+.year-cell { width: 2ch; text-align: center; font-size: 10px; color: #666; }
+.info-area { height: 2.5em; margin-top: 1em; font-size: 13px; color: #666; }
+.info { display: none; position: absolute; left: 0; right: 0; bottom: -4em; white-space: nowrap; background: #fff; z-index: 10; }
+.col:hover .info { display: block; }
 .title { margin-bottom: 1em; }
-.footer { margin-top: 2em; font-size: 12px; color: #666; }
+.footer { margin-top: 3em; font-size: 12px; color: #666; }
+a { color: #666; }
 '''
 
-    # Construire les lignes du graphe
-    # Structure: pour chaque année, on a une colonne avec les additions en haut et les délétions en bas
-
     # Générer les barres pour chaque année
-    bars_add = []
-    bars_del = []
-    for year_data in yearly_data:
-        bars_add.append(generate_bar(year_data['add'], max_value, bar_height, up=True))
-        bars_del.append(generate_bar(year_data['del'], max_value, bar_height, up=False))
+    # Structure: colonnes verticales, chaque colonne = une année
 
-    # Labels Y-axis (on met quelques graduations)
-    y_labels_add = [''] * bar_height
-    y_labels_del = [''] * bar_height
-    for i in [0, bar_height // 2, bar_height - 1]:
-        val = int(max_value * (bar_height - i) / bar_height)
-        y_labels_add[i] = format_number(val)
-    for i in [0, bar_height // 2, bar_height - 1]:
-        val = int(max_value * (i + 1) / bar_height)
-        y_labels_del[i] = format_number(val)
-
-    # Générer le HTML du graphe
     html_parts = []
     html_parts.append('<!DOCTYPE html>')
     html_parts.append('<html lang="fr">')
@@ -190,58 +132,86 @@ body { font-family: monospace; font-size: 14px; line-height: 1; color: #222; bac
     html_parts.append(f'<style>{css}</style>')
     html_parts.append('</head>')
     html_parts.append('<body>')
-    html_parts.append('<div class="title">Évolution des codes législatifs français (lignes modifiées par an)</div>')
+    html_parts.append('<div class="title">Évolution des codes législatifs français (delta net par an)</div>')
+
+    # Chart container
     html_parts.append('<div class="chart">')
 
-    # Partie additions (haut)
-    for row_idx in range(bar_height):
-        html_parts.append('<div class="row">')
-        html_parts.append(f'<div class="y-axis">{y_labels_add[row_idx]}</div>')
-        for col_idx, year_data in enumerate(yearly_data):
-            char = bars_add[col_idx][row_idx]
-            info_html = ''
-            if row_idx == 0:
-                # Info popup pour cette année
-                net = year_data['add'] - year_data['del']
-                net_str = f"+{format_number(net)}" if net >= 0 else format_number(net)
-                top_codes = year_data['codes'][:5]
-                codes_str = ', '.join([f"{c['name']}" for c in top_codes])
-                info_html = f'''<div class="info">{year_data['year']}: +{format_number(year_data['add'])} / -{format_number(year_data['del'])} (net: {net_str}) | {year_data['commits']} commits | Top: {escape(codes_str)}</div>'''
-            html_parts.append(f'<div class="cell bar-col">{char}{info_html}</div>')
-        html_parts.append('</div>')
-
-    # Ligne de base (axe X = 0)
-    html_parts.append('<div class="row axis">')
-    html_parts.append('<div class="y-axis">0</div>')
-    for year_data in yearly_data:
-        html_parts.append('<div class="cell bar-col"> </div>')
+    # Y-axis labels
+    html_parts.append('<div class="y-axis">')
+    for i in range(bar_height):
+        val = int(max_abs * (bar_height - i) / bar_height)
+        label = f"+{format_number(val)}" if i == 0 or i == bar_height // 2 else ""
+        html_parts.append(f'<div>{label}</div>')
+    html_parts.append('<div class="axis-line">0</div>')
+    for i in range(bar_height):
+        val = int(max_abs * (i + 1) / bar_height)
+        label = f"-{format_number(val)}" if i == bar_height // 2 or i == bar_height - 1 else ""
+        html_parts.append(f'<div>{label}</div>')
     html_parts.append('</div>')
 
-    # Partie délétions (bas)
-    for row_idx in range(bar_height):
-        html_parts.append('<div class="row">')
-        html_parts.append(f'<div class="y-axis">{y_labels_del[row_idx]}</div>')
-        for col_idx, year_data in enumerate(yearly_data):
-            char = bars_del[col_idx][row_idx]
-            html_parts.append(f'<div class="cell bar-col">{char}</div>')
-        html_parts.append('</div>')
-
-    # Labels années
-    html_parts.append('<div class="row">')
-    html_parts.append('<div class="y-axis"></div>')
+    # Columns
+    html_parts.append('<div class="columns">')
     for year_data in yearly_data:
-        year_short = str(year_data['year'])[2:]  # Juste les 2 derniers chiffres
-        html_parts.append(f'<div class="cell">{year_short}</div>')
+        net = year_data['net']
+
+        # Calculate bar height
+        if max_abs == 0:
+            bar_cells_count = 0
+        else:
+            bar_cells_count = int(abs(net) / max_abs * bar_height)
+
+        # Generate column cells
+        html_parts.append('<div class="col">')
+
+        # Top half (positive values)
+        for i in range(bar_height):
+            pos = bar_height - 1 - i  # Position from bottom of top section
+            if net > 0 and pos < bar_cells_count:
+                html_parts.append('<div class="cell pos">█</div>')
+            else:
+                html_parts.append('<div class="cell"> </div>')
+
+        # Axis line
+        html_parts.append('<div class="cell axis-line"> </div>')
+
+        # Bottom half (negative values)
+        for i in range(bar_height):
+            if net < 0 and i < bar_cells_count:
+                html_parts.append('<div class="cell neg">█</div>')
+            else:
+                html_parts.append('<div class="cell"> </div>')
+
+        # Info popup
+        net_str = f"+{format_number(net)}" if net >= 0 else format_number(net)
+        color = "#2ea043" if net >= 0 else "#cf222e"
+        top_codes = year_data['codes'][:3]
+        codes_str = ', '.join([c['name'] for c in top_codes])
+        info_html = f'<div class="info" style="color:{color}">{year_data["year"]}: {net_str} lignes | {year_data["commits"]} commits | {escape(codes_str)}</div>'
+        html_parts.append(info_html)
+
+        html_parts.append('</div>')  # end col
+
+    html_parts.append('</div>')  # end columns
+    html_parts.append('</div>')  # end chart
+
+    # Year labels (every 5 years)
+    html_parts.append('<div class="year-row">')
+    for year_data in yearly_data:
+        year = year_data['year']
+        if year % 5 == 0:
+            html_parts.append(f'<div class="year-cell">{year}</div>')
+        else:
+            html_parts.append('<div class="year-cell"></div>')
     html_parts.append('</div>')
 
-    html_parts.append('</div>')  # fin chart
-
-    # Zone info (hint)
-    html_parts.append('<div class="info-zone">(survoler une colonne pour voir les détails)</div>')
+    # Info area hint
+    html_parts.append('<div class="info-area">(survoler une colonne)</div>')
 
     # Footer
+    net_str = f"+{format_number(total_net)}" if total_net >= 0 else format_number(total_net)
     html_parts.append(f'<div class="footer">')
-    html_parts.append(f'Total: +{format_number(total_add)} / -{format_number(total_del)} lignes | ')
+    html_parts.append(f'Total: {net_str} lignes | ')
     html_parts.append(f'{metadata["total_codes"]} codes | ')
     html_parts.append(f'{metadata["total_commits"]} commits | ')
     html_parts.append(f'<a href="https://git.tricoteuses.fr/codes">git.tricoteuses.fr</a>')
