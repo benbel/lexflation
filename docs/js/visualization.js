@@ -1,12 +1,11 @@
 // État global de l'application
 let globalData = null;
-let scaleMode = 'per-code'; // 'per-code' ou 'common'
 let tooltipPinned = false;
 
-// Dimensions des graphiques
-const CHART_WIDTH = 800;
-const CHART_HEIGHT = 120;
-const MARGIN = { top: 5, right: 5, bottom: 5, left: 5 };
+// Dimensions du graphique
+const CHART_WIDTH = 1200;
+const CHART_HEIGHT = 400;
+const MARGIN = { top: 20, right: 30, bottom: 50, left: 70 };
 
 /**
  * Charge les données depuis le fichier JSON
@@ -26,10 +25,36 @@ async function loadData() {
 }
 
 /**
- * Calcule le score de modifications total pour un code (somme des valeurs absolues)
+ * Agrège les données de tous les codes par mois
+ * @param {Array} codes - Liste des codes avec leurs commits
+ * @returns {Array} Données agrégées par mois [{date, add, del, month}]
  */
-function calculateModificationScore(code) {
-    return code.commits.reduce((sum, commit) => sum + commit.add + commit.del, 0);
+function aggregateByMonth(codes) {
+    const monthlyData = {};
+
+    codes.forEach(code => {
+        code.commits.forEach(commit => {
+            const date = new Date(commit.ts);
+            // Créer une clé pour le mois (YYYY-MM)
+            const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+
+            if (!monthlyData[monthKey]) {
+                // Premier jour du mois pour la date
+                monthlyData[monthKey] = {
+                    date: new Date(date.getFullYear(), date.getMonth(), 1).getTime(),
+                    add: 0,
+                    del: 0,
+                    monthKey: monthKey
+                };
+            }
+
+            monthlyData[monthKey].add += commit.add;
+            monthlyData[monthKey].del += commit.del;
+        });
+    });
+
+    // Convertir en tableau et trier par date
+    return Object.values(monthlyData).sort((a, b) => a.date - b.date);
 }
 
 /**
@@ -46,14 +71,14 @@ async function init() {
         // Afficher les contrôles
         document.getElementById('controls').style.display = 'flex';
 
-        // Afficher les graphiques
-        document.getElementById('charts-container').style.display = 'flex';
-        renderAllCharts(globalData);
+        // Afficher le graphique
+        document.getElementById('chart-container').style.display = 'block';
+        renderChart(globalData);
 
         // Ajouter listener pour fermer le tooltip en cliquant ailleurs
         document.addEventListener('click', function(event) {
             const tooltip = document.getElementById('tooltip');
-            if (tooltipPinned && !tooltip.contains(event.target) && !event.target.closest('.point')) {
+            if (tooltipPinned && !tooltip.contains(event.target) && !event.target.closest('.bar')) {
                 hideTooltip();
             }
         });
@@ -66,230 +91,201 @@ async function init() {
 }
 
 /**
- * Crée les échelles communes pour tous les graphiques
+ * Rend l'histogramme mensuel
  */
-function createCommonScales(metadata) {
-    const xScale = d3.scaleTime()
-        .domain([metadata.earliest_commit, metadata.latest_commit])
-        .range([MARGIN.left, CHART_WIDTH - MARGIN.right]);
+function renderChart(data) {
+    const container = document.getElementById('chart-container');
+    container.innerHTML = '';
 
-    const maxValue = Math.max(metadata.max_additions, metadata.max_deletions);
-    const yScale = d3.scaleLinear()
-        .domain([-maxValue, maxValue])
-        .range([CHART_HEIGHT - MARGIN.bottom, MARGIN.top]);
+    // Agréger les données par mois
+    const monthlyData = aggregateByMonth(data.codes);
 
-    return { xScale, yScale };
-}
+    if (monthlyData.length === 0) {
+        container.innerHTML = '<p>Aucune donnée disponible</p>';
+        return;
+    }
 
-/**
- * Crée les échelles spécifiques pour un code
- */
-function createCodeScales(code, metadata) {
-    const xScale = d3.scaleTime()
-        .domain([metadata.earliest_commit, metadata.latest_commit])
-        .range([MARGIN.left, CHART_WIDTH - MARGIN.right]);
+    const innerWidth = CHART_WIDTH - MARGIN.left - MARGIN.right;
+    const innerHeight = CHART_HEIGHT - MARGIN.top - MARGIN.bottom;
 
-    const maxAdd = Math.max(...code.commits.map(c => c.add));
-    const maxDel = Math.max(...code.commits.map(c => c.del));
-    const maxValue = Math.max(maxAdd, maxDel, 1);
-
-    const yScale = d3.scaleLinear()
-        .domain([-maxValue, maxValue])
-        .range([CHART_HEIGHT - MARGIN.bottom, MARGIN.top]);
-
-    return { xScale, yScale };
-}
-
-/**
- * Rend tous les graphiques
- */
-function renderAllCharts(data) {
-    const container = document.getElementById('charts-container');
-    container.innerHTML = ''; // Vider le conteneur
-
-    // Trier les codes par score de modifications (décroissant)
-    const sortedCodes = [...data.codes]
-        .filter(code => code.commits.length > 0)
-        .sort((a, b) => calculateModificationScore(b) - calculateModificationScore(a));
-
-    const commonScales = createCommonScales(data.metadata);
-
-    sortedCodes.forEach(code => {
-        const scales = scaleMode === 'common'
-            ? commonScales
-            : createCodeScales(code, data.metadata);
-
-        const chartCard = createChartCard(code, scales.xScale, scales.yScale);
-        container.appendChild(chartCard);
-    });
-}
-
-/**
- * Crée une carte de graphique pour un code
- */
-function createChartCard(code, xScale, yScale) {
-    const card = document.createElement('div');
-    card.className = 'chart-card';
-
-    const header = document.createElement('div');
-    header.className = 'chart-header';
-
-    const title = document.createElement('div');
-    title.className = 'chart-title';
-    title.textContent = code.name;
-    title.title = code.name;
-
-    header.appendChild(title);
-    card.appendChild(header);
-
-    const svg = createChart(code, xScale, yScale);
-    card.appendChild(svg);
-
-    return card;
-}
-
-/**
- * Crée le graphique SVG pour un code
- */
-function createChart(code, xScale, yScale) {
+    // Créer le SVG
     const svg = d3.create('svg')
         .attr('class', 'chart-svg')
         .attr('viewBox', `0 0 ${CHART_WIDTH} ${CHART_HEIGHT}`)
         .attr('preserveAspectRatio', 'xMidYMid meet');
 
-    renderBrutMode(svg, code.commits, code, xScale, yScale);
+    const g = svg.append('g')
+        .attr('transform', `translate(${MARGIN.left},${MARGIN.top})`);
 
-    return svg.node();
-}
+    // Échelle X (temps)
+    const xScale = d3.scaleBand()
+        .domain(monthlyData.map(d => d.date))
+        .range([0, innerWidth])
+        .padding(0.1);
 
-/**
- * Rend le graphique en mode brut (additions + deletions séparées)
- */
-function renderBrutMode(svg, commits, code, xScale, yScale) {
-    // Préparer les données pour les areas
-    const additionsData = commits.map(c => ({
-        date: c.ts,
-        value: c.add
-    }));
+    // Échelle Y (symétrique pour add/del)
+    const maxValue = Math.max(
+        d3.max(monthlyData, d => d.add),
+        d3.max(monthlyData, d => d.del)
+    );
 
-    const deletionsData = commits.map(c => ({
-        date: c.ts,
-        value: -c.del
-    }));
+    const yScale = d3.scaleLinear()
+        .domain([-maxValue, maxValue])
+        .range([innerHeight, 0])
+        .nice();
 
-    // Area pour les additions (vert)
-    const areaAdd = d3.area()
-        .x(d => xScale(d.date))
-        .y0(yScale(0))
-        .y1(d => yScale(d.value))
-        .curve(d3.curveStepAfter);
+    // Axe X
+    const xAxis = d3.axisBottom(xScale)
+        .tickValues(xScale.domain().filter((d, i) => {
+            // Afficher un tick tous les 12 mois environ
+            const totalTicks = Math.min(20, monthlyData.length);
+            const step = Math.ceil(monthlyData.length / totalTicks);
+            return i % step === 0;
+        }))
+        .tickFormat(d => {
+            const date = new Date(d);
+            return date.toLocaleDateString('fr-FR', { year: 'numeric', month: 'short' });
+        });
 
-    svg.append('path')
-        .datum(additionsData)
-        .attr('fill', '#2ea043')
-        .attr('fill-opacity', 0.3)
-        .attr('stroke', '#2ea043')
-        .attr('stroke-width', 1)
-        .attr('d', areaAdd);
+    g.append('g')
+        .attr('class', 'x-axis')
+        .attr('transform', `translate(0,${innerHeight / 2})`)
+        .call(xAxis)
+        .selectAll('text')
+        .attr('transform', 'rotate(-45)')
+        .style('text-anchor', 'end')
+        .attr('dx', '-0.5em')
+        .attr('dy', '0.5em');
 
-    // Area pour les deletions (rouge)
-    const areaDel = d3.area()
-        .x(d => xScale(d.date))
-        .y0(yScale(0))
-        .y1(d => yScale(d.value))
-        .curve(d3.curveStepAfter);
+    // Axe Y
+    const yAxis = d3.axisLeft(yScale)
+        .tickFormat(d => d3.format('.2s')(Math.abs(d)));
 
-    svg.append('path')
-        .datum(deletionsData)
-        .attr('fill', '#cf222e')
-        .attr('fill-opacity', 0.3)
-        .attr('stroke', '#cf222e')
-        .attr('stroke-width', 1)
-        .attr('d', areaDel);
+    g.append('g')
+        .attr('class', 'y-axis')
+        .call(yAxis);
 
-    // Points interactifs
-    addInteractivePoints(svg, commits, code, xScale, yScale);
-}
+    // Ligne de base (y = 0)
+    g.append('line')
+        .attr('class', 'baseline')
+        .attr('x1', 0)
+        .attr('x2', innerWidth)
+        .attr('y1', yScale(0))
+        .attr('y2', yScale(0))
+        .attr('stroke', '#d0d7de')
+        .attr('stroke-width', 1);
 
-/**
- * Ajoute les points interactifs pour le tooltip
- */
-function addInteractivePoints(svg, commits, code, xScale, yScale) {
-    const points = svg.selectAll('.point')
-        .data(commits)
+    // Barres des additions (vers le haut)
+    g.selectAll('.bar-add')
+        .data(monthlyData)
         .enter()
-        .append('circle')
-        .attr('class', 'point')
-        .attr('cx', d => xScale(d.ts))
-        .attr('cy', d => yScale(d.add > d.del ? d.add : -d.del))
-        .attr('r', 4)
-        .attr('fill', 'transparent')
-        .attr('stroke', 'transparent')
+        .append('rect')
+        .attr('class', 'bar bar-add')
+        .attr('x', d => xScale(d.date))
+        .attr('y', d => yScale(d.add))
+        .attr('width', xScale.bandwidth())
+        .attr('height', d => yScale(0) - yScale(d.add))
+        .attr('fill', '#2ea043')
+        .attr('fill-opacity', 0.7)
         .style('cursor', 'pointer')
         .on('mouseenter', function(event, d) {
             if (!tooltipPinned) {
-                d3.select(this)
-                    .attr('fill', '#0969da')
-                    .attr('r', 5);
-                showTooltip(event, d, code);
+                d3.select(this).attr('fill-opacity', 1);
+                showTooltip(event, d);
             }
         })
         .on('mouseleave', function() {
             if (!tooltipPinned) {
-                d3.select(this)
-                    .attr('fill', 'transparent')
-                    .attr('r', 4);
+                d3.select(this).attr('fill-opacity', 0.7);
                 hideTooltip();
             }
         })
         .on('click', function(event, d) {
             event.stopPropagation();
-
-            // Réinitialiser tous les points
-            svg.selectAll('.point')
-                .attr('fill', 'transparent')
-                .attr('r', 4);
-
-            // Activer ce point
-            d3.select(this)
-                .attr('fill', '#0969da')
-                .attr('r', 5);
-
+            resetBarOpacity();
+            d3.select(this).attr('fill-opacity', 1);
             tooltipPinned = true;
-            showTooltip(event, d, code);
+            showTooltip(event, d);
         });
+
+    // Barres des délétions (vers le bas)
+    g.selectAll('.bar-del')
+        .data(monthlyData)
+        .enter()
+        .append('rect')
+        .attr('class', 'bar bar-del')
+        .attr('x', d => xScale(d.date))
+        .attr('y', yScale(0))
+        .attr('width', xScale.bandwidth())
+        .attr('height', d => yScale(-d.del) - yScale(0))
+        .attr('fill', '#cf222e')
+        .attr('fill-opacity', 0.7)
+        .style('cursor', 'pointer')
+        .on('mouseenter', function(event, d) {
+            if (!tooltipPinned) {
+                d3.select(this).attr('fill-opacity', 1);
+                showTooltip(event, d);
+            }
+        })
+        .on('mouseleave', function() {
+            if (!tooltipPinned) {
+                d3.select(this).attr('fill-opacity', 0.7);
+                hideTooltip();
+            }
+        })
+        .on('click', function(event, d) {
+            event.stopPropagation();
+            resetBarOpacity();
+            d3.select(this).attr('fill-opacity', 1);
+            tooltipPinned = true;
+            showTooltip(event, d);
+        });
+
+    // Label axe Y
+    svg.append('text')
+        .attr('class', 'axis-label')
+        .attr('transform', 'rotate(-90)')
+        .attr('x', -CHART_HEIGHT / 2)
+        .attr('y', 15)
+        .attr('text-anchor', 'middle')
+        .attr('fill', '#57606a')
+        .attr('font-size', '12px')
+        .text('Lignes modifiées');
+
+    container.appendChild(svg.node());
+}
+
+/**
+ * Réinitialise l'opacité de toutes les barres
+ */
+function resetBarOpacity() {
+    d3.selectAll('.bar').attr('fill-opacity', 0.7);
 }
 
 /**
  * Affiche le tooltip
  */
-function showTooltip(event, commit, code) {
+function showTooltip(event, monthData) {
     const tooltip = document.getElementById('tooltip');
 
-    const date = new Date(commit.ts);
+    const date = new Date(monthData.date);
     const dateStr = date.toLocaleDateString('fr-FR', {
         year: 'numeric',
-        month: 'long',
-        day: 'numeric'
+        month: 'long'
     });
 
-    const statsHTML = `
-        <div class="tooltip-stats">
-            <span class="tooltip-add">+${commit.add}</span>
-            <span class="tooltip-del">-${commit.del}</span>
-        </div>
-    `;
-
-    // Construire l'URL Légifrance à partir du slug
-    const legifranceUrl = `https://www.legifrance.gouv.fr/codes/texte_lc/${code.slug.toUpperCase()}`;
+    const net = monthData.add - monthData.del;
+    const netStr = net >= 0 ? `+${net.toLocaleString('fr-FR')}` : net.toLocaleString('fr-FR');
+    const netClass = net >= 0 ? 'tooltip-add' : 'tooltip-del';
 
     tooltip.innerHTML = `
-        <div class="tooltip-title">${commit.msg}</div>
-        <div class="tooltip-date">${dateStr}</div>
-        ${statsHTML}
-        <div class="tooltip-links">
-            <a href="${commit.url}" target="_blank">Voir sur git.tricoteuses.fr</a>
-            <a href="${legifranceUrl}" target="_blank">Voir sur Légifrance</a>
+        <div class="tooltip-title">${dateStr}</div>
+        <div class="tooltip-stats">
+            <span class="tooltip-add">+${monthData.add.toLocaleString('fr-FR')}</span>
+            <span class="tooltip-del">-${monthData.del.toLocaleString('fr-FR')}</span>
+        </div>
+        <div class="tooltip-net">
+            Net: <span class="${netClass}">${netStr}</span>
         </div>
     `;
 
@@ -310,30 +306,7 @@ function hideTooltip() {
     const tooltip = document.getElementById('tooltip');
     tooltip.style.display = 'none';
     tooltipPinned = false;
-
-    // Réinitialiser tous les points
-    d3.selectAll('.point')
-        .attr('fill', 'transparent')
-        .attr('r', 4);
-}
-
-/**
- * Bascule entre l'échelle commune et l'échelle par code
- */
-function toggleScale() {
-    scaleMode = scaleMode === 'per-code' ? 'common' : 'per-code';
-
-    // Mettre à jour le bouton
-    const button = document.getElementById('toggle-scale');
-    button.textContent = scaleMode === 'per-code' ? 'Échelle par code' : 'Échelle commune';
-    button.title = scaleMode === 'per-code'
-        ? 'Forcer une échelle commune pour tous les graphiques'
-        : 'Utiliser une échelle calculée par code';
-
-    // Re-rendre tous les graphiques
-    if (globalData) {
-        renderAllCharts(globalData);
-    }
+    resetBarOpacity();
 }
 
 // Initialiser l'application au chargement de la page
