@@ -7,23 +7,23 @@
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: monospace; font-size: 14px; line-height: 1; color: #222; background: #fff; padding: 20px; }
-.chart { display: flex; align-items: stretch; }
+.chart { display: flex; align-items: flex-start; }
 .y-axis { display: flex; flex-direction: column; text-align: right; padding-right: 0.5ch; font-size: 11px; color: #666; width: 12ch; }
-.y-axis > div { height: 1.2em; display: flex; align-items: center; justify-content: flex-end; }
-.columns { display: flex; }
+.y-label { height: 1.2em; display: flex; align-items: center; justify-content: flex-end; }
+.columns { display: flex; align-items: flex-start; }
 .col { display: flex; flex-direction: column; width: 2ch; position: relative; }
 .col:hover { background: #eee; }
-.cell { height: 1.2em; text-align: center; }
-.pos { color: #2ea043; }
-.neg { color: #cf222e; }
-.axis-line { border-bottom: 1px solid #222; }
+.cell { height: 1.2em; text-align: center; line-height: 1.2em; }
+.pos { color: #cf222e; }
+.neg { color: #2ea043; }
+.axis { height: 1.2em; border-bottom: 1px solid #222; }
 .year-row { display: flex; margin-left: 12ch; }
 .year-cell { width: 2ch; text-align: center; font-size: 10px; color: #666; }
-.info-area { height: 2.5em; margin-top: 1em; font-size: 13px; color: #666; }
-.info { display: none; position: absolute; left: 0; right: 0; bottom: -4em; white-space: nowrap; background: #fff; z-index: 10; }
+.info-area { margin-top: 1em; font-size: 12px; color: #666; min-height: 1.5em; }
+.info { display: none; position: absolute; left: 0; bottom: -3em; white-space: nowrap; background: #fff; z-index: 10; padding: 2px 0; }
 .col:hover .info { display: block; }
 .title { margin-bottom: 1em; }
-.footer { margin-top: 3em; font-size: 12px; color: #666; }
+.footer { margin-top: 2em; font-size: 12px; color: #666; }
 a { color: #666; }
 </style>
 </head>
@@ -31,27 +31,27 @@ a { color: #666; }
 <div class="title">Évolution des codes législatifs français (delta net par an)</div>
 <div class="chart">
 <div class="y-axis">
-<div>+1 643 358</div>
-<div></div>
-<div></div>
-<div></div>
-<div></div>
-<div>+821 679</div>
-<div></div>
-<div></div>
-<div></div>
-<div></div>
-<div class="axis-line">0</div>
-<div></div>
-<div></div>
-<div></div>
-<div></div>
-<div></div>
-<div>-986 014</div>
-<div></div>
-<div></div>
-<div></div>
-<div>-1 643 358</div>
+<div class="y-label">+1 643 358</div>
+<div class="y-label"></div>
+<div class="y-label"></div>
+<div class="y-label"></div>
+<div class="y-label"></div>
+<div class="y-label"></div>
+<div class="y-label"></div>
+<div class="y-label"></div>
+<div class="y-label"></div>
+<div class="y-label">+164 335</div>
+<div class="y-label axis">0</div>
+<div class="y-label">-164 335</div>
+<div class="y-label"></div>
+<div class="y-label"></div>
+<div class="y-label"></div>
+<div class="y-label"></div>
+<div class="y-label"></div>
+<div class="y-label"></div>
+<div class="y-label"></div>
+<div class="y-label"></div>
+<div class="y-label">-1 643 358</div>
 </div>
 <div class="columns">
 <div class="col">
@@ -65,7 +65,7 @@ a { color: #666; }
 <div class="cell pos">█</div>
 <div class="cell pos">█</div>
 <div class="cell pos">█</div>
-<div class="cell axis-line"> </div>
+<div class="cell axis"> </div>
 <div class="cell"> </div>
 <div class="cell"> </div>
 <div class="cell"> </div>
@@ -76,127 +76,7 @@ a { color: #666; }
 <div class="cell"> </div>
 <div class="cell"> </div>
 <div class="cell"> </div>
-<div class="info" style="color:#2ea043">1970: +1 643 358 lignes | 1435 commits | Code de la santé publique, Code civil, Code général des impôts</div>
-</div>
-<div class="col">
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell axis-line"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="info" style="color:#2ea043">1971: +24 268 lignes | 55 commits | Code civil, Code de la santé publique, Code de l&#x27;aviation civile</div>
-</div>
-<div class="col">
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell axis-line"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="info" style="color:#2ea043">1972: +65 547 lignes | 112 commits | Code du service national, Code civil, Code de procédure pénale</div>
-</div>
-<div class="col">
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell pos">█</div>
-<div class="cell pos">█</div>
-<div class="cell pos">█</div>
-<div class="cell axis-line"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="info" style="color:#2ea043">1973: +583 020 lignes | 324 commits | Code du travail, Code de l&#x27;urbanisme, Code de la nationalité française</div>
-</div>
-<div class="col">
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell axis-line"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="info" style="color:#2ea043">1974: +23 641 lignes | 95 commits | Code du travail, Code de l&#x27;urbanisme, Code de procédure pénale</div>
-</div>
-<div class="col">
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell axis-line"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="info" style="color:#2ea043">1975: +49 637 lignes | 140 commits | Code du travail, Code de la santé publique, Code de procédure pénale</div>
+<div class="info" style="color:#cf222e">1970: +1 643 358 lignes | 1435 commits | Code de la santé publique, Code civil, Code général des impôts, Code des pensions militaires d&#x27;invalidité et des victimes de la guerre, Code des pensions militaires d&#x27;invalidité et des victimes de guerre, Code de procédure pénale, Code de la sécurité sociale, Code rural (ancien), Code des postes et des communications électroniques, Code des douanes, Code de l&#x27;aviation civile, Code électoral, Code du domaine de l&#x27;Etat, Code pénal (ancien), Code de commerce (ancien), Code des pensions civiles et militaires de retraite, Code du vin, Code de la famille et de l&#x27;aide sociale, Code minier, Code du domaine public fluvial et de la navigation intérieure, Code de la route (ancien), Code de procédure civile (1807), Code de l&#x27;enseignement technique, Code de la légion d&#x27;honneur et de la médaille militaire, Code de la Légion d&#x27;honneur, de la Médaille militaire et de l&#x27;ordre national du Mérite, Code des débits de boissons et des mesures contre l&#x27;alcoolisme, Code de la nationalité française, Code du travail maritime, Code de l&#x27;industrie cinématographique, Code de l&#x27;artisanat, Livre des procédures fiscales, Code des caisses d&#x27;épargne, Code des marchés publics (édition 1964), Code disciplinaire et pénal de la marine marchande, Code des pensions de retraite des marins français du commerce, de pêche ou de plaisance, Code du blé, Code de l&#x27;Office national interprofessionnel du blé, Code de déontologie des sages-femmes, Code de déontologie des chirurgiens-dentistes, Code des instruments monétaires et des médailles, Code général des impôts, annexe III, Code général des impôts, annexe I, Code général des impôts, annexe II, Code général des impôts, annexe IV, Code de commerce, Code de déontologie de la police nationale, Code de déontologie de la profession de commissaire aux comptes, Code de déontologie des agents de police municipale, Code de déontologie des architectes, Code de déontologie des médecins, Code de déontologie des professionnels de l&#x27;expertise comptable, Code de déontologie médicale, Code de déontologie vétérinaire, Code de justice administrative, Code de justice militaire, Code de justice militaire (nouveau), Code de l&#x27;action sociale et des familles, Code de l&#x27;entrée et du séjour des étrangers et du droit d&#x27;asile, Code de l&#x27;environnement, Code de l&#x27;expropriation pour cause d&#x27;utilité publique, Code de l&#x27;organisation judiciaire, Code de l&#x27;urbanisme, Code de l&#x27;éducation, Code de l&#x27;énergie, Code de la commande publique, Code de la consommation, Code de la consommation des boissons et des mesures contre l&#x27;alcoolisme applicable dans la collectivité territoriale de Mayotte, Code de la construction et de l&#x27;habitation, Code de la défense, Code de la justice pénale des mineurs, Code de la mutualité, Code de la propriété intellectuelle, Code de la recherche, Code de la route, Code de la sécurité intérieure, Code de la voirie routière, Code de procédure civile, Code des assurances, Code des communes, Code des communes de la Nouvelle-Calédonie, Code des douanes de Mayotte, Code des impositions sur les biens et services, Code des juridictions financières, Code des marchés publics (édition 2001), Code des marchés publics (édition 2004), Code des marchés publics (édition 2006), Code des ports maritimes, Code des procédures civiles d&#x27;exécution, Code des relations entre le public et l&#x27;administration, Code des transports, Code des tribunaux administratifs et des cours administratives d&#x27;appel, Code du cinéma et de l&#x27;image animée, Code du domaine de l&#x27;Etat et des collectivités publiques applicable à la collectivité territoriale de Mayotte, Code du patrimoine, Code du service national, Code du sport, Code du tourisme, Code du travail, Code du travail applicable à Mayotte, Code forestier, Code forestier (nouveau), Code forestier de Mayotte, Code général de la fonction publique, Code général de la propriété des personnes publiques, Code général des collectivités territoriales, Code minier (nouveau), Code monétaire et financier, Code pénal, Code pénitentiaire, Code rural (nouveau), Code rural et de la pêche maritime</div>
 </div>
 <div class="col">
 <div class="cell"> </div>
@@ -209,7 +89,7 @@ a { color: #666; }
 <div class="cell"> </div>
 <div class="cell"> </div>
 <div class="cell pos">█</div>
-<div class="cell axis-line"> </div>
+<div class="cell axis"> </div>
 <div class="cell"> </div>
 <div class="cell"> </div>
 <div class="cell"> </div>
@@ -220,31 +100,7 @@ a { color: #666; }
 <div class="cell"> </div>
 <div class="cell"> </div>
 <div class="cell"> </div>
-<div class="info" style="color:#2ea043">1976: +285 933 lignes | 208 commits | Code des assurances, Code de procédure civile, Code de l&#x27;urbanisme</div>
-</div>
-<div class="col">
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell pos">█</div>
-<div class="cell pos">█</div>
-<div class="cell axis-line"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="info" style="color:#2ea043">1977: +427 477 lignes | 238 commits | Code des communes, Code de l&#x27;urbanisme, Code de l&#x27;expropriation pour cause d&#x27;utilité publique</div>
+<div class="info" style="color:#cf222e">1971: +24 268 lignes | 55 commits | Code civil, Code de la santé publique, Code de l&#x27;aviation civile, Code de la famille et de l&#x27;aide sociale, Code de procédure pénale, Code des douanes, Code des débits de boissons et des mesures contre l&#x27;alcoolisme, Code rural (ancien), Code minier, Code de la route (ancien), Code général des impôts, annexe II, Code de l&#x27;artisanat, Code du domaine de l&#x27;Etat, Code des marchés publics (édition 1964), Code de l&#x27;industrie cinématographique, Code général des impôts, Code de commerce (ancien), Code des pensions militaires d&#x27;invalidité et des victimes de guerre, Code des pensions militaires d&#x27;invalidité et des victimes de la guerre, Code du domaine public fluvial et de la navigation intérieure, Code de l&#x27;enseignement technique, Code pénal (ancien), Code des postes et des communications électroniques, Code des caisses d&#x27;épargne, Code électoral</div>
 </div>
 <div class="col">
 <div class="cell"> </div>
@@ -257,7 +113,7 @@ a { color: #666; }
 <div class="cell"> </div>
 <div class="cell"> </div>
 <div class="cell pos">█</div>
-<div class="cell axis-line"> </div>
+<div class="cell axis"> </div>
 <div class="cell"> </div>
 <div class="cell"> </div>
 <div class="cell"> </div>
@@ -268,153 +124,10 @@ a { color: #666; }
 <div class="cell"> </div>
 <div class="cell"> </div>
 <div class="cell"> </div>
-<div class="info" style="color:#2ea043">1978: +309 079 lignes | 335 commits | Code de la construction et de l&#x27;habitation, Code de l&#x27;organisation judiciaire, Code du travail</div>
+<div class="info" style="color:#cf222e">1972: +65 547 lignes | 112 commits | Code du service national, Code civil, Code de procédure pénale, Code rural (ancien), Code de la route (ancien), Code de la santé publique, Code de l&#x27;aviation civile, Code du vin, Code des douanes, Code des pensions civiles et militaires de retraite, Code des postes et des communications électroniques, Code général des impôts, Code général des impôts, annexe III, Code de commerce (ancien), Code des débits de boissons et des mesures contre l&#x27;alcoolisme, Code des marchés publics (édition 1964), Code pénal (ancien), Code de procédure civile (1807), Code de la famille et de l&#x27;aide sociale, Code de l&#x27;artisanat, Code minier, Code des pensions militaires d&#x27;invalidité et des victimes de guerre, Code des pensions militaires d&#x27;invalidité et des victimes de la guerre</div>
 </div>
 <div class="col">
 <div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell pos">█</div>
-<div class="cell pos">█</div>
-<div class="cell axis-line"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="info" style="color:#2ea043">1979: +478 558 lignes | 341 commits | Code général des impôts, Code forestier, Code du travail</div>
-</div>
-<div class="col">
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell axis-line"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="info" style="color:#2ea043">1980: +87 329 lignes | 272 commits | Code général des impôts, Code du travail, Code rural (nouveau)</div>
-</div>
-<div class="col">
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell axis-line"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="info" style="color:#2ea043">1981: +41 306 lignes | 242 commits | Code des assurances, Code du travail, Code général des impôts</div>
-</div>
-<div class="col">
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell axis-line"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="info" style="color:#2ea043">1982: +119 983 lignes | 399 commits | Code du travail, Code général des impôts, Code des communes</div>
-</div>
-<div class="col">
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell axis-line"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="info" style="color:#2ea043">1983: +100 708 lignes | 396 commits | Code du travail, Code général des impôts, Code de justice militaire</div>
-</div>
-<div class="col">
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell axis-line"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="info" style="color:#2ea043">1984: +56 909 lignes | 412 commits | Code du travail, Code de l&#x27;urbanisme, Code des communes</div>
-</div>
-<div class="col">
 <div class="cell"> </div>
 <div class="cell"> </div>
 <div class="cell"> </div>
@@ -424,8 +137,7 @@ a { color: #666; }
 <div class="cell pos">█</div>
 <div class="cell pos">█</div>
 <div class="cell pos">█</div>
-<div class="cell pos">█</div>
-<div class="cell axis-line"> </div>
+<div class="cell axis"> </div>
 <div class="cell"> </div>
 <div class="cell"> </div>
 <div class="cell"> </div>
@@ -436,79 +148,7 @@ a { color: #666; }
 <div class="cell"> </div>
 <div class="cell"> </div>
 <div class="cell"> </div>
-<div class="info" style="color:#2ea043">1985: +891 043 lignes | 468 commits | Code de la sécurité sociale, Code du travail, Code général des impôts</div>
-</div>
-<div class="col">
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell axis-line"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="info" style="color:#2ea043">1986: +9 968 lignes | 554 commits | Code de la sécurité sociale, Code de l&#x27;urbanisme, Code général des impôts</div>
-</div>
-<div class="col">
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell axis-line"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="info" style="color:#cf222e">1987: -10 205 lignes | 381 commits | Code de la sécurité sociale, Code général des impôts, Code du travail</div>
-</div>
-<div class="col">
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell axis-line"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="info" style="color:#2ea043">1988: +19 602 lignes | 390 commits | Code de la sécurité sociale, Code du travail, Code des communes</div>
+<div class="info" style="color:#cf222e">1973: +583 020 lignes | 324 commits | Code du travail, Code de l&#x27;urbanisme, Code de la nationalité française, Code de l&#x27;aviation civile, Code de procédure pénale, Code des tribunaux administratifs et des cours administratives d&#x27;appel, Code de la santé publique, Code des marchés publics (édition 1964), Code rural (ancien), Code pénal (ancien), Code de la route (ancien), Code du domaine de l&#x27;Etat, Code des pensions militaires d&#x27;invalidité et des victimes de guerre, Code des pensions militaires d&#x27;invalidité et des victimes de la guerre, Code des douanes, Code électoral, Code général des impôts, Code des pensions civiles et militaires de retraite, Code du service national, Code civil, Code des instruments monétaires et des médailles, Code des postes et des communications électroniques, Code de la sécurité sociale, Code de l&#x27;artisanat, Code de procédure civile (1807), Code général des impôts, annexe II</div>
 </div>
 <div class="col">
 <div class="cell"> </div>
@@ -521,7 +161,7 @@ a { color: #666; }
 <div class="cell"> </div>
 <div class="cell"> </div>
 <div class="cell pos">█</div>
-<div class="cell axis-line"> </div>
+<div class="cell axis"> </div>
 <div class="cell"> </div>
 <div class="cell"> </div>
 <div class="cell"> </div>
@@ -532,79 +172,7 @@ a { color: #666; }
 <div class="cell"> </div>
 <div class="cell"> </div>
 <div class="cell"> </div>
-<div class="info" style="color:#2ea043">1989: +243 047 lignes | 257 commits | Code rural (nouveau), Code rural et de la pêche maritime, Code général des impôts</div>
-</div>
-<div class="col">
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell axis-line"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="info" style="color:#2ea043">1990: +61 014 lignes | 403 commits | Code de la sécurité sociale, Code des assurances, Code du travail</div>
-</div>
-<div class="col">
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell axis-line"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="info" style="color:#2ea043">1991: +120 534 lignes | 398 commits | Code de la sécurité sociale, Code du travail applicable à Mayotte, Code général des impôts</div>
-</div>
-<div class="col">
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell pos">█</div>
-<div class="cell pos">█</div>
-<div class="cell axis-line"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="info" style="color:#2ea043">1992: +340 708 lignes | 567 commits | Code du travail, Code rural (nouveau), Code rural et de la pêche maritime</div>
+<div class="info" style="color:#cf222e">1974: +23 641 lignes | 95 commits | Code du travail, Code de l&#x27;urbanisme, Code de procédure pénale, Code civil, Code de la santé publique, Code de l&#x27;aviation civile, Code des pensions militaires d&#x27;invalidité et des victimes de guerre, Code des pensions militaires d&#x27;invalidité et des victimes de la guerre, Code des débits de boissons et des mesures contre l&#x27;alcoolisme, Code du domaine de l&#x27;Etat, Code rural (ancien), Code de la famille et de l&#x27;aide sociale, Code du service national, Code du domaine public fluvial et de la navigation intérieure, Code de la nationalité française, Code des postes et des communications électroniques, Code général des impôts, annexe I, Code des caisses d&#x27;épargne, Code de commerce (ancien), Code des pensions civiles et militaires de retraite, Code général des impôts, Code électoral</div>
 </div>
 <div class="col">
 <div class="cell"> </div>
@@ -617,7 +185,7 @@ a { color: #666; }
 <div class="cell"> </div>
 <div class="cell"> </div>
 <div class="cell pos">█</div>
-<div class="cell axis-line"> </div>
+<div class="cell axis"> </div>
 <div class="cell"> </div>
 <div class="cell"> </div>
 <div class="cell"> </div>
@@ -628,223 +196,7 @@ a { color: #666; }
 <div class="cell"> </div>
 <div class="cell"> </div>
 <div class="cell"> </div>
-<div class="info" style="color:#2ea043">1993: +216 259 lignes | 612 commits | Code de la sécurité sociale, Code du travail, Code de la consommation</div>
-</div>
-<div class="col">
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell pos">█</div>
-<div class="cell axis-line"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="info" style="color:#2ea043">1994: +264 054 lignes | 626 commits | Code pénal, Code de la santé publique, Code de la sécurité sociale</div>
-</div>
-<div class="col">
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell pos">█</div>
-<div class="cell axis-line"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="info" style="color:#2ea043">1995: +180 139 lignes | 498 commits | Code de la sécurité sociale, Code de la propriété intellectuelle, Code de la santé publique</div>
-</div>
-<div class="col">
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell pos">█</div>
-<div class="cell axis-line"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="info" style="color:#2ea043">1996: +318 918 lignes | 474 commits | Code général des collectivités territoriales, Code de la sécurité sociale, Code des communes</div>
-</div>
-<div class="col">
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell axis-line"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="info" style="color:#2ea043">1997: +113 045 lignes | 439 commits | Code de la sécurité sociale, Code de la santé publique, Code du service national</div>
-</div>
-<div class="col">
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell pos">█</div>
-<div class="cell axis-line"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="info" style="color:#2ea043">1998: +165 733 lignes | 419 commits | Code de la santé publique, Code du service national, Code de la sécurité sociale</div>
-</div>
-<div class="col">
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell axis-line"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="info" style="color:#2ea043">1999: +37 606 lignes | 460 commits | Code de la sécurité sociale, Code de la santé publique, Code général des collectivités territoriales</div>
-</div>
-<div class="col">
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell pos">█</div>
-<div class="cell pos">█</div>
-<div class="cell pos">█</div>
-<div class="cell pos">█</div>
-<div class="cell pos">█</div>
-<div class="cell pos">█</div>
-<div class="cell pos">█</div>
-<div class="cell axis-line"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="info" style="color:#2ea043">2000: +1 187 017 lignes | 833 commits | Code de la santé publique, Code de commerce, Code de l&#x27;environnement</div>
-</div>
-<div class="col">
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell pos">█</div>
-<div class="cell pos">█</div>
-<div class="cell pos">█</div>
-<div class="cell axis-line"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="info" style="color:#2ea043">2001: +503 381 lignes | 888 commits | Code monétaire et financier, Code de la route, Code de la sécurité sociale</div>
-</div>
-<div class="col">
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell axis-line"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="info" style="color:#2ea043">2002: +95 985 lignes | 773 commits | Code de la santé publique, Code général des impôts, Code de la sécurité sociale</div>
+<div class="info" style="color:#cf222e">1975: +49 637 lignes | 140 commits | Code du travail, Code de la santé publique, Code de procédure pénale, Code rural (ancien), Code de la famille et de l&#x27;aide sociale, Code de la route (ancien), Code civil, Code des douanes, Code pénal (ancien), Code des pensions civiles et militaires de retraite, Code de déontologie des chirurgiens-dentistes, Code des pensions militaires d&#x27;invalidité et des victimes de guerre, Code des pensions militaires d&#x27;invalidité et des victimes de la guerre, Code du service national, Code général des impôts, annexe III, Code des postes et des communications électroniques, Code de l&#x27;urbanisme, Code des débits de boissons et des mesures contre l&#x27;alcoolisme, Code général des impôts, Code du domaine de l&#x27;Etat, Code du blé, Code des marchés publics (édition 1964), Code de l&#x27;aviation civile</div>
 </div>
 <div class="col">
 <div class="cell"> </div>
@@ -857,7 +209,7 @@ a { color: #666; }
 <div class="cell"> </div>
 <div class="cell pos">█</div>
 <div class="cell pos">█</div>
-<div class="cell axis-line"> </div>
+<div class="cell axis"> </div>
 <div class="cell"> </div>
 <div class="cell"> </div>
 <div class="cell"> </div>
@@ -868,7 +220,7 @@ a { color: #666; }
 <div class="cell"> </div>
 <div class="cell"> </div>
 <div class="cell"> </div>
-<div class="info" style="color:#2ea043">2003: +380 076 lignes | 776 commits | Code de la santé publique, Code rural (nouveau), Code rural et de la pêche maritime</div>
+<div class="info" style="color:#cf222e">1976: +285 933 lignes | 208 commits | Code des assurances, Code de procédure civile, Code de l&#x27;urbanisme, Code électoral, Code du travail, Code civil, Code de procédure pénale, Code pénal (ancien), Code rural (ancien), Code des marchés publics (édition 1964), Code de l&#x27;aviation civile, Code du service national, Code général des impôts, Code de la santé publique, Code des tribunaux administratifs et des cours administratives d&#x27;appel, Code de l&#x27;artisanat, Code général des impôts, annexe II, Code de la sécurité sociale, Code de la famille et de l&#x27;aide sociale, Code des douanes, Code général des impôts, annexe III, Code de la nationalité française, Code de commerce (ancien), Code du domaine de l&#x27;Etat, Code minier</div>
 </div>
 <div class="col">
 <div class="cell"> </div>
@@ -881,7 +233,7 @@ a { color: #666; }
 <div class="cell pos">█</div>
 <div class="cell pos">█</div>
 <div class="cell pos">█</div>
-<div class="cell axis-line"> </div>
+<div class="cell axis"> </div>
 <div class="cell"> </div>
 <div class="cell"> </div>
 <div class="cell"> </div>
@@ -892,151 +244,7 @@ a { color: #666; }
 <div class="cell"> </div>
 <div class="cell"> </div>
 <div class="cell"> </div>
-<div class="info" style="color:#2ea043">2004: +585 968 lignes | 1392 commits | Code de la santé publique, Code de la sécurité sociale, Code de l&#x27;action sociale et des familles</div>
-</div>
-<div class="col">
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell pos">█</div>
-<div class="cell pos">█</div>
-<div class="cell pos">█</div>
-<div class="cell pos">█</div>
-<div class="cell pos">█</div>
-<div class="cell axis-line"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="info" style="color:#2ea043">2005: +847 860 lignes | 1586 commits | Code de la santé publique, Code rural et de la pêche maritime, Code rural (nouveau)</div>
-</div>
-<div class="col">
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell pos">█</div>
-<div class="cell pos">█</div>
-<div class="cell pos">█</div>
-<div class="cell axis-line"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="info" style="color:#2ea043">2006: +598 770 lignes | 1677 commits | Code de la santé publique, Code de la sécurité sociale, Code rural (nouveau)</div>
-</div>
-<div class="col">
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell pos">█</div>
-<div class="cell pos">█</div>
-<div class="cell pos">█</div>
-<div class="cell pos">█</div>
-<div class="cell pos">█</div>
-<div class="cell axis-line"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="info" style="color:#2ea043">2007: +913 451 lignes | 1670 commits | Code de commerce, Code de l&#x27;environnement, Code de la santé publique</div>
-</div>
-<div class="col">
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell pos">█</div>
-<div class="cell pos">█</div>
-<div class="cell pos">█</div>
-<div class="cell axis-line"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="info" style="color:#2ea043">2008: +639 032 lignes | 1219 commits | Code du travail, Code de l&#x27;organisation judiciaire, Code de la santé publique</div>
-</div>
-<div class="col">
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell axis-line"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="info" style="color:#2ea043">2009: +98 934 lignes | 1544 commits | Code de commerce, Code monétaire et financier, Code du travail</div>
-</div>
-<div class="col">
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell pos">█</div>
-<div class="cell axis-line"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="info" style="color:#2ea043">2010: +182 731 lignes | 1839 commits | Code de la santé publique, Code des transports, Code rural et de la pêche maritime</div>
+<div class="info" style="color:#cf222e">1977: +427 477 lignes | 238 commits | Code des communes, Code de l&#x27;urbanisme, Code de l&#x27;expropriation pour cause d&#x27;utilité publique, Code du travail, Code de la construction et de l&#x27;habitation, Code de la santé publique, Code des douanes, Code minier, Code civil, Code du travail maritime, Code de procédure pénale, Code général des impôts, Code électoral, Code de la famille et de l&#x27;aide sociale, Code du domaine de l&#x27;Etat, Code des assurances, Code de l&#x27;aviation civile, Code rural (ancien), Code des postes et des communications électroniques, Code général des impôts, annexe II, Code général des impôts, annexe III, Code des pensions civiles et militaires de retraite, Code de la route (ancien), Code pénal (ancien), Livre des procédures fiscales, Code des débits de boissons et des mesures contre l&#x27;alcoolisme, Code du service national, Code des pensions militaires d&#x27;invalidité et des victimes de guerre, Code des pensions militaires d&#x27;invalidité et des victimes de la guerre, Code du blé, Code des marchés publics (édition 1964), Code du vin, Code de commerce (ancien)</div>
 </div>
 <div class="col">
 <div class="cell"> </div>
@@ -1049,7 +257,7 @@ a { color: #666; }
 <div class="cell"> </div>
 <div class="cell pos">█</div>
 <div class="cell pos">█</div>
-<div class="cell axis-line"> </div>
+<div class="cell axis"> </div>
 <div class="cell"> </div>
 <div class="cell"> </div>
 <div class="cell"> </div>
@@ -1060,79 +268,7 @@ a { color: #666; }
 <div class="cell"> </div>
 <div class="cell"> </div>
 <div class="cell"> </div>
-<div class="info" style="color:#2ea043">2011: +466 074 lignes | 1687 commits | Code général des collectivités territoriales, Code rural (nouveau), Code rural et de la pêche maritime</div>
-</div>
-<div class="col">
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell pos">█</div>
-<div class="cell axis-line"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="info" style="color:#2ea043">2012: +293 493 lignes | 1532 commits | Code du travail applicable à Mayotte, Code de la santé publique, Code forestier</div>
-</div>
-<div class="col">
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell pos">█</div>
-<div class="cell pos">█</div>
-<div class="cell axis-line"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="info" style="color:#2ea043">2013: +331 720 lignes | 1159 commits | Code monétaire et financier, Code de l&#x27;éducation, Code de l&#x27;environnement</div>
-</div>
-<div class="col">
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell pos">█</div>
-<div class="cell pos">█</div>
-<div class="cell axis-line"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="info" style="color:#2ea043">2014: +450 554 lignes | 1502 commits | Code de la sécurité intérieure, Code monétaire et financier, Code du travail</div>
+<div class="info" style="color:#cf222e">1978: +309 079 lignes | 335 commits | Code de la construction et de l&#x27;habitation, Code de l&#x27;organisation judiciaire, Code du travail, Code de l&#x27;urbanisme, Code des ports maritimes, Code des marchés publics (édition 1964), Code des communes, Code civil, Code de procédure pénale, Code des douanes, Code pénal (ancien), Code de la santé publique, Code des assurances, Code des pensions militaires d&#x27;invalidité et des victimes de guerre, Code des pensions militaires d&#x27;invalidité et des victimes de la guerre, Code rural (ancien), Code des postes et des communications électroniques, Code du domaine de l&#x27;Etat, Code du service national, Code de procédure civile, Code de commerce (ancien), Code général des impôts, Code général des impôts, annexe III, Code de la route (ancien), Code de la famille et de l&#x27;aide sociale, Code général des impôts, annexe II, Code de l&#x27;aviation civile, Code électoral, Code des pensions civiles et militaires de retraite, Code disciplinaire et pénal de la marine marchande, Code de l&#x27;industrie cinématographique, Code des débits de boissons et des mesures contre l&#x27;alcoolisme, Code de l&#x27;expropriation pour cause d&#x27;utilité publique, Code du domaine public fluvial et de la navigation intérieure</div>
 </div>
 <div class="col">
 <div class="cell"> </div>
@@ -1145,7 +281,7 @@ a { color: #666; }
 <div class="cell pos">█</div>
 <div class="cell pos">█</div>
 <div class="cell pos">█</div>
-<div class="cell axis-line"> </div>
+<div class="cell axis"> </div>
 <div class="cell"> </div>
 <div class="cell"> </div>
 <div class="cell"> </div>
@@ -1156,103 +292,7 @@ a { color: #666; }
 <div class="cell"> </div>
 <div class="cell"> </div>
 <div class="cell"> </div>
-<div class="info" style="color:#2ea043">2015: +564 459 lignes | 1922 commits | Code rural (nouveau), Code rural et de la pêche maritime, Code de la sécurité sociale</div>
-</div>
-<div class="col">
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell pos">█</div>
-<div class="cell pos">█</div>
-<div class="cell axis-line"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="info" style="color:#2ea043">2016: +403 605 lignes | 2387 commits | Code de la consommation, Code de la santé publique, Code des assurances</div>
-</div>
-<div class="col">
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell pos">█</div>
-<div class="cell pos">█</div>
-<div class="cell axis-line"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="info" style="color:#2ea043">2017: +377 112 lignes | 1883 commits | Code des pensions militaires d&#x27;invalidité et des victimes de guerre, Code des pensions militaires d&#x27;invalidité et des victimes de la guerre, Code des juridictions financières</div>
-</div>
-<div class="col">
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell axis-line"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="info" style="color:#cf222e">2018: -131 407 lignes | 1491 commits | Code de la sécurité sociale, Code du travail applicable à Mayotte, Code du travail</div>
-</div>
-<div class="col">
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell pos">█</div>
-<div class="cell pos">█</div>
-<div class="cell axis-line"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="info" style="color:#2ea043">2019: +333 252 lignes | 1836 commits | Code de la sécurité sociale, Code de la construction et de l&#x27;habitation, Code de la commande publique</div>
+<div class="info" style="color:#cf222e">1979: +478 558 lignes | 341 commits | Code général des impôts, Code forestier, Code du travail, Code général des impôts, annexe III, Code rural (nouveau), Code général des impôts, annexe II, Code général des impôts, annexe IV, Code de la construction et de l&#x27;habitation, Code des communes, Code rural et de la pêche maritime, Code général des impôts, annexe I, Code de déontologie des médecins, Code de procédure pénale, Code des assurances, Code civil, Code des pensions civiles et militaires de retraite, Code de l&#x27;organisation judiciaire, Code de la route (ancien), Code de la santé publique, Code des pensions militaires d&#x27;invalidité et des victimes de guerre, Code des pensions militaires d&#x27;invalidité et des victimes de la guerre, Code des marchés publics (édition 1964), Code des pensions de retraite des marins français du commerce, de pêche ou de plaisance, Code rural (ancien), Code des ports maritimes, Code de l&#x27;urbanisme, Code des postes et des communications électroniques, Code de l&#x27;aviation civile, Code du domaine de l&#x27;Etat, Code électoral, Code de procédure civile, Code pénal (ancien), Code de la nationalité française, Code du service national, Code disciplinaire et pénal de la marine marchande, Code du domaine public fluvial et de la navigation intérieure, Code minier, Code du vin</div>
 </div>
 <div class="col">
 <div class="cell"> </div>
@@ -1265,7 +305,7 @@ a { color: #666; }
 <div class="cell"> </div>
 <div class="cell"> </div>
 <div class="cell pos">█</div>
-<div class="cell axis-line"> </div>
+<div class="cell axis"> </div>
 <div class="cell"> </div>
 <div class="cell"> </div>
 <div class="cell"> </div>
@@ -1276,7 +316,271 @@ a { color: #666; }
 <div class="cell"> </div>
 <div class="cell"> </div>
 <div class="cell"> </div>
-<div class="info" style="color:#2ea043">2020: +235 694 lignes | 1804 commits | Code de la sécurité sociale, Code de la santé publique, Code du travail</div>
+<div class="info" style="color:#cf222e">1980: +87 329 lignes | 272 commits | Code général des impôts, Code du travail, Code rural (nouveau), Code rural et de la pêche maritime, Code des communes, Code rural (ancien), Code de procédure civile, Code de l&#x27;aviation civile, Code général des impôts, annexe II, Code de la construction et de l&#x27;habitation, Code électoral, Code général des impôts, annexe III, Code de la santé publique, Code de déontologie des architectes, Code des assurances, Code général des impôts, annexe IV, Code de l&#x27;urbanisme, Code civil, Code de procédure pénale, Code forestier, Code pénal (ancien), Code du domaine de l&#x27;Etat, Code des pensions civiles et militaires de retraite, Code de la route (ancien), Code des pensions militaires d&#x27;invalidité et des victimes de guerre, Code des pensions militaires d&#x27;invalidité et des victimes de la guerre, Code des ports maritimes, Code des marchés publics (édition 1964), Code de la famille et de l&#x27;aide sociale, Code de l&#x27;organisation judiciaire, Code du vin, Code des postes et des communications électroniques, Code du domaine public fluvial et de la navigation intérieure, Code des douanes, Code de déontologie des sages-femmes, Code des caisses d&#x27;épargne, Code de la sécurité sociale, Code de l&#x27;industrie cinématographique, Code de commerce (ancien), Code disciplinaire et pénal de la marine marchande, Code de l&#x27;Office national interprofessionnel du blé, Code de l&#x27;artisanat, Code de l&#x27;expropriation pour cause d&#x27;utilité publique, Code général des impôts, annexe I</div>
+</div>
+<div class="col">
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell pos">█</div>
+<div class="cell axis"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="info" style="color:#cf222e">1981: +41 306 lignes | 242 commits | Code des assurances, Code du travail, Code général des impôts, Code des communes, Code de procédure pénale, Code de procédure civile, Code pénal (ancien), Code général des impôts, annexe III, Livre des procédures fiscales, Code de la construction et de l&#x27;habitation, Code général des impôts, annexe II, Code des pensions militaires d&#x27;invalidité et des victimes de guerre, Code des pensions militaires d&#x27;invalidité et des victimes de la guerre, Code général des impôts, annexe IV, Code des douanes, Code rural (nouveau), Code rural et de la pêche maritime, Code des postes et des communications électroniques, Code électoral, Code du domaine de l&#x27;Etat, Code de l&#x27;urbanisme, Code des marchés publics (édition 1964), Code de l&#x27;organisation judiciaire, Code civil, Code de la santé publique, Code rural (ancien), Code de la Légion d&#x27;honneur, de la Médaille militaire et de l&#x27;ordre national du Mérite, Code de la légion d&#x27;honneur et de la médaille militaire, Code de l&#x27;aviation civile, Code général des impôts, annexe I, Code minier, Code des pensions de retraite des marins français du commerce, de pêche ou de plaisance, Code forestier, Code du service national, Code des débits de boissons et des mesures contre l&#x27;alcoolisme</div>
+</div>
+<div class="col">
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell pos">█</div>
+<div class="cell axis"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="info" style="color:#cf222e">1982: +119 983 lignes | 399 commits | Code du travail, Code général des impôts, Code des communes, Livre des procédures fiscales, Code rural (nouveau), Code rural et de la pêche maritime, Code de procédure civile, Code général des impôts, annexe II, Code général des impôts, annexe III, Code des pensions civiles et militaires de retraite, Code général des impôts, annexe IV, Code de l&#x27;urbanisme, Code de la construction et de l&#x27;habitation, Code de la santé publique, Code de l&#x27;aviation civile, Code rural (ancien), Code du travail maritime, Code général des impôts, annexe I, Code de procédure pénale, Code des assurances, Code électoral, Code de l&#x27;organisation judiciaire, Code civil, Code de la route (ancien), Code des marchés publics (édition 1964), Code du domaine de l&#x27;Etat, Code des postes et des communications électroniques, Code des pensions militaires d&#x27;invalidité et des victimes de guerre, Code des pensions militaires d&#x27;invalidité et des victimes de la guerre, Code des pensions de retraite des marins français du commerce, de pêche ou de plaisance, Code de la Légion d&#x27;honneur, de la Médaille militaire et de l&#x27;ordre national du Mérite, Code de la légion d&#x27;honneur et de la médaille militaire, Code des ports maritimes, Code pénal (ancien), Code de commerce (ancien), Code de la famille et de l&#x27;aide sociale, Code de l&#x27;expropriation pour cause d&#x27;utilité publique, Code du service national, Code des caisses d&#x27;épargne</div>
+</div>
+<div class="col">
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell pos">█</div>
+<div class="cell axis"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="info" style="color:#cf222e">1983: +100 708 lignes | 396 commits | Code du travail, Code général des impôts, Code de justice militaire, Code de l&#x27;urbanisme, Code des communes, Code de la construction et de l&#x27;habitation, Code de procédure pénale, Code des assurances, Code général des impôts, annexe III, Code général des impôts, annexe II, Code électoral, Livre des procédures fiscales, Code général des impôts, annexe IV, Code du service national, Code de l&#x27;organisation judiciaire, Code rural (ancien), Code des ports maritimes, Code de la famille et de l&#x27;aide sociale, Code des marchés publics (édition 1964), Code de l&#x27;artisanat, Code pénal (ancien), Code de la santé publique, Code des pensions militaires d&#x27;invalidité et des victimes de guerre, Code des pensions militaires d&#x27;invalidité et des victimes de la guerre, Code de la route (ancien), Code de commerce (ancien), Code du domaine de l&#x27;Etat, Code général des impôts, annexe I, Code des douanes, Code des pensions civiles et militaires de retraite, Code des postes et des communications électroniques, Code rural (nouveau), Code rural et de la pêche maritime, Code des caisses d&#x27;épargne, Code de la nationalité française, Code de l&#x27;aviation civile, Code du vin, Code des débits de boissons et des mesures contre l&#x27;alcoolisme, Code des pensions de retraite des marins français du commerce, de pêche ou de plaisance</div>
+</div>
+<div class="col">
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell pos">█</div>
+<div class="cell axis"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="info" style="color:#cf222e">1984: +56 909 lignes | 412 commits | Code du travail, Code de l&#x27;urbanisme, Code des communes, Code des assurances, Code général des impôts, Code de la construction et de l&#x27;habitation, Code des ports maritimes, Livre des procédures fiscales, Code de procédure pénale, Code général des impôts, annexe III, Code de l&#x27;organisation judiciaire, Code général des impôts, annexe II, Code rural (nouveau), Code rural et de la pêche maritime, Code de la famille et de l&#x27;aide sociale, Code de la santé publique, Code de l&#x27;aviation civile, Code rural (ancien), Code des postes et des communications électroniques, Code du service national, Code général des impôts, annexe IV, Code du domaine de l&#x27;Etat, Code de procédure civile, Code pénal (ancien), Code civil, Code général des impôts, annexe I, Code des douanes, Code forestier, Code de la route (ancien), Code de l&#x27;expropriation pour cause d&#x27;utilité publique, Code des pensions militaires d&#x27;invalidité et des victimes de guerre, Code des pensions militaires d&#x27;invalidité et des victimes de la guerre, Code des caisses d&#x27;épargne, Code du domaine public fluvial et de la navigation intérieure, Code des pensions de retraite des marins français du commerce, de pêche ou de plaisance, Code électoral, Code de procédure civile (1807), Code de la nationalité française, Code de commerce (ancien), Code du vin</div>
+</div>
+<div class="col">
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell pos">█</div>
+<div class="cell pos">█</div>
+<div class="cell pos">█</div>
+<div class="cell pos">█</div>
+<div class="cell pos">█</div>
+<div class="cell axis"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="info" style="color:#cf222e">1985: +891 043 lignes | 468 commits | Code de la sécurité sociale, Code du travail, Code général des impôts, Code de l&#x27;urbanisme, Code des assurances, Code des communes, Code de la construction et de l&#x27;habitation, Code de procédure pénale, Code rural (ancien), Code général des impôts, annexe III, Code de la mutualité, Code électoral, Code forestier, Code de l&#x27;expropriation pour cause d&#x27;utilité publique, Code général des impôts, annexe II, Code général des impôts, annexe IV, Livre des procédures fiscales, Code rural (nouveau), Code rural et de la pêche maritime, Code pénal (ancien), Code de la santé publique, Code de l&#x27;aviation civile, Code de la route (ancien), Code des postes et des communications électroniques, Code des marchés publics (édition 1964), Code du service national, Code des caisses d&#x27;épargne, Code de l&#x27;organisation judiciaire, Code civil, Code de la famille et de l&#x27;aide sociale, Code des pensions de retraite des marins français du commerce, de pêche ou de plaisance, Code général des impôts, annexe I, Code de commerce (ancien), Code des ports maritimes, Code de l&#x27;industrie cinématographique, Code des pensions militaires d&#x27;invalidité et des victimes de guerre, Code des pensions militaires d&#x27;invalidité et des victimes de la guerre, Code des débits de boissons et des mesures contre l&#x27;alcoolisme, Code du domaine de l&#x27;Etat, Code des douanes, Code de procédure civile, Code de procédure civile (1807), Code des tribunaux administratifs et des cours administratives d&#x27;appel, Code du domaine public fluvial et de la navigation intérieure</div>
+</div>
+<div class="col">
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell pos">█</div>
+<div class="cell axis"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="info" style="color:#cf222e">1986: +9 968 lignes | 554 commits | Code de la sécurité sociale, Code de l&#x27;urbanisme, Code général des impôts, Code du travail, Code de procédure pénale, Code de la santé publique, Code des communes, Code de la famille et de l&#x27;aide sociale, Code des postes et des communications électroniques, Code de la construction et de l&#x27;habitation, Code des assurances, Code de la route (ancien), Code général des impôts, annexe III, Code civil, Code rural (ancien), Livre des procédures fiscales, Code rural (nouveau), Code rural et de la pêche maritime, Code électoral, Code de la mutualité, Code général des impôts, annexe II, Code général des impôts, annexe IV, Code de procédure civile, Code des pensions civiles et militaires de retraite, Code des marchés publics (édition 1964), Code pénal (ancien), Code des pensions militaires d&#x27;invalidité et des victimes de guerre, Code des pensions militaires d&#x27;invalidité et des victimes de la guerre, Code du service national, Code de déontologie de la police nationale, Code du travail maritime, Code disciplinaire et pénal de la marine marchande, Code de l&#x27;organisation judiciaire, Code des débits de boissons et des mesures contre l&#x27;alcoolisme, Code forestier, Code de déontologie des sages-femmes, Code de l&#x27;aviation civile, Code général des impôts, annexe I, Code des ports maritimes, Code du domaine de l&#x27;Etat, Code des pensions de retraite des marins français du commerce, de pêche ou de plaisance, Code de déontologie des chirurgiens-dentistes, Code des tribunaux administratifs et des cours administratives d&#x27;appel, Code des caisses d&#x27;épargne, Code de commerce (ancien), Code des douanes</div>
+</div>
+<div class="col">
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell axis"> </div>
+<div class="cell neg">█</div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="info" style="color:#2ea043">1987: -10 205 lignes | 381 commits | Code de la sécurité sociale, Code général des impôts, Code du travail, Code de l&#x27;urbanisme, Code général des impôts, annexe II, Code des communes, Code de la construction et de l&#x27;habitation, Livre des procédures fiscales, Code de la santé publique, Code du domaine de l&#x27;Etat, Code général des impôts, annexe III, Code forestier, Code général des impôts, annexe I, Code des postes et des communications électroniques, Code général des impôts, annexe IV, Code des assurances, Code des douanes, Code rural (nouveau), Code rural et de la pêche maritime, Code pénal (ancien), Code civil, Code de procédure civile, Code rural (ancien), Code de procédure pénale, Code du service national, Code électoral, Code des ports maritimes, Code de la route (ancien), Code des débits de boissons et des mesures contre l&#x27;alcoolisme, Code des tribunaux administratifs et des cours administratives d&#x27;appel, Code des pensions militaires d&#x27;invalidité et des victimes de guerre, Code des pensions militaires d&#x27;invalidité et des victimes de la guerre, Code des pensions de retraite des marins français du commerce, de pêche ou de plaisance, Code de l&#x27;expropriation pour cause d&#x27;utilité publique, Code de l&#x27;aviation civile, Code de l&#x27;enseignement technique, Code de l&#x27;organisation judiciaire, Code de la famille et de l&#x27;aide sociale, Code de commerce (ancien), Code du domaine public fluvial et de la navigation intérieure, Code des caisses d&#x27;épargne</div>
+</div>
+<div class="col">
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell pos">█</div>
+<div class="cell axis"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="info" style="color:#cf222e">1988: +19 602 lignes | 390 commits | Code de la sécurité sociale, Code du travail, Code des communes, Code général des impôts, Code de la construction et de l&#x27;habitation, Code des assurances, Code de la santé publique, Code de l&#x27;urbanisme, Code de l&#x27;organisation judiciaire, Code général des impôts, annexe III, Code rural (nouveau), Code rural et de la pêche maritime, Code général des impôts, annexe IV, Code général des impôts, annexe II, Code de procédure pénale, Code forestier, Code rural (ancien), Code des postes et des communications électroniques, Code du domaine de l&#x27;Etat, Code de la mutualité, Code des marchés publics (édition 1964), Code électoral, Livre des procédures fiscales, Code des ports maritimes, Code de commerce (ancien), Code pénal (ancien), Code des pensions militaires d&#x27;invalidité et des victimes de guerre, Code des pensions militaires d&#x27;invalidité et des victimes de la guerre, Code des douanes, Code de procédure civile, Code civil, Code de l&#x27;aviation civile, Code de la route (ancien), Code général des impôts, annexe I, Code de l&#x27;expropriation pour cause d&#x27;utilité publique, Code du service national, Code des pensions civiles et militaires de retraite, Code du vin, Code de la famille et de l&#x27;aide sociale, Code des caisses d&#x27;épargne</div>
+</div>
+<div class="col">
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell pos">█</div>
+<div class="cell axis"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="info" style="color:#cf222e">1989: +243 047 lignes | 257 commits | Code rural (nouveau), Code rural et de la pêche maritime, Code général des impôts, Code du travail, Code de la sécurité sociale, Code de la voirie routière, Code rural (ancien), Code de l&#x27;urbanisme, Code de la santé publique, Code des communes, Code de procédure pénale, Code électoral, Code général des impôts, annexe II, Code de la construction et de l&#x27;habitation, Code de la famille et de l&#x27;aide sociale, Livre des procédures fiscales, Code des pensions militaires d&#x27;invalidité et des victimes de guerre, Code des pensions militaires d&#x27;invalidité et des victimes de la guerre, Code de procédure civile, Code de l&#x27;aviation civile, Code du domaine de l&#x27;Etat, Code des assurances, Code général des impôts, annexe III, Code général des impôts, annexe IV, Code de la route (ancien), Code des douanes, Code du service national, Code des pensions civiles et militaires de retraite, Code des marchés publics (édition 1964), Code de la mutualité, Code civil, Code des postes et des communications électroniques, Code de l&#x27;expropriation pour cause d&#x27;utilité publique, Code du travail maritime, Code général des impôts, annexe I, Code de l&#x27;artisanat, Code pénal (ancien), Code des ports maritimes, Code des pensions de retraite des marins français du commerce, de pêche ou de plaisance, Code de l&#x27;organisation judiciaire</div>
+</div>
+<div class="col">
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell pos">█</div>
+<div class="cell axis"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="info" style="color:#cf222e">1990: +61 014 lignes | 403 commits | Code de la sécurité sociale, Code des assurances, Code du travail, Code général des impôts, Code des tribunaux administratifs et des cours administratives d&#x27;appel, Code rural (nouveau), Code rural et de la pêche maritime, Code des postes et des communications électroniques, Code de la santé publique, Code de la construction et de l&#x27;habitation, Code des communes, Code électoral, Livre des procédures fiscales, Code rural (ancien), Code de procédure pénale, Code de la route (ancien), Code général des impôts, annexe III, Code général des impôts, annexe IV, Code des marchés publics (édition 1964), Code de l&#x27;urbanisme, Code des pensions militaires d&#x27;invalidité et des victimes de guerre, Code des pensions militaires d&#x27;invalidité et des victimes de la guerre, Code pénal (ancien), Code forestier, Code général des impôts, annexe II, Code de l&#x27;aviation civile, Code du domaine public fluvial et de la navigation intérieure, Code de la mutualité, Code des douanes, Code de l&#x27;organisation judiciaire, Code des caisses d&#x27;épargne, Code des pensions de retraite des marins français du commerce, de pêche ou de plaisance, Code du service national, Code civil, Code de la famille et de l&#x27;aide sociale, Code du vin, Code des ports maritimes, Code disciplinaire et pénal de la marine marchande, Code des pensions civiles et militaires de retraite, Code de la Légion d&#x27;honneur, de la Médaille militaire et de l&#x27;ordre national du Mérite, Code de la légion d&#x27;honneur et de la médaille militaire, Code du domaine de l&#x27;Etat, Code de la voirie routière, Code général des impôts, annexe I, Code de commerce (ancien)</div>
+</div>
+<div class="col">
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell pos">█</div>
+<div class="cell axis"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="info" style="color:#cf222e">1991: +120 534 lignes | 398 commits | Code de la sécurité sociale, Code du travail applicable à Mayotte, Code général des impôts, Code du travail, Code de la santé publique, Code des assurances, Code de la construction et de l&#x27;habitation, Code des postes et des communications électroniques, Code électoral, Code des communes, Code de l&#x27;urbanisme, Code général des impôts, annexe II, Code général des impôts, annexe III, Code rural (nouveau), Code rural et de la pêche maritime, Code de déontologie des sages-femmes, Code des pensions civiles et militaires de retraite, Code de procédure pénale, Code général des impôts, annexe IV, Code de l&#x27;organisation judiciaire, Code de la famille et de l&#x27;aide sociale, Code de l&#x27;aviation civile, Code rural (ancien), Code forestier, Code de la route (ancien), Code des débits de boissons et des mesures contre l&#x27;alcoolisme, Code des douanes, Code des pensions militaires d&#x27;invalidité et des victimes de guerre, Code des pensions militaires d&#x27;invalidité et des victimes de la guerre, Code des marchés publics (édition 1964), Livre des procédures fiscales, Code pénal (ancien), Code des caisses d&#x27;épargne, Code des tribunaux administratifs et des cours administratives d&#x27;appel, Code du service national, Code du domaine de l&#x27;Etat, Code civil, Code des pensions de retraite des marins français du commerce, de pêche ou de plaisance, Code de procédure civile, Code de l&#x27;expropriation pour cause d&#x27;utilité publique, Code de l&#x27;Office national interprofessionnel du blé, Code de la voirie routière, Code des ports maritimes, Code de la Légion d&#x27;honneur, de la Médaille militaire et de l&#x27;ordre national du Mérite, Code de la légion d&#x27;honneur et de la médaille militaire</div>
 </div>
 <div class="col">
 <div class="cell"> </div>
@@ -1289,7 +593,7 @@ a { color: #666; }
 <div class="cell"> </div>
 <div class="cell pos">█</div>
 <div class="cell pos">█</div>
-<div class="cell axis-line"> </div>
+<div class="cell axis"> </div>
 <div class="cell"> </div>
 <div class="cell"> </div>
 <div class="cell"> </div>
@@ -1300,31 +604,7 @@ a { color: #666; }
 <div class="cell"> </div>
 <div class="cell"> </div>
 <div class="cell"> </div>
-<div class="info" style="color:#2ea043">2021: +343 759 lignes | 1868 commits | Code de l&#x27;entrée et du séjour des étrangers et du droit d&#x27;asile, Code de la construction et de l&#x27;habitation, Code de la santé publique</div>
-</div>
-<div class="col">
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell pos">█</div>
-<div class="cell pos">█</div>
-<div class="cell pos">█</div>
-<div class="cell axis-line"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="cell"> </div>
-<div class="info" style="color:#2ea043">2022: +639 512 lignes | 1827 commits | Code monétaire et financier, Code de la santé publique, Code pénitentiaire</div>
+<div class="info" style="color:#cf222e">1992: +340 708 lignes | 567 commits | Code du travail, Code rural (nouveau), Code rural et de la pêche maritime, Code de la santé publique, Code de la sécurité sociale, Code de la propriété intellectuelle, Code général des impôts, Code des assurances, Code des communes, Code pénal, Code du service national, Code rural (ancien), Code des marchés publics (édition 1964), Code forestier de Mayotte, Code de la construction et de l&#x27;habitation, Code des postes et des communications électroniques, Code général des impôts, annexe III, Code général des impôts, annexe II, Code de la route (ancien), Code de la consommation des boissons et des mesures contre l&#x27;alcoolisme applicable dans la collectivité territoriale de Mayotte, Code de l&#x27;urbanisme, Livre des procédures fiscales, Code de l&#x27;aviation civile, Code des tribunaux administratifs et des cours administratives d&#x27;appel, Code de déontologie vétérinaire, Code du domaine de l&#x27;Etat, Code des ports maritimes, Code général des impôts, annexe IV, Code du travail applicable à Mayotte, Code du domaine public fluvial et de la navigation intérieure, Code des pensions militaires d&#x27;invalidité et des victimes de guerre, Code des pensions militaires d&#x27;invalidité et des victimes de la guerre, Code des douanes de Mayotte, Code de la famille et de l&#x27;aide sociale, Code de l&#x27;organisation judiciaire, Code des douanes, Code de la mutualité, Code forestier, Code civil, Code de procédure civile, Code de procédure pénale, Code pénal (ancien), Code électoral, Code de l&#x27;artisanat, Code des caisses d&#x27;épargne, Code de procédure civile (1807), Code minier, Code de déontologie des architectes, Code de l&#x27;industrie cinématographique, Code de commerce (ancien), Code des débits de boissons et des mesures contre l&#x27;alcoolisme, Code de l&#x27;expropriation pour cause d&#x27;utilité publique, Code des pensions civiles et militaires de retraite</div>
 </div>
 <div class="col">
 <div class="cell"> </div>
@@ -1335,9 +615,9 @@ a { color: #666; }
 <div class="cell"> </div>
 <div class="cell"> </div>
 <div class="cell"> </div>
+<div class="cell"> </div>
 <div class="cell pos">█</div>
-<div class="cell pos">█</div>
-<div class="cell axis-line"> </div>
+<div class="cell axis"> </div>
 <div class="cell"> </div>
 <div class="cell"> </div>
 <div class="cell"> </div>
@@ -1348,7 +628,7 @@ a { color: #666; }
 <div class="cell"> </div>
 <div class="cell"> </div>
 <div class="cell"> </div>
-<div class="info" style="color:#2ea043">2023: +380 636 lignes | 1759 commits | Code du cinéma et de l&#x27;image animée, Code des transports, Code de la santé publique</div>
+<div class="info" style="color:#cf222e">1993: +216 259 lignes | 612 commits | Code de la sécurité sociale, Code du travail, Code de la consommation, Code général des impôts, Code de la santé publique, Code de procédure pénale, Code rural (nouveau), Code rural et de la pêche maritime, Code des assurances, Code de l&#x27;organisation judiciaire, Code général des impôts, annexe III, Code civil, Livre des procédures fiscales, Code de l&#x27;urbanisme, Code de la construction et de l&#x27;habitation, Code des communes, Code général des impôts, annexe IV, Code de la nationalité française, Code général des impôts, annexe II, Code du domaine de l&#x27;Etat et des collectivités publiques applicable à la collectivité territoriale de Mayotte, Code des postes et des communications électroniques, Code général des impôts, annexe I, Code de la famille et de l&#x27;aide sociale, Code des douanes, Code rural (ancien), Code de la mutualité, Code de la route (ancien), Code des pensions militaires d&#x27;invalidité et des victimes de guerre, Code des pensions militaires d&#x27;invalidité et des victimes de la guerre, Code de procédure civile, Code des marchés publics (édition 1964), Code de justice militaire, Code de l&#x27;aviation civile, Code forestier, Code électoral, Code de la voirie routière, Code minier, Code des ports maritimes, Code du service national, Code des débits de boissons et des mesures contre l&#x27;alcoolisme, Code du vin, Code des caisses d&#x27;épargne, Code des pensions civiles et militaires de retraite, Code des tribunaux administratifs et des cours administratives d&#x27;appel, Code pénal (ancien), Code de la propriété intellectuelle, Code du domaine public fluvial et de la navigation intérieure, Code du travail applicable à Mayotte, Code disciplinaire et pénal de la marine marchande, Code de l&#x27;industrie cinématographique, Code des douanes de Mayotte, Code des instruments monétaires et des médailles, Code de l&#x27;artisanat, Code du blé, Code de l&#x27;expropriation pour cause d&#x27;utilité publique, Code du travail maritime, Code de la Légion d&#x27;honneur, de la Médaille militaire et de l&#x27;ordre national du Mérite, Code de la légion d&#x27;honneur et de la médaille militaire, Code du domaine de l&#x27;Etat</div>
 </div>
 <div class="col">
 <div class="cell"> </div>
@@ -1361,7 +641,7 @@ a { color: #666; }
 <div class="cell"> </div>
 <div class="cell pos">█</div>
 <div class="cell pos">█</div>
-<div class="cell axis-line"> </div>
+<div class="cell axis"> </div>
 <div class="cell"> </div>
 <div class="cell"> </div>
 <div class="cell"> </div>
@@ -1372,7 +652,151 @@ a { color: #666; }
 <div class="cell"> </div>
 <div class="cell"> </div>
 <div class="cell"> </div>
-<div class="info" style="color:#2ea043">2024: +392 808 lignes | 1267 commits | Code de commerce, Code monétaire et financier, Code de la recherche</div>
+<div class="info" style="color:#cf222e">1994: +264 054 lignes | 626 commits | Code pénal, Code de la santé publique, Code de la sécurité sociale, Code du travail, Code des assurances, Code pénal (ancien), Code des juridictions financières, Code général des impôts, Code de procédure pénale, Code des communes, Code de la construction et de l&#x27;habitation, Code rural (nouveau), Code rural et de la pêche maritime, Code de l&#x27;urbanisme, Code général des impôts, annexe III, Code civil, Code de la route (ancien), Code rural (ancien), Code de justice militaire, Code de la consommation, Code des postes et des communications électroniques, Code de la propriété intellectuelle, Code de l&#x27;aviation civile, Code des marchés publics (édition 1964), Code général des impôts, annexe II, Code de procédure civile, Livre des procédures fiscales, Code minier, Code de déontologie des chirurgiens-dentistes, Code général des impôts, annexe IV, Code forestier, Code des douanes, Code de l&#x27;organisation judiciaire, Code du travail applicable à Mayotte, Code disciplinaire et pénal de la marine marchande, Code des débits de boissons et des mesures contre l&#x27;alcoolisme, Code des pensions militaires d&#x27;invalidité et des victimes de guerre, Code des pensions militaires d&#x27;invalidité et des victimes de la guerre, Code du domaine public fluvial et de la navigation intérieure, Code du domaine de l&#x27;Etat, Code des tribunaux administratifs et des cours administratives d&#x27;appel, Code de commerce (ancien), Code général des impôts, annexe I, Code des ports maritimes, Code de la famille et de l&#x27;aide sociale, Code de la mutualité, Code des instruments monétaires et des médailles, Code de la nationalité française, Code du service national, Code des douanes de Mayotte, Code électoral, Code du vin, Code de l&#x27;enseignement technique, Code de la consommation des boissons et des mesures contre l&#x27;alcoolisme applicable dans la collectivité territoriale de Mayotte, Code forestier de Mayotte, Code de l&#x27;expropriation pour cause d&#x27;utilité publique, Code des caisses d&#x27;épargne, Code de la voirie routière, Code de l&#x27;industrie cinématographique, Code de procédure civile (1807), Code des pensions civiles et militaires de retraite, Code de déontologie vétérinaire, Code du blé, Code de l&#x27;artisanat, Code de la Légion d&#x27;honneur, de la Médaille militaire et de l&#x27;ordre national du Mérite, Code de la légion d&#x27;honneur et de la médaille militaire, Code de l&#x27;Office national interprofessionnel du blé, Code des pensions de retraite des marins français du commerce, de pêche ou de plaisance</div>
+</div>
+<div class="col">
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell pos">█</div>
+<div class="cell axis"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="info" style="color:#cf222e">1995: +180 139 lignes | 498 commits | Code de la sécurité sociale, Code de la propriété intellectuelle, Code de la santé publique, Code général des impôts, Code du travail, Code des assurances, Code rural (nouveau), Code rural et de la pêche maritime, Code général des collectivités territoriales, Code de procédure pénale, Code de la construction et de l&#x27;habitation, Code de l&#x27;urbanisme, Code général des impôts, annexe III, Code de déontologie médicale, Code de la consommation, Code général des impôts, annexe II, Code de déontologie des médecins, Code des communes, Code des juridictions financières, Code des pensions militaires d&#x27;invalidité et des victimes de guerre, Code des pensions militaires d&#x27;invalidité et des victimes de la guerre, Code de l&#x27;aviation civile, Code de la route (ancien), Code rural (ancien), Code du service national, Code électoral, Code général des impôts, annexe IV, Code civil, Code des tribunaux administratifs et des cours administratives d&#x27;appel, Livre des procédures fiscales, Code de l&#x27;organisation judiciaire, Code du domaine de l&#x27;Etat, Code du travail applicable à Mayotte, Code des douanes, Code de la famille et de l&#x27;aide sociale, Code pénal, Code de l&#x27;expropriation pour cause d&#x27;utilité publique, Code des pensions de retraite des marins français du commerce, de pêche ou de plaisance, Code de la voirie routière, Code de procédure civile, Code du travail maritime, Code des postes et des communications électroniques, Code forestier, Code de la mutualité, Code de la Légion d&#x27;honneur, de la Médaille militaire et de l&#x27;ordre national du Mérite, Code de la légion d&#x27;honneur et de la médaille militaire, Code des débits de boissons et des mesures contre l&#x27;alcoolisme, Code de l&#x27;artisanat, Code général des impôts, annexe I, Code des caisses d&#x27;épargne, Code minier</div>
+</div>
+<div class="col">
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell pos">█</div>
+<div class="cell pos">█</div>
+<div class="cell axis"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="info" style="color:#cf222e">1996: +318 918 lignes | 474 commits | Code général des collectivités territoriales, Code de la sécurité sociale, Code des communes, Code rural (nouveau), Code rural et de la pêche maritime, Code de la santé publique, Code général des impôts, Code des postes et des communications électroniques, Code du travail, Code de la construction et de l&#x27;habitation, Code pénal, Code de procédure pénale, Code de l&#x27;organisation judiciaire, Code des juridictions financières, Code de la route (ancien), Code général des impôts, annexe II, Code général des impôts, annexe III, Code rural (ancien), Code de la propriété intellectuelle, Livre des procédures fiscales, Code de procédure civile, Code général des impôts, annexe IV, Code civil, Code de l&#x27;urbanisme, Code de la famille et de l&#x27;aide sociale, Code du travail maritime, Code des pensions militaires d&#x27;invalidité et des victimes de guerre, Code des pensions militaires d&#x27;invalidité et des victimes de la guerre, Code du domaine de l&#x27;Etat, Code des douanes, Code de l&#x27;aviation civile, Code des assurances, Code de la voirie routière, Code électoral, Code de l&#x27;expropriation pour cause d&#x27;utilité publique, Code général des impôts, annexe I, Code des débits de boissons et des mesures contre l&#x27;alcoolisme, Code des tribunaux administratifs et des cours administratives d&#x27;appel, Code des ports maritimes, Code du domaine public fluvial et de la navigation intérieure, Code de la consommation des boissons et des mesures contre l&#x27;alcoolisme applicable dans la collectivité territoriale de Mayotte, Code de la consommation, Code du service national, Code forestier de Mayotte, Code des pensions civiles et militaires de retraite, Code de l&#x27;artisanat, Code de la Légion d&#x27;honneur, de la Médaille militaire et de l&#x27;ordre national du Mérite, Code de la légion d&#x27;honneur et de la médaille militaire, Code forestier</div>
+</div>
+<div class="col">
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell pos">█</div>
+<div class="cell axis"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="info" style="color:#cf222e">1997: +113 045 lignes | 439 commits | Code de la sécurité sociale, Code de la santé publique, Code du service national, Code général des impôts, Code de la consommation, Code des postes et des communications électroniques, Code des assurances, Code du travail, Code de la construction et de l&#x27;habitation, Code rural (nouveau), Code rural et de la pêche maritime, Code de procédure pénale, Code général des impôts, annexe III, Code de l&#x27;aviation civile, Code général des impôts, annexe II, Code de l&#x27;organisation judiciaire, Code des tribunaux administratifs et des cours administratives d&#x27;appel, Livre des procédures fiscales, Code pénal, Code de la propriété intellectuelle, Code général des impôts, annexe IV, Code de l&#x27;urbanisme, Code du domaine de l&#x27;Etat, Code électoral, Code forestier, Code général des collectivités territoriales, Code du travail maritime, Code des douanes, Code de la route (ancien), Code rural (ancien), Code des pensions militaires d&#x27;invalidité et des victimes de guerre, Code des pensions militaires d&#x27;invalidité et des victimes de la guerre, Code civil, Code des communes, Code des ports maritimes, Code des pensions de retraite des marins français du commerce, de pêche ou de plaisance, Code du travail applicable à Mayotte, Code des marchés publics (édition 1964), Code de la famille et de l&#x27;aide sociale, Code de l&#x27;enseignement technique, Code de la voirie routière, Code de déontologie médicale, Code de déontologie des sages-femmes, Code des juridictions financières, Code de déontologie des chirurgiens-dentistes, Code de procédure civile, Code de la mutualité</div>
+</div>
+<div class="col">
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell pos">█</div>
+<div class="cell axis"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="info" style="color:#cf222e">1998: +165 733 lignes | 419 commits | Code de la santé publique, Code du service national, Code de la sécurité sociale, Code de procédure pénale, Code rural et de la pêche maritime, Code rural (nouveau), Code général des impôts, Code de la construction et de l&#x27;habitation, Code du travail, Code forestier de Mayotte, Code de la consommation, Code pénal, Code de la propriété intellectuelle, Code électoral, Code général des impôts, annexe III, Code de l&#x27;aviation civile, Code civil, Code général des impôts, annexe II, Code de l&#x27;organisation judiciaire, Code des douanes, Code de l&#x27;urbanisme, Code de la route (ancien), Code général des impôts, annexe IV, Code rural (ancien), Code général des collectivités territoriales, Code minier, Livre des procédures fiscales, Code des postes et des communications électroniques, Code du domaine de l&#x27;Etat, Code des marchés publics (édition 1964), Code des assurances, Code forestier, Code de procédure civile (1807), Code de procédure civile, Code des tribunaux administratifs et des cours administratives d&#x27;appel, Code général des impôts, annexe I, Code des communes, Code des pensions militaires d&#x27;invalidité et des victimes de guerre, Code des pensions militaires d&#x27;invalidité et des victimes de la guerre, Code du travail applicable à Mayotte, Code de la famille et de l&#x27;aide sociale, Code des juridictions financières, Code des pensions de retraite des marins français du commerce, de pêche ou de plaisance, Code de l&#x27;expropriation pour cause d&#x27;utilité publique, Code de commerce (ancien), Code du vin, Code des débits de boissons et des mesures contre l&#x27;alcoolisme, Code du travail maritime, Code de l&#x27;Office national interprofessionnel du blé, Code de la mutualité, Code des pensions civiles et militaires de retraite</div>
+</div>
+<div class="col">
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell pos">█</div>
+<div class="cell axis"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="info" style="color:#cf222e">1999: +37 606 lignes | 460 commits | Code de la sécurité sociale, Code de la santé publique, Code général des collectivités territoriales, Code général des impôts, Code de procédure pénale, Code rural (nouveau), Code rural et de la pêche maritime, Code de justice militaire, Code de la construction et de l&#x27;habitation, Code général des impôts, annexe III, Code rural (ancien), Code des communes, Code de l&#x27;organisation judiciaire, Code du travail, Code général des impôts, annexe II, Code des juridictions financières, Code de l&#x27;aviation civile, Code des ports maritimes, Code des assurances, Code de la route (ancien), Livre des procédures fiscales, Code civil, Code des douanes, Code pénal, Code électoral, Code général des impôts, annexe IV, Code des postes et des communications électroniques, Code de la consommation, Code du service national, Code de procédure civile, Code de l&#x27;urbanisme, Code des tribunaux administratifs et des cours administratives d&#x27;appel, Code minier, Code des marchés publics (édition 1964), Code des pensions militaires d&#x27;invalidité et des victimes de guerre, Code des pensions militaires d&#x27;invalidité et des victimes de la guerre, Code forestier, Code des pensions de retraite des marins français du commerce, de pêche ou de plaisance, Code de l&#x27;artisanat, Code des douanes de Mayotte, Code de la voirie routière, Code des débits de boissons et des mesures contre l&#x27;alcoolisme, Code de la mutualité, Code du travail applicable à Mayotte, Code de l&#x27;expropriation pour cause d&#x27;utilité publique, Code des pensions civiles et militaires de retraite</div>
+</div>
+<div class="col">
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell pos">█</div>
+<div class="cell pos">█</div>
+<div class="cell pos">█</div>
+<div class="cell pos">█</div>
+<div class="cell pos">█</div>
+<div class="cell pos">█</div>
+<div class="cell pos">█</div>
+<div class="cell axis"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="info" style="color:#cf222e">2000: +1 187 017 lignes | 833 commits | Code de la santé publique, Code de commerce, Code de l&#x27;environnement, Code rural (nouveau), Code rural et de la pêche maritime, Code général des collectivités territoriales, Code de l&#x27;éducation, Code de la sécurité sociale, Code de l&#x27;action sociale et des familles, Code des communes, Code rural (ancien), Code général des impôts, Code des juridictions financières, Code de la famille et de l&#x27;aide sociale, Code de la construction et de l&#x27;habitation, Code de la route, Code de l&#x27;urbanisme, Code du travail, Code de procédure pénale, Code général des impôts, annexe III, Code de l&#x27;enseignement technique, Code des débits de boissons et des mesures contre l&#x27;alcoolisme, Code électoral, Code de commerce (ancien), Code général des impôts, annexe IV, Code de la route (ancien), Code pénal, Code du domaine de l&#x27;Etat, Code civil, Code de la consommation des boissons et des mesures contre l&#x27;alcoolisme applicable dans la collectivité territoriale de Mayotte, Code des douanes, Code général des impôts, annexe II, Code de justice administrative, Livre des procédures fiscales, Code de l&#x27;aviation civile, Code des assurances, Code du service national, Code du travail applicable à Mayotte, Code général des impôts, annexe I, Code de la consommation, Code de l&#x27;expropriation pour cause d&#x27;utilité publique, Code minier, Code des postes et des communications électroniques, Code de l&#x27;organisation judiciaire, Code des caisses d&#x27;épargne, Code des pensions civiles et militaires de retraite, Code de la Légion d&#x27;honneur, de la Médaille militaire et de l&#x27;ordre national du Mérite, Code de la légion d&#x27;honneur et de la médaille militaire, Code des pensions militaires d&#x27;invalidité et des victimes de guerre, Code des pensions militaires d&#x27;invalidité et des victimes de la guerre, Code de la propriété intellectuelle, Code des marchés publics (édition 1964), Code des ports maritimes, Code des tribunaux administratifs et des cours administratives d&#x27;appel, Code de procédure civile, Code du travail maritime, Code forestier, Code de l&#x27;industrie cinématographique, Code des pensions de retraite des marins français du commerce, de pêche ou de plaisance, Code de la voirie routière, Code de la mutualité</div>
 </div>
 <div class="col">
 <div class="cell"> </div>
@@ -1385,7 +809,7 @@ a { color: #666; }
 <div class="cell pos">█</div>
 <div class="cell pos">█</div>
 <div class="cell pos">█</div>
-<div class="cell axis-line"> </div>
+<div class="cell axis"> </div>
 <div class="cell"> </div>
 <div class="cell"> </div>
 <div class="cell"> </div>
@@ -1396,7 +820,391 @@ a { color: #666; }
 <div class="cell"> </div>
 <div class="cell"> </div>
 <div class="cell"> </div>
-<div class="info" style="color:#2ea043">2025: +550 272 lignes | 1400 commits | Code général de la fonction publique, Code général des impôts, Code rural (nouveau)</div>
+<div class="info" style="color:#cf222e">2001: +503 381 lignes | 888 commits | Code monétaire et financier, Code de la route, Code de la sécurité sociale, Code de justice administrative, Code de la santé publique, Code de la route (ancien), Code général des impôts, Code général des collectivités territoriales, Code du travail, Code des communes de la Nouvelle-Calédonie, Code de la mutualité, Code de procédure pénale, Code rural (nouveau), Code rural et de la pêche maritime, Code de commerce, Code des tribunaux administratifs et des cours administratives d&#x27;appel, Code du travail applicable à Mayotte, Code de l&#x27;urbanisme, Code des marchés publics (édition 1964), Code de la construction et de l&#x27;habitation, Code forestier, Code de l&#x27;environnement, Code des marchés publics (édition 2001), Code forestier de Mayotte, Code des douanes de Mayotte, Code général des impôts, annexe IV, Code général des impôts, annexe III, Code pénal, Code de l&#x27;organisation judiciaire, Code des assurances, Code de la consommation, Code général des impôts, annexe II, Code de la propriété intellectuelle, Code de l&#x27;aviation civile, Code des postes et des communications électroniques, Code des douanes, Code des juridictions financières, Code général des impôts, annexe I, Code électoral, Code des ports maritimes, Livre des procédures fiscales, Code de l&#x27;action sociale et des familles, Code rural (ancien), Code civil, Code des instruments monétaires et des médailles, Code des pensions militaires d&#x27;invalidité et des victimes de guerre, Code des pensions militaires d&#x27;invalidité et des victimes de la guerre, Code des caisses d&#x27;épargne, Code des communes, Code du domaine public fluvial et de la navigation intérieure, Code du domaine de l&#x27;Etat, Code de justice militaire, Code de l&#x27;éducation, Code de la voirie routière, Code des pensions de retraite des marins français du commerce, de pêche ou de plaisance, Code de l&#x27;industrie cinématographique, Code du domaine de l&#x27;Etat et des collectivités publiques applicable à la collectivité territoriale de Mayotte, Code du service national, Code de procédure civile, Code de l&#x27;expropriation pour cause d&#x27;utilité publique, Code de déontologie de la police nationale, Code des pensions civiles et militaires de retraite, Code disciplinaire et pénal de la marine marchande</div>
+</div>
+<div class="col">
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell pos">█</div>
+<div class="cell axis"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="info" style="color:#cf222e">2002: +95 985 lignes | 773 commits | Code de la santé publique, Code général des impôts, Code de la sécurité sociale, Code général des collectivités territoriales, Code de l&#x27;action sociale et des familles, Code du travail, Code pénal, Code rural (nouveau), Code rural et de la pêche maritime, Code de procédure pénale, Code général des impôts, annexe III, Code de la mutualité, Code de l&#x27;environnement, Code civil, Code des juridictions financières, Code de l&#x27;éducation, Code général des impôts, annexe II, Code des douanes, Code électoral, Code de la construction et de l&#x27;habitation, Code forestier, Code des assurances, Code monétaire et financier, Code de l&#x27;aviation civile, Code général des impôts, annexe IV, Code de la route, Code de l&#x27;urbanisme, Code de l&#x27;organisation judiciaire, Code de commerce, Code du service national, Code du travail applicable à Mayotte, Code de justice administrative, Livre des procédures fiscales, Code des postes et des communications électroniques, Code de la propriété intellectuelle, Code du domaine de l&#x27;Etat, Code de la voirie routière, Code de procédure civile, Code des pensions militaires d&#x27;invalidité et des victimes de guerre, Code des pensions militaires d&#x27;invalidité et des victimes de la guerre, Code des ports maritimes, Code de la consommation, Code disciplinaire et pénal de la marine marchande, Code du domaine public fluvial et de la navigation intérieure, Code de procédure civile (1807), Code de l&#x27;expropriation pour cause d&#x27;utilité publique, Code des pensions civiles et militaires de retraite, Code du travail maritime, Code de justice militaire, Code des douanes de Mayotte, Code des communes, Code des communes de la Nouvelle-Calédonie, Code de l&#x27;industrie cinématographique, Code général des impôts, annexe I, Code des marchés publics (édition 2001), Code de la famille et de l&#x27;aide sociale, Code minier, Code des caisses d&#x27;épargne, Code des marchés publics (édition 1964), Code de l&#x27;artisanat, Code des pensions de retraite des marins français du commerce, de pêche ou de plaisance, Code rural (ancien), Code des instruments monétaires et des médailles</div>
+</div>
+<div class="col">
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell pos">█</div>
+<div class="cell pos">█</div>
+<div class="cell axis"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="info" style="color:#cf222e">2003: +380 076 lignes | 776 commits | Code de la santé publique, Code rural (nouveau), Code rural et de la pêche maritime, Code de l&#x27;environnement, Code de la sécurité sociale, Code général des collectivités territoriales, Code général des impôts, Code monétaire et financier, Code du travail, Code de commerce, Code de la route, Code des assurances, Code du vin, Code forestier, Code des postes et des communications électroniques, Code de la construction et de l&#x27;habitation, Code de l&#x27;organisation judiciaire, Code de procédure pénale, Code de l&#x27;aviation civile, Code pénal, Code général des impôts, annexe III, Code général des impôts, annexe II, Code de l&#x27;éducation, Code de l&#x27;urbanisme, Code de procédure civile, Code électoral, Code des débits de boissons et des mesures contre l&#x27;alcoolisme, Code de la consommation, Code général des impôts, annexe IV, Livre des procédures fiscales, Code de l&#x27;Office national interprofessionnel du blé, Code de la mutualité, Code de déontologie vétérinaire, Code des juridictions financières, Code des pensions militaires d&#x27;invalidité et des victimes de guerre, Code des pensions militaires d&#x27;invalidité et des victimes de la guerre, Code de justice administrative, Code de l&#x27;action sociale et des familles, Code des ports maritimes, Code du travail applicable à Mayotte, Code des douanes, Code de déontologie des agents de police municipale, Code du domaine de l&#x27;Etat, Code rural (ancien), Code des communes de la Nouvelle-Calédonie, Code minier, Code civil, Code du domaine public fluvial et de la navigation intérieure, Code de la propriété intellectuelle, Code du service national, Code de la voirie routière, Code des douanes de Mayotte, Code des pensions civiles et militaires de retraite, Code de l&#x27;expropriation pour cause d&#x27;utilité publique, Code du travail maritime, Code disciplinaire et pénal de la marine marchande, Code de déontologie médicale, Code de déontologie des chirurgiens-dentistes</div>
+</div>
+<div class="col">
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell pos">█</div>
+<div class="cell pos">█</div>
+<div class="cell pos">█</div>
+<div class="cell pos">█</div>
+<div class="cell axis"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="info" style="color:#cf222e">2004: +585 968 lignes | 1392 commits | Code de la santé publique, Code de la sécurité sociale, Code de l&#x27;action sociale et des familles, Code de la défense, Code du travail, Code de procédure pénale, Code général des collectivités territoriales, Code du patrimoine, Code de l&#x27;environnement, Code de l&#x27;éducation, Code du travail applicable à Mayotte, Code des postes et des communications électroniques, Code général des impôts, Code de commerce, Code des assurances, Code rural (nouveau), Code rural et de la pêche maritime, Code monétaire et financier, Code de la recherche, Code des pensions civiles et militaires de retraite, Code pénal, Code général des impôts, annexe III, Code des douanes de Mayotte, Code de la construction et de l&#x27;habitation, Code des marchés publics (édition 2001), Code de la consommation, Code des marchés publics (édition 2004), Code de l&#x27;urbanisme, Code de la propriété intellectuelle, Code de la route, Code de l&#x27;organisation judiciaire, Code général des impôts, annexe II, Code de déontologie médicale, Code de la mutualité, Livre des procédures fiscales, Code de l&#x27;aviation civile, Code de déontologie des chirurgiens-dentistes, Code général des impôts, annexe IV, Code électoral, Code civil, Code de déontologie des sages-femmes, Code de justice administrative, Code de la famille et de l&#x27;aide sociale, Code des juridictions financières, Code des pensions militaires d&#x27;invalidité et des victimes de guerre, Code des pensions militaires d&#x27;invalidité et des victimes de la guerre, Code du tourisme, Code des douanes, Code du domaine de l&#x27;Etat, Code des ports maritimes, Code forestier, Code de l&#x27;artisanat, Code de la voirie routière, Code du travail maritime, Code du service national, Code du domaine public fluvial et de la navigation intérieure, Code rural (ancien), Code minier, Code de procédure civile, Code de l&#x27;expropriation pour cause d&#x27;utilité publique, Code de justice militaire, Code des communes de la Nouvelle-Calédonie, Code général des impôts, annexe I, Code forestier de Mayotte, Code des caisses d&#x27;épargne</div>
+</div>
+<div class="col">
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell pos">█</div>
+<div class="cell pos">█</div>
+<div class="cell pos">█</div>
+<div class="cell pos">█</div>
+<div class="cell pos">█</div>
+<div class="cell axis"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="info" style="color:#cf222e">2005: +847 860 lignes | 1586 commits | Code de la santé publique, Code rural et de la pêche maritime, Code rural (nouveau), Code de l&#x27;environnement, Code monétaire et financier, Code de la sécurité sociale, Code de l&#x27;action sociale et des familles, Code du travail, Code de procédure pénale, Code général des impôts, Code des postes et des communications électroniques, Code général des collectivités territoriales, Code des assurances, Code de l&#x27;entrée et du séjour des étrangers et du droit d&#x27;asile, Code de la construction et de l&#x27;habitation, Code de la mutualité, Code de l&#x27;éducation, Code du tourisme, Code de commerce, Code de procédure civile, Code général des impôts, annexe III, Code civil, Code de la consommation, Code de l&#x27;aviation civile, Code des ports maritimes, Code de l&#x27;urbanisme, Code pénal, Code des pensions militaires d&#x27;invalidité et des victimes de guerre, Code des pensions militaires d&#x27;invalidité et des victimes de la guerre, Code de l&#x27;organisation judiciaire, Code forestier, Code de la défense, Livre des procédures fiscales, Code de l&#x27;expropriation pour cause d&#x27;utilité publique, Code des juridictions financières, Code général des impôts, annexe II, Code de justice administrative, Code de la route, Code du travail applicable à Mayotte, Code de déontologie de la profession de commissaire aux comptes, Code des caisses d&#x27;épargne, Code des douanes, Code rural (ancien), Code des communes de la Nouvelle-Calédonie, Code général des impôts, annexe IV, Code de la voirie routière, Code du patrimoine, Code électoral, Code du domaine de l&#x27;Etat, Code des communes, Code des pensions civiles et militaires de retraite, Code de la propriété intellectuelle, Code du service national, Code des marchés publics (édition 2004), Code du domaine public fluvial et de la navigation intérieure, Code de la recherche, Code de la Légion d&#x27;honneur, de la Médaille militaire et de l&#x27;ordre national du Mérite, Code de la légion d&#x27;honneur et de la médaille militaire, Code de l&#x27;industrie cinématographique, Code des instruments monétaires et des médailles, Code de l&#x27;artisanat, Code des pensions de retraite des marins français du commerce, de pêche ou de plaisance, Code forestier de Mayotte, Code général des impôts, annexe I, Code des douanes de Mayotte, Code du blé, Code de procédure civile (1807)</div>
+</div>
+<div class="col">
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell pos">█</div>
+<div class="cell pos">█</div>
+<div class="cell pos">█</div>
+<div class="cell pos">█</div>
+<div class="cell axis"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="info" style="color:#cf222e">2006: +598 770 lignes | 1677 commits | Code de la santé publique, Code de la sécurité sociale, Code rural (nouveau), Code rural et de la pêche maritime, Code des assurances, Code de l&#x27;éducation, Code de commerce, Code général des impôts, Code de l&#x27;environnement, Code du travail, Code du travail applicable à Mayotte, Code civil, Code de l&#x27;organisation judiciaire, Code du sport, Code de l&#x27;entrée et du séjour des étrangers et du droit d&#x27;asile, Code du tourisme, Code de la construction et de l&#x27;habitation, Code général de la propriété des personnes publiques, Code général des collectivités territoriales, Code de l&#x27;action sociale et des familles, Code monétaire et financier, Code forestier, Code des marchés publics (édition 2006), Code de l&#x27;urbanisme, Code de l&#x27;aviation civile, Code général des impôts, annexe III, Code des marchés publics (édition 2004), Code de procédure pénale, Code du domaine de l&#x27;Etat, Code électoral, Code des postes et des communications électroniques, Code de la route, Code de la recherche, Code général des impôts, annexe II, Code de la propriété intellectuelle, Code du domaine de l&#x27;Etat et des collectivités publiques applicable à la collectivité territoriale de Mayotte, Code de la consommation, Code des juridictions financières, Code du domaine public fluvial et de la navigation intérieure, Code de la mutualité, Code de procédure civile, Livre des procédures fiscales, Code de justice administrative, Code du blé, Code des pensions militaires d&#x27;invalidité et des victimes de guerre, Code des pensions militaires d&#x27;invalidité et des victimes de la guerre, Code général des impôts, annexe IV, Code de l&#x27;industrie cinématographique, Code pénal, Code de la voirie routière, Code du patrimoine, Code des douanes, Code du travail maritime, Code rural (ancien), Code minier, Code des pensions civiles et militaires de retraite, Code des communes de la Nouvelle-Calédonie, Code de la défense, Code général des impôts, annexe I, Code de procédure civile (1807), Code des ports maritimes, Code de l&#x27;expropriation pour cause d&#x27;utilité publique, Code du service national, Code de l&#x27;artisanat, Code des pensions de retraite des marins français du commerce, de pêche ou de plaisance, Code des instruments monétaires et des médailles, Code forestier de Mayotte, Code de déontologie de la profession de commissaire aux comptes</div>
+</div>
+<div class="col">
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell pos">█</div>
+<div class="cell pos">█</div>
+<div class="cell pos">█</div>
+<div class="cell pos">█</div>
+<div class="cell pos">█</div>
+<div class="cell pos">█</div>
+<div class="cell axis"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="info" style="color:#cf222e">2007: +913 451 lignes | 1670 commits | Code de commerce, Code de l&#x27;environnement, Code de la santé publique, Code général des collectivités territoriales, Code de la sécurité sociale, Code rural et de la pêche maritime, Code rural (nouveau), Code de l&#x27;urbanisme, Code de la défense, Code monétaire et financier, Code du sport, Code du travail, Code de l&#x27;action sociale et des familles, Code de procédure pénale, Code général des impôts, Code civil, Code de justice militaire (nouveau), Code de la construction et de l&#x27;habitation, Code de justice militaire, Code électoral, Code de l&#x27;entrée et du séjour des étrangers et du droit d&#x27;asile, Code de l&#x27;organisation judiciaire, Code de l&#x27;éducation, Code général des impôts, annexe III, Code de procédure civile (1807), Code de la propriété intellectuelle, Code des assurances, Code du tourisme, Code pénal, Code de la consommation, Code des ports maritimes, Code des juridictions financières, Code de l&#x27;aviation civile, Code de procédure civile, Code des postes et des communications électroniques, Code général des impôts, annexe II, Code des communes de la Nouvelle-Calédonie, Code général des impôts, annexe IV, Livre des procédures fiscales, Code de justice administrative, Code de la route, Code du patrimoine, Code de déontologie de la profession de commissaire aux comptes, Code des douanes, Code de la mutualité, Code forestier, Code de déontologie des professionnels de l&#x27;expertise comptable, Code général de la propriété des personnes publiques, Code du domaine de l&#x27;Etat, Code du travail applicable à Mayotte, Code des pensions militaires d&#x27;invalidité et des victimes de guerre, Code des pensions militaires d&#x27;invalidité et des victimes de la guerre, Code des communes, Code de la voirie routière, Code du service national, Code des douanes de Mayotte, Code de la recherche, Code de l&#x27;industrie cinématographique, Code des marchés publics (édition 2006), Code de l&#x27;expropriation pour cause d&#x27;utilité publique, Code général des impôts, annexe I, Code minier, Code des pensions civiles et militaires de retraite</div>
+</div>
+<div class="col">
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell pos">█</div>
+<div class="cell pos">█</div>
+<div class="cell pos">█</div>
+<div class="cell pos">█</div>
+<div class="cell axis"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="info" style="color:#cf222e">2008: +639 032 lignes | 1219 commits | Code du travail, Code de l&#x27;organisation judiciaire, Code de la santé publique, Code de la sécurité sociale, Code de la défense, Code rural (nouveau), Code rural et de la pêche maritime, Code de l&#x27;éducation, Code du sport, Code de l&#x27;environnement, Code monétaire et financier, Code des assurances, Code général des collectivités territoriales, Code de commerce, Code général des impôts, Code de la construction et de l&#x27;habitation, Code de la propriété intellectuelle, Code de procédure pénale, Code des juridictions financières, Code de l&#x27;action sociale et des familles, Code de l&#x27;entrée et du séjour des étrangers et du droit d&#x27;asile, Code de procédure civile, Code électoral, Code minier, Code général des impôts, annexe II, Code de la mutualité, Code général des impôts, annexe III, Code de la consommation, Code de la recherche, Code des ports maritimes, Code civil, Code du tourisme, Code pénal, Code des marchés publics (édition 2006), Code de justice administrative, Code de justice militaire (nouveau), Code de la route, Code des douanes, Code du patrimoine, Livre des procédures fiscales, Code forestier, Code des postes et des communications électroniques, Code général des impôts, annexe IV, Code de l&#x27;urbanisme, Code général de la propriété des personnes publiques, Code des pensions militaires d&#x27;invalidité et des victimes de guerre, Code des pensions militaires d&#x27;invalidité et des victimes de la guerre, Code de l&#x27;industrie cinématographique, Code des pensions civiles et militaires de retraite, Code des douanes de Mayotte, Code de l&#x27;aviation civile, Code de la voirie routière, Code du travail applicable à Mayotte, Code disciplinaire et pénal de la marine marchande, Code du service national, Code du domaine de l&#x27;Etat, Code de la Légion d&#x27;honneur, de la Médaille militaire et de l&#x27;ordre national du Mérite, Code de la légion d&#x27;honneur et de la médaille militaire, Code de l&#x27;expropriation pour cause d&#x27;utilité publique, Code du domaine de l&#x27;Etat et des collectivités publiques applicable à la collectivité territoriale de Mayotte, Code du travail maritime, Code du domaine public fluvial et de la navigation intérieure</div>
+</div>
+<div class="col">
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell pos">█</div>
+<div class="cell axis"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="info" style="color:#cf222e">2009: +98 934 lignes | 1544 commits | Code de commerce, Code monétaire et financier, Code du travail, Code rural (nouveau), Code rural et de la pêche maritime, Code de la santé publique, Code de l&#x27;action sociale et des familles, Code électoral, Code de la défense, Code de l&#x27;environnement, Code de la sécurité sociale, Code de la construction et de l&#x27;habitation, Code général des impôts, Code de procédure pénale, Code de l&#x27;éducation, Code civil, Code du tourisme, Code général des collectivités territoriales, Code des ports maritimes, Code des pensions militaires d&#x27;invalidité et des victimes de guerre, Code des pensions militaires d&#x27;invalidité et des victimes de la guerre, Code du sport, Code des juridictions financières, Code du cinéma et de l&#x27;image animée, Code de procédure civile, Code de la propriété intellectuelle, Code de l&#x27;organisation judiciaire, Code du travail applicable à Mayotte, Code de la route, Code des assurances, Code général des impôts, annexe III, Code de l&#x27;urbanisme, Code de l&#x27;industrie cinématographique, Code de justice administrative, Code de la consommation, Livre des procédures fiscales, Code de l&#x27;entrée et du séjour des étrangers et du droit d&#x27;asile, Code pénal, Code des douanes, Code général des impôts, annexe II, Code de l&#x27;aviation civile, Code forestier, Code des postes et des communications électroniques, Code des communes de la Nouvelle-Calédonie, Code général des impôts, annexe IV, Code de la mutualité, Code du travail maritime, Code des marchés publics (édition 2006), Code général de la propriété des personnes publiques, Code du domaine de l&#x27;Etat, Code du patrimoine, Code minier, Code de la voirie routière, Code des pensions civiles et militaires de retraite, Code du domaine public fluvial et de la navigation intérieure, Code des communes, Code de l&#x27;expropriation pour cause d&#x27;utilité publique, Code de la recherche, Code des douanes de Mayotte, Code de justice militaire (nouveau), Code de déontologie des professionnels de l&#x27;expertise comptable, Code des pensions de retraite des marins français du commerce, de pêche ou de plaisance, Code des instruments monétaires et des médailles, Code du service national</div>
+</div>
+<div class="col">
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell pos">█</div>
+<div class="cell axis"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="info" style="color:#cf222e">2010: +182 731 lignes | 1839 commits | Code de la santé publique, Code des transports, Code rural et de la pêche maritime, Code rural (nouveau), Code de l&#x27;environnement, Code du travail, Code de la sécurité sociale, Code monétaire et financier, Code de procédure pénale, Code général des impôts, Code de commerce, Code général des collectivités territoriales, Code de la défense, Code de l&#x27;action sociale et des familles, Code de la consommation, Code de la construction et de l&#x27;habitation, Code du tourisme, Code des assurances, Code de l&#x27;aviation civile, Code du sport, Code des pensions militaires d&#x27;invalidité et des victimes de guerre, Code des pensions militaires d&#x27;invalidité et des victimes de la guerre, Code forestier, Code de l&#x27;éducation, Code de la mutualité, Code général des impôts, annexe III, Code de l&#x27;urbanisme, Code des ports maritimes, Code de procédure civile, Code du travail maritime, Code de la propriété intellectuelle, Code de l&#x27;organisation judiciaire, Code pénal, Code du service national, Code général des impôts, annexe II, Code du domaine public fluvial et de la navigation intérieure, Livre des procédures fiscales, Code de justice administrative, Code de la route, Code des douanes, Code général des impôts, annexe IV, Code des pensions de retraite des marins français du commerce, de pêche ou de plaisance, Code disciplinaire et pénal de la marine marchande, Code du cinéma et de l&#x27;image animée, Code des communes de la Nouvelle-Calédonie, Code de l&#x27;artisanat, Code civil, Code du patrimoine, Code des juridictions financières, Code de la Légion d&#x27;honneur, de la Médaille militaire et de l&#x27;ordre national du Mérite, Code de la légion d&#x27;honneur et de la médaille militaire, Code de la voirie routière, Code général de la propriété des personnes publiques, Code de l&#x27;entrée et du séjour des étrangers et du droit d&#x27;asile, Code des marchés publics (édition 2006), Code des postes et des communications électroniques, Code minier, Code de l&#x27;industrie cinématographique, Code de l&#x27;expropriation pour cause d&#x27;utilité publique, Code électoral, Code de la recherche, Code des pensions civiles et militaires de retraite, Code du domaine de l&#x27;Etat, Code de justice militaire (nouveau), Code de déontologie des professionnels de l&#x27;expertise comptable, Code des communes, Code du travail applicable à Mayotte</div>
+</div>
+<div class="col">
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell pos">█</div>
+<div class="cell pos">█</div>
+<div class="cell pos">█</div>
+<div class="cell axis"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="info" style="color:#cf222e">2011: +466 074 lignes | 1687 commits | Code général des collectivités territoriales, Code rural (nouveau), Code rural et de la pêche maritime, Code de l&#x27;énergie, Code de la santé publique, Code du patrimoine, Code de l&#x27;environnement, Code du travail, Code monétaire et financier, Code général des impôts, Code de procédure pénale, Code de la sécurité sociale, Code minier (nouveau), Code général de la propriété des personnes publiques, Code de commerce, Code de l&#x27;action sociale et des familles, Code de la consommation, Code de l&#x27;urbanisme, Code de la construction et de l&#x27;habitation, Code de l&#x27;entrée et du séjour des étrangers et du droit d&#x27;asile, Code électoral, Code minier, Code de procédure civile, Code de la défense, Code du sport, Code des marchés publics (édition 2006), Code de l&#x27;éducation, Code de l&#x27;organisation judiciaire, Code des juridictions financières, Code général des impôts, annexe III, Code des postes et des communications électroniques, Code de la route, Code des transports, Code de justice administrative, Code des douanes, Code pénal, Code des assurances, Livre des procédures fiscales, Code général des impôts, annexe IV, Code général des impôts, annexe II, Code de l&#x27;aviation civile, Code des pensions militaires d&#x27;invalidité et des victimes de guerre, Code des pensions militaires d&#x27;invalidité et des victimes de la guerre, Code de la propriété intellectuelle, Code du domaine de l&#x27;Etat, Code civil, Code de la mutualité, Code de la voirie routière, Code des pensions civiles et militaires de retraite, Code du travail applicable à Mayotte, Code du tourisme, Code des ports maritimes, Code du service national, Code du domaine public fluvial et de la navigation intérieure, Code des douanes de Mayotte, Code de justice militaire (nouveau), Code forestier, Code de la recherche, Code de l&#x27;artisanat, Code de l&#x27;expropriation pour cause d&#x27;utilité publique, Code des communes de la Nouvelle-Calédonie, Code du cinéma et de l&#x27;image animée, Code de déontologie des professionnels de l&#x27;expertise comptable, Code des communes, Code du domaine de l&#x27;Etat et des collectivités publiques applicable à la collectivité territoriale de Mayotte, Code forestier de Mayotte, Code disciplinaire et pénal de la marine marchande, Code du travail maritime</div>
+</div>
+<div class="col">
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell pos">█</div>
+<div class="cell pos">█</div>
+<div class="cell axis"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="info" style="color:#cf222e">2012: +293 493 lignes | 1532 commits | Code du travail applicable à Mayotte, Code de la santé publique, Code forestier, Code forestier (nouveau), Code rural (nouveau), Code rural et de la pêche maritime, Code de l&#x27;environnement, Code de la sécurité intérieure, Code du travail, Code de la sécurité sociale, Code des procédures civiles d&#x27;exécution, Code général des collectivités territoriales, Code forestier de Mayotte, Code du sport, Code de commerce, Code de l&#x27;action sociale et des familles, Code général des impôts, annexe III, Code général des impôts, Code de l&#x27;urbanisme, Code de la construction et de l&#x27;habitation, Code de procédure pénale, Code de l&#x27;éducation, Code de la défense, Code monétaire et financier, Code de l&#x27;aviation civile, Livre des procédures fiscales, Code des transports, Code général des impôts, annexe II, Code des postes et des communications électroniques, Code de procédure civile, Code des assurances, Code général de la propriété des personnes publiques, Code de justice militaire (nouveau), Code de l&#x27;expropriation pour cause d&#x27;utilité publique, Code de la route, Code du tourisme, Code des juridictions financières, Code de l&#x27;organisation judiciaire, Code de la mutualité, Code de la consommation, Code pénal, Code de justice administrative, Code des douanes, Code civil, Code de l&#x27;entrée et du séjour des étrangers et du droit d&#x27;asile, Code de déontologie des professionnels de l&#x27;expertise comptable, Code des pensions militaires d&#x27;invalidité et des victimes de guerre, Code des pensions militaires d&#x27;invalidité et des victimes de la guerre, Code des pensions civiles et militaires de retraite, Code de la voirie routière, Code du patrimoine, Code des ports maritimes, Code électoral, Code général des impôts, annexe IV, Code de la propriété intellectuelle, Code des communes, Code du domaine de l&#x27;Etat, Code des communes de la Nouvelle-Calédonie, Code de l&#x27;énergie, Code minier (nouveau), Code du domaine public fluvial et de la navigation intérieure, Code des marchés publics (édition 2006), Code de la recherche, Code du service national, Code de la Légion d&#x27;honneur, de la Médaille militaire et de l&#x27;ordre national du Mérite, Code de la légion d&#x27;honneur et de la médaille militaire, Code du cinéma et de l&#x27;image animée, Code de l&#x27;artisanat, Code des douanes de Mayotte</div>
+</div>
+<div class="col">
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell pos">█</div>
+<div class="cell pos">█</div>
+<div class="cell axis"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="info" style="color:#cf222e">2013: +331 720 lignes | 1159 commits | Code monétaire et financier, Code de l&#x27;éducation, Code de l&#x27;environnement, Code des transports, Code de la sécurité sociale, Code rural (nouveau), Code rural et de la pêche maritime, Code du travail applicable à Mayotte, Code de la santé publique, Code général des impôts, Code du travail, Code de l&#x27;urbanisme, Code des juridictions financières, Code de procédure pénale, Code général des collectivités territoriales, Code de commerce, Code des assurances, Code de la défense, Code du sport, Code général des impôts, annexe III, Code de l&#x27;énergie, Code de l&#x27;action sociale et des familles, Code de la sécurité intérieure, Code de la construction et de l&#x27;habitation, Livre des procédures fiscales, Code de la mutualité, Code de l&#x27;entrée et du séjour des étrangers et du droit d&#x27;asile, Code pénal, Code des postes et des communications électroniques, Code des douanes, Code général des impôts, annexe IV, Code de la recherche, Code général des impôts, annexe II, Code électoral, Code de justice administrative, Code de la route, Code de la propriété intellectuelle, Code général de la propriété des personnes publiques, Code du domaine public fluvial et de la navigation intérieure, Code civil, Code du patrimoine, Code de la consommation, Code de l&#x27;aviation civile, Code du tourisme, Code de l&#x27;organisation judiciaire, Code de procédure civile, Code forestier (nouveau), Code des procédures civiles d&#x27;exécution, Code des pensions militaires d&#x27;invalidité et des victimes de guerre, Code des pensions militaires d&#x27;invalidité et des victimes de la guerre, Code du service national, Code de la voirie routière, Code des marchés publics (édition 2006), Code de l&#x27;expropriation pour cause d&#x27;utilité publique, Code du domaine de l&#x27;Etat, Code des pensions civiles et militaires de retraite, Code du cinéma et de l&#x27;image animée, Code des communes de la Nouvelle-Calédonie, Code des douanes de Mayotte, Code du travail maritime, Code de justice militaire (nouveau), Code des ports maritimes, Code de l&#x27;artisanat, Code des pensions de retraite des marins français du commerce, de pêche ou de plaisance, Code minier (nouveau), Code rural (ancien)</div>
+</div>
+<div class="col">
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell pos">█</div>
+<div class="cell pos">█</div>
+<div class="cell pos">█</div>
+<div class="cell axis"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="info" style="color:#cf222e">2014: +450 554 lignes | 1502 commits | Code de la sécurité intérieure, Code monétaire et financier, Code du travail, Code de la santé publique, Code des transports, Code général des impôts, Code rural (nouveau), Code rural et de la pêche maritime, Code de commerce, Code de l&#x27;environnement, Code général des collectivités territoriales, Code de la consommation, Code de la sécurité sociale, Code de la construction et de l&#x27;habitation, Code de procédure pénale, Code du cinéma et de l&#x27;image animée, Code de l&#x27;éducation, Code de la défense, Code de l&#x27;urbanisme, Code de la propriété intellectuelle, Code des assurances, Code général de la propriété des personnes publiques, Code de l&#x27;action sociale et des familles, Code du patrimoine, Code général des impôts, annexe III, Code du travail applicable à Mayotte, Code de la recherche, Code de l&#x27;entrée et du séjour des étrangers et du droit d&#x27;asile, Code forestier (nouveau), Code des douanes, Code général des impôts, annexe II, Code de la mutualité, Code électoral, Code du sport, Livre des procédures fiscales, Code pénal, Code du tourisme, Code de l&#x27;organisation judiciaire, Code de justice administrative, Code général des impôts, annexe IV, Code civil, Code des postes et des communications électroniques, Code de procédure civile, Code du domaine public fluvial et de la navigation intérieure, Code de la route, Code des marchés publics (édition 2006), Code de justice militaire (nouveau), Code minier (nouveau), Code des pensions civiles et militaires de retraite, Code de déontologie des agents de police municipale, Code de déontologie de la police nationale, Code des communes de la Nouvelle-Calédonie, Code de l&#x27;aviation civile, Code des pensions militaires d&#x27;invalidité et des victimes de guerre, Code des pensions militaires d&#x27;invalidité et des victimes de la guerre, Code du service national, Code des juridictions financières, Code des communes, Code de l&#x27;énergie, Code des ports maritimes, Code de l&#x27;artisanat, Code des procédures civiles d&#x27;exécution, Code du domaine de l&#x27;Etat, Code des pensions de retraite des marins français du commerce, de pêche ou de plaisance, Code de l&#x27;expropriation pour cause d&#x27;utilité publique, Code de la voirie routière</div>
+</div>
+<div class="col">
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell pos">█</div>
+<div class="cell pos">█</div>
+<div class="cell pos">█</div>
+<div class="cell axis"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="info" style="color:#cf222e">2015: +564 459 lignes | 1922 commits | Code rural (nouveau), Code rural et de la pêche maritime, Code de la sécurité sociale, Code du travail, Code général des collectivités territoriales, Code des transports, Code du cinéma et de l&#x27;image animée, Code de l&#x27;environnement, Code de l&#x27;éducation, Code monétaire et financier, Code de l&#x27;expropriation pour cause d&#x27;utilité publique, Code de la santé publique, Code de l&#x27;action sociale et des familles, Code de la construction et de l&#x27;habitation, Code des ports maritimes, Code général des impôts, Code de l&#x27;urbanisme, Code de la sécurité intérieure, Code de commerce, Code de l&#x27;entrée et du séjour des étrangers et du droit d&#x27;asile, Code de procédure pénale, Code de la défense, Code de l&#x27;énergie, Code du sport, Code général des impôts, annexe III, Code de la consommation, Code du tourisme, Code de justice administrative, Code de la propriété intellectuelle, Code de l&#x27;organisation judiciaire, Code électoral, Code forestier (nouveau), Code général des impôts, annexe II, Code du travail applicable à Mayotte, Code des relations entre le public et l&#x27;administration, Code des juridictions financières, Code de procédure civile, Code de la route, Code civil, Code des postes et des communications électroniques, Code général des impôts, annexe IV, Code des assurances, Livre des procédures fiscales, Code de l&#x27;aviation civile, Code disciplinaire et pénal de la marine marchande, Code de la mutualité, Code des pensions civiles et militaires de retraite, Code du patrimoine, Code général de la propriété des personnes publiques, Code des marchés publics (édition 2006), Code des douanes, Code des procédures civiles d&#x27;exécution, Code des pensions militaires d&#x27;invalidité et des victimes de guerre, Code des pensions militaires d&#x27;invalidité et des victimes de la guerre, Code du domaine de l&#x27;Etat, Code de la voirie routière, Code du service national, Code minier (nouveau), Code pénal, Code de l&#x27;artisanat, Code de la recherche, Code des communes de la Nouvelle-Calédonie, Code de la famille et de l&#x27;aide sociale, Code des communes, Code de la Légion d&#x27;honneur, de la Médaille militaire et de l&#x27;ordre national du Mérite, Code de la légion d&#x27;honneur et de la médaille militaire</div>
+</div>
+<div class="col">
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell pos">█</div>
+<div class="cell pos">█</div>
+<div class="cell axis"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="info" style="color:#cf222e">2016: +403 605 lignes | 2387 commits | Code de la consommation, Code de la santé publique, Code des assurances, Code rural (nouveau), Code rural et de la pêche maritime, Code de l&#x27;urbanisme, Code du travail, Code de l&#x27;énergie, Code de la sécurité sociale, Code de commerce, Code de l&#x27;environnement, Code de l&#x27;action sociale et des familles, Code des transports, Code du sport, Code civil, Code des relations entre le public et l&#x27;administration, Code général des collectivités territoriales, Code monétaire et financier, Code de la mutualité, Code de l&#x27;éducation, Code de procédure pénale, Code de la construction et de l&#x27;habitation, Code de l&#x27;entrée et du séjour des étrangers et du droit d&#x27;asile, Code général des impôts, Code des marchés publics (édition 2006), Code de la sécurité intérieure, Code du travail applicable à Mayotte, Code du patrimoine, Code de la défense, Code du cinéma et de l&#x27;image animée, Code de la propriété intellectuelle, Code de la route, Code de justice administrative, Code général des impôts, annexe III, Code général des impôts, annexe II, Code des postes et des communications électroniques, Code de l&#x27;organisation judiciaire, Code des douanes, Code pénal, Code général de la propriété des personnes publiques, Code de la voirie routière, Code des juridictions financières, Livre des procédures fiscales, Code forestier (nouveau), Code du tourisme, Code de procédure civile, Code de l&#x27;aviation civile, Code général des impôts, annexe IV, Code des communes de la Nouvelle-Calédonie, Code de l&#x27;expropriation pour cause d&#x27;utilité publique, Code des pensions civiles et militaires de retraite, Code électoral, Code des procédures civiles d&#x27;exécution, Code minier (nouveau), Code général des impôts, annexe I, Code des pensions militaires d&#x27;invalidité et des victimes de guerre, Code des pensions militaires d&#x27;invalidité et des victimes de la guerre, Code du service national, Code de la recherche, Code de l&#x27;artisanat, Code des ports maritimes, Code du domaine de l&#x27;Etat, Code du travail maritime, Code forestier de Mayotte, Code disciplinaire et pénal de la marine marchande, Code de justice militaire (nouveau)</div>
+</div>
+<div class="col">
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell pos">█</div>
+<div class="cell pos">█</div>
+<div class="cell axis"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="info" style="color:#cf222e">2017: +377 112 lignes | 1883 commits | Code des pensions militaires d&#x27;invalidité et des victimes de guerre, Code des pensions militaires d&#x27;invalidité et des victimes de la guerre, Code des juridictions financières, Code de la santé publique, Code du travail, Code rural (nouveau), Code rural et de la pêche maritime, Code de l&#x27;environnement, Code de la sécurité sociale, Code de commerce, Code de la défense, Code des transports, Code du cinéma et de l&#x27;image animée, Code général des impôts, Code de l&#x27;action sociale et des familles, Code de la sécurité intérieure, Code des assurances, Code monétaire et financier, Code de la construction et de l&#x27;habitation, Code général des collectivités territoriales, Code de l&#x27;éducation, Code général de la propriété des personnes publiques, Code de la consommation, Code de procédure pénale, Code de l&#x27;urbanisme, Code du patrimoine, Code de procédure civile, Code de justice administrative, Code du sport, Code de l&#x27;organisation judiciaire, Code de la propriété intellectuelle, Code de l&#x27;énergie, Code des postes et des communications électroniques, Code de la mutualité, Code de la route, Code des douanes, Code du travail applicable à Mayotte, Code général des impôts, annexe III, Code des relations entre le public et l&#x27;administration, Livre des procédures fiscales, Code de l&#x27;entrée et du séjour des étrangers et du droit d&#x27;asile, Code pénal, Code général des impôts, annexe II, Code électoral, Code forestier (nouveau), Code général des impôts, annexe IV, Code de l&#x27;artisanat, Code civil, Code du service national, Code des procédures civiles d&#x27;exécution, Code de la voirie routière, Code de l&#x27;aviation civile, Code du tourisme, Code des douanes de Mayotte, Code de l&#x27;expropriation pour cause d&#x27;utilité publique, Code des pensions civiles et militaires de retraite, Code minier (nouveau), Code des communes de la Nouvelle-Calédonie, Code de la recherche, Code de la Légion d&#x27;honneur, de la Médaille militaire et de l&#x27;ordre national du Mérite, Code de la légion d&#x27;honneur et de la médaille militaire, Code du domaine de l&#x27;Etat, Code de justice militaire (nouveau), Code minier, Code des communes, Code général des impôts, annexe I</div>
 </div>
 <div class="col">
 <div class="cell"> </div>
@@ -1409,7 +1217,31 @@ a { color: #666; }
 <div class="cell"> </div>
 <div class="cell"> </div>
 <div class="cell"> </div>
-<div class="cell axis-line"> </div>
+<div class="cell axis"> </div>
+<div class="cell neg">█</div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="info" style="color:#2ea043">2018: -131 407 lignes | 1491 commits | Code de la sécurité sociale, Code du travail applicable à Mayotte, Code du travail, Code monétaire et financier, Code de la santé publique, Code général des impôts, Code de l&#x27;éducation, Code de la défense, Code de l&#x27;énergie, Code rural (nouveau), Code rural et de la pêche maritime, Code de la sécurité intérieure, Code de commerce, Code de l&#x27;action sociale et des familles, Code de l&#x27;environnement, Code général des collectivités territoriales, Code des transports, Code des pensions militaires d&#x27;invalidité et des victimes de guerre, Code des pensions militaires d&#x27;invalidité et des victimes de la guerre, Code des assurances, Code de la construction et de l&#x27;habitation, Code du cinéma et de l&#x27;image animée, Code de la consommation, Code de procédure pénale, Code général des impôts, annexe III, Code de l&#x27;urbanisme, Code du patrimoine, Livre des procédures fiscales, Code des douanes, Code du sport, Code général des impôts, annexe II, Code des relations entre le public et l&#x27;administration, Code de l&#x27;aviation civile, Code de l&#x27;entrée et du séjour des étrangers et du droit d&#x27;asile, Code de la route, Code de la Légion d&#x27;honneur, de la Médaille militaire et de l&#x27;ordre national du Mérite, Code de la légion d&#x27;honneur et de la médaille militaire, Code de justice administrative, Code du tourisme, Code électoral, Code général de la propriété des personnes publiques, Code pénal, Code de l&#x27;organisation judiciaire, Code général des impôts, annexe IV, Code de la mutualité, Code de la propriété intellectuelle, Code des postes et des communications électroniques, Code forestier (nouveau), Code de la commande publique, Code minier (nouveau), Code des pensions civiles et militaires de retraite, Code civil, Code des procédures civiles d&#x27;exécution, Code de la voirie routière, Code du service national, Code de l&#x27;expropriation pour cause d&#x27;utilité publique, Code disciplinaire et pénal de la marine marchande, Code de procédure civile, Code de l&#x27;artisanat, Code des juridictions financières, Code de la recherche, Code des pensions de retraite des marins français du commerce, de pêche ou de plaisance, Code des communes de la Nouvelle-Calédonie, Code du domaine de l&#x27;Etat</div>
+</div>
+<div class="col">
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell pos">█</div>
+<div class="cell pos">█</div>
+<div class="cell axis"> </div>
 <div class="cell"> </div>
 <div class="cell"> </div>
 <div class="cell"> </div>
@@ -1420,7 +1252,175 @@ a { color: #666; }
 <div class="cell"> </div>
 <div class="cell"> </div>
 <div class="cell"> </div>
-<div class="info" style="color:#cf222e">2026: -16 546 lignes | 239 commits | Code général des collectivités territoriales, Code rural (nouveau), Code rural et de la pêche maritime</div>
+<div class="info" style="color:#cf222e">2019: +333 252 lignes | 1836 commits | Code de la sécurité sociale, Code de la construction et de l&#x27;habitation, Code de la commande publique, Code du travail, Code de la santé publique, Code de commerce, Code général des impôts, Code de l&#x27;environnement, Code des transports, Code monétaire et financier, Code de l&#x27;éducation, Code rural (nouveau), Code rural et de la pêche maritime, Code de la défense, Code général des collectivités territoriales, Code de procédure pénale, Code de l&#x27;entrée et du séjour des étrangers et du droit d&#x27;asile, Code de l&#x27;action sociale et des familles, Code de l&#x27;énergie, Code du sport, Code des postes et des communications électroniques, Code électoral, Code de la propriété intellectuelle, Code des assurances, Code général des impôts, annexe III, Code de la sécurité intérieure, Code de l&#x27;urbanisme, Code des pensions militaires d&#x27;invalidité et des victimes de guerre, Code des pensions militaires d&#x27;invalidité et des victimes de la guerre, Code de l&#x27;organisation judiciaire, Livre des procédures fiscales, Code de justice administrative, Code de la route, Code général des impôts, annexe II, Code de la mutualité, Code des douanes, Code civil, Code de la consommation, Code de procédure civile, Code du cinéma et de l&#x27;image animée, Code pénal, Code des relations entre le public et l&#x27;administration, Code du tourisme, Code de l&#x27;aviation civile, Code de la voirie routière, Code général des impôts, annexe IV, Code général de la propriété des personnes publiques, Code de la recherche, Code du patrimoine, Code forestier (nouveau), Code des procédures civiles d&#x27;exécution, Code de l&#x27;artisanat, Code des pensions civiles et militaires de retraite, Code des communes, Code des communes de la Nouvelle-Calédonie, Code minier (nouveau), Code du service national, Code de la famille et de l&#x27;aide sociale, Code des douanes de Mayotte, Code des juridictions financières, Code du domaine de l&#x27;Etat</div>
+</div>
+<div class="col">
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell pos">█</div>
+<div class="cell axis"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="info" style="color:#cf222e">2020: +235 694 lignes | 1804 commits | Code de la sécurité sociale, Code de la santé publique, Code du travail, Code de l&#x27;éducation, Code monétaire et financier, Code de l&#x27;environnement, Code général des impôts, Code de commerce, Code de procédure pénale, Code de la défense, Code de l&#x27;organisation judiciaire, Code des transports, Code rural (nouveau), Code rural et de la pêche maritime, Code de procédure civile, Code de la sécurité intérieure, Code général des collectivités territoriales, Code du sport, Code de la construction et de l&#x27;habitation, Code du cinéma et de l&#x27;image animée, Code de la propriété intellectuelle, Code de l&#x27;action sociale et des familles, Code électoral, Code de l&#x27;énergie, Code de la route, Code des douanes, Code général des impôts, annexe III, Code du patrimoine, Code pénal, Code de justice administrative, Code de l&#x27;urbanisme, Code de la consommation, Code des assurances, Code de la commande publique, Code général des impôts, annexe IV, Code minier (nouveau), Code général des impôts, annexe II, Livre des procédures fiscales, Code des postes et des communications électroniques, Code des juridictions financières, Code de l&#x27;entrée et du séjour des étrangers et du droit d&#x27;asile, Code de la recherche, Code civil, Code des pensions militaires d&#x27;invalidité et des victimes de guerre, Code des pensions militaires d&#x27;invalidité et des victimes de la guerre, Code général de la propriété des personnes publiques, Code de la mutualité, Code des procédures civiles d&#x27;exécution, Code du tourisme, Code du domaine de l&#x27;Etat, Code de l&#x27;expropriation pour cause d&#x27;utilité publique, Code des communes de la Nouvelle-Calédonie, Code du travail applicable à Mayotte, Code des relations entre le public et l&#x27;administration, Code forestier (nouveau), Code de l&#x27;aviation civile, Code du service national, Code de justice militaire (nouveau), Code des pensions civiles et militaires de retraite, Code des ports maritimes, Code des pensions de retraite des marins français du commerce, de pêche ou de plaisance, Code de la Légion d&#x27;honneur, de la Médaille militaire et de l&#x27;ordre national du Mérite, Code de la légion d&#x27;honneur et de la médaille militaire, Code du travail maritime, Code des douanes de Mayotte, Code de la voirie routière, Code des communes</div>
+</div>
+<div class="col">
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell pos">█</div>
+<div class="cell pos">█</div>
+<div class="cell axis"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="info" style="color:#cf222e">2021: +343 759 lignes | 1868 commits | Code de l&#x27;entrée et du séjour des étrangers et du droit d&#x27;asile, Code de la construction et de l&#x27;habitation, Code de la santé publique, Code de la défense, Code du travail, Code de commerce, Code de l&#x27;environnement, Code rural (nouveau), Code rural et de la pêche maritime, Code de la sécurité sociale, Code de procédure pénale, Code des transports, Code de la justice pénale des mineurs, Code de l&#x27;énergie, Code monétaire et financier, Code général des impôts, Code de l&#x27;urbanisme, Code de la sécurité intérieure, Code du sport, Code des postes et des communications électroniques, Code de l&#x27;éducation, Code de l&#x27;action sociale et des familles, Code général des collectivités territoriales, Code du cinéma et de l&#x27;image animée, Code de la consommation, Code pénal, Code de la commande publique, Code de la propriété intellectuelle, Code du patrimoine, Code de justice administrative, Code général des impôts, annexe III, Code de la route, Code civil, Code de l&#x27;artisanat, Code de procédure civile, Code de l&#x27;aviation civile, Code de l&#x27;organisation judiciaire, Code des assurances, Code général des impôts, annexe IV, Code des douanes, Code des procédures civiles d&#x27;exécution, Livre des procédures fiscales, Code minier (nouveau), Code électoral, Code général des impôts, annexe II, Code général de la propriété des personnes publiques, Code de la mutualité, Code du tourisme, Code de la voirie routière, Code des juridictions financières, Code des communes de la Nouvelle-Calédonie, Code des relations entre le public et l&#x27;administration, Code forestier (nouveau), Code du service national, Code des pensions militaires d&#x27;invalidité et des victimes de guerre, Code des pensions militaires d&#x27;invalidité et des victimes de la guerre, Code de la recherche, Code de l&#x27;expropriation pour cause d&#x27;utilité publique, Code des ports maritimes, Code des pensions civiles et militaires de retraite, Code des communes, Code des douanes de Mayotte, Code du domaine de l&#x27;Etat, Code des pensions de retraite des marins français du commerce, de pêche ou de plaisance, Code de justice militaire (nouveau)</div>
+</div>
+<div class="col">
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell pos">█</div>
+<div class="cell pos">█</div>
+<div class="cell pos">█</div>
+<div class="cell pos">█</div>
+<div class="cell axis"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="info" style="color:#cf222e">2022: +639 512 lignes | 1827 commits | Code monétaire et financier, Code de la santé publique, Code pénitentiaire, Code de l&#x27;éducation, Code général de la fonction publique, Code de procédure pénale, Code de la sécurité sociale, Code des transports, Code général des impôts, Code des impositions sur les biens et services, Code du travail, Code général des collectivités territoriales, Code de l&#x27;environnement, Code de commerce, Code de la sécurité intérieure, Code rural (nouveau), Code rural et de la pêche maritime, Code de l&#x27;action sociale et des familles, Code civil, Code de la construction et de l&#x27;habitation, Code de l&#x27;énergie, Code du cinéma et de l&#x27;image animée, Code de la propriété intellectuelle, Code de la consommation, Code de l&#x27;urbanisme, Code des douanes, Code du patrimoine, Code de la mutualité, Code du sport, Code de la défense, Code minier (nouveau), Code général des impôts, annexe III, Code de l&#x27;aviation civile, Livre des procédures fiscales, Code de l&#x27;entrée et du séjour des étrangers et du droit d&#x27;asile, Code des juridictions financières, Code de la voirie routière, Code des assurances, Code général des impôts, annexe IV, Code général de la propriété des personnes publiques, Code pénal, Code de la route, Code de procédure civile, Code des communes, Code général des impôts, annexe II, Code forestier (nouveau), Code de justice administrative, Code des relations entre le public et l&#x27;administration, Code des postes et des communications électroniques, Code de la recherche, Code de la justice pénale des mineurs, Code électoral, Code de la commande publique, Code de l&#x27;organisation judiciaire, Code des communes de la Nouvelle-Calédonie, Code des procédures civiles d&#x27;exécution, Code des pensions militaires d&#x27;invalidité et des victimes de guerre, Code des pensions militaires d&#x27;invalidité et des victimes de la guerre, Code des pensions civiles et militaires de retraite, Code de l&#x27;expropriation pour cause d&#x27;utilité publique, Code du tourisme, Code du service national, Code de l&#x27;artisanat, Code du domaine de l&#x27;Etat, Code des pensions de retraite des marins français du commerce, de pêche ou de plaisance</div>
+</div>
+<div class="col">
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell pos">█</div>
+<div class="cell pos">█</div>
+<div class="cell axis"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="info" style="color:#cf222e">2023: +380 636 lignes | 1759 commits | Code du cinéma et de l&#x27;image animée, Code des transports, Code de la santé publique, Code de l&#x27;aviation civile, Code de commerce, Code de la sécurité sociale, Code général des impôts, Code rural (nouveau), Code rural et de la pêche maritime, Code de procédure pénale, Code de l&#x27;artisanat, Code de la sécurité intérieure, Code de l&#x27;environnement, Code des juridictions financières, Code de l&#x27;énergie, Code de l&#x27;action sociale et des familles, Code monétaire et financier, Code de l&#x27;éducation, Code du travail, Code général des collectivités territoriales, Code de la construction et de l&#x27;habitation, Code de la défense, Code des assurances, Code de l&#x27;urbanisme, Code de la propriété intellectuelle, Code du sport, Code de la consommation, Code pénal, Code civil, Code général des impôts, annexe III, Code de l&#x27;entrée et du séjour des étrangers et du droit d&#x27;asile, Code des impositions sur les biens et services, Code général de la fonction publique, Code de la commande publique, Code de justice administrative, Code pénitentiaire, Livre des procédures fiscales, Code des douanes, Code général des impôts, annexe II, Code de procédure civile, Code forestier (nouveau), Code des postes et des communications électroniques, Code des pensions civiles et militaires de retraite, Code des pensions militaires d&#x27;invalidité et des victimes de guerre, Code des pensions militaires d&#x27;invalidité et des victimes de la guerre, Code de l&#x27;organisation judiciaire, Code de la route, Code de la mutualité, Code général de la propriété des personnes publiques, Code général des impôts, annexe IV, Code des relations entre le public et l&#x27;administration, Code du patrimoine, Code minier (nouveau), Code des procédures civiles d&#x27;exécution, Code du domaine de l&#x27;Etat, Code de la justice pénale des mineurs, Code des communes de la Nouvelle-Calédonie, Code du service national, Code électoral, Code des communes, Code de la voirie routière, Code de la recherche, Code de l&#x27;expropriation pour cause d&#x27;utilité publique, Code du tourisme, Code de la Légion d&#x27;honneur, de la Médaille militaire et de l&#x27;ordre national du Mérite, Code de la légion d&#x27;honneur et de la médaille militaire</div>
+</div>
+<div class="col">
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell pos">█</div>
+<div class="cell pos">█</div>
+<div class="cell axis"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="info" style="color:#cf222e">2024: +392 808 lignes | 1267 commits | Code de commerce, Code monétaire et financier, Code de la recherche, Code des assurances, Code de l&#x27;environnement, Code de la santé publique, Code du travail, Code de la sécurité sociale, Code de la défense, Code de l&#x27;entrée et du séjour des étrangers et du droit d&#x27;asile, Code général des impôts, Code des impositions sur les biens et services, Code de la sécurité intérieure, Code de procédure pénale, Code des transports, Code du patrimoine, Code de l&#x27;action sociale et des familles, Code de l&#x27;éducation, Code de la construction et de l&#x27;habitation, Code de l&#x27;énergie, Code du sport, Code rural (nouveau), Code rural et de la pêche maritime, Code général des impôts, annexe III, Code pénitentiaire, Code général des collectivités territoriales, Code du cinéma et de l&#x27;image animée, Code de l&#x27;organisation judiciaire, Code de justice administrative, Code de procédure civile, Code minier (nouveau), Code de l&#x27;urbanisme, Code pénal, Code de la consommation, Livre des procédures fiscales, Code des postes et des communications électroniques, Code de la commande publique, Code de la route, Code de l&#x27;expropriation pour cause d&#x27;utilité publique, Code des juridictions financières, Code général des impôts, annexe IV, Code de la propriété intellectuelle, Code général des impôts, annexe II, Code forestier (nouveau), Code civil, Code des pensions militaires d&#x27;invalidité et des victimes de guerre, Code des pensions militaires d&#x27;invalidité et des victimes de la guerre, Code de la mutualité, Code de la justice pénale des mineurs, Code de la voirie routière, Code des douanes, Code général de la fonction publique, Code général de la propriété des personnes publiques, Code électoral, Code du tourisme, Code de l&#x27;artisanat, Code des communes de la Nouvelle-Calédonie, Code des procédures civiles d&#x27;exécution, Code des pensions civiles et militaires de retraite, Code des relations entre le public et l&#x27;administration, Code de la Légion d&#x27;honneur, de la Médaille militaire et de l&#x27;ordre national du Mérite, Code de la légion d&#x27;honneur et de la médaille militaire, Code du service national, Code de justice militaire (nouveau)</div>
+</div>
+<div class="col">
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell pos">█</div>
+<div class="cell pos">█</div>
+<div class="cell pos">█</div>
+<div class="cell axis"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="info" style="color:#cf222e">2025: +550 272 lignes | 1400 commits | Code général de la fonction publique, Code général des impôts, Code rural (nouveau), Code rural et de la pêche maritime, Code des transports, Code de la sécurité sociale, Code monétaire et financier, Code des impositions sur les biens et services, Code de la santé publique, Code de l&#x27;environnement, Code de l&#x27;action sociale et des familles, Code du travail, Code de l&#x27;éducation, Code général des collectivités territoriales, Code de l&#x27;entrée et du séjour des étrangers et du droit d&#x27;asile, Code de commerce, Code de procédure civile, Code de la sécurité intérieure, Code de procédure pénale, Code de la construction et de l&#x27;habitation, Code de l&#x27;énergie, Code général des impôts, annexe III, Code pénitentiaire, Code du cinéma et de l&#x27;image animée, Code de l&#x27;urbanisme, Code général des impôts, annexe IV, Code de la consommation, Code de la défense, Code général des impôts, annexe II, Code de la route, Code de la commande publique, Livre des procédures fiscales, Code pénal, Code de justice administrative, Code des procédures civiles d&#x27;exécution, Code du sport, Code des assurances, Code électoral, Code de l&#x27;organisation judiciaire, Code des communes, Code des douanes, Code des pensions civiles et militaires de retraite, Code de la recherche, Code forestier (nouveau), Code du patrimoine, Code général de la propriété des personnes publiques, Code de la justice pénale des mineurs, Code des postes et des communications électroniques, Code civil, Code de l&#x27;expropriation pour cause d&#x27;utilité publique, Code de la Légion d&#x27;honneur, de la Médaille militaire et de l&#x27;ordre national du Mérite, Code de la légion d&#x27;honneur et de la médaille militaire, Code du service national, Code des relations entre le public et l&#x27;administration, Code général des impôts, annexe I, Codes juridiques, Code de l&#x27;aviation civile, Code du tourisme, Code de la propriété intellectuelle, Code de la mutualité, Code de la voirie routière, Code des pensions militaires d&#x27;invalidité et des victimes de guerre, Code des pensions militaires d&#x27;invalidité et des victimes de la guerre, Code des juridictions financières, Code de l&#x27;artisanat, Code de justice militaire (nouveau)</div>
+</div>
+<div class="col">
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell axis"> </div>
+<div class="cell neg">█</div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="cell"> </div>
+<div class="info" style="color:#2ea043">2026: -16 546 lignes | 239 commits | Code général des collectivités territoriales, Code rural (nouveau), Code rural et de la pêche maritime, Code de la sécurité sociale, Code des impositions sur les biens et services, Code de l&#x27;énergie, Code de la santé publique, Code de procédure pénale, Code de l&#x27;éducation, Code monétaire et financier, Code général de la fonction publique, Code général des impôts, Code des transports, Code de l&#x27;environnement, Code du travail, Code de la route, Code du cinéma et de l&#x27;image animée, Code de la construction et de l&#x27;habitation, Code de la commande publique, Code du sport, Code de l&#x27;action sociale et des familles, Code électoral, Code de la sécurité intérieure, Code de la défense, Code des pensions civiles et militaires de retraite, Code général des impôts, annexe III, Code de l&#x27;organisation judiciaire, Code de commerce, Code de l&#x27;entrée et du séjour des étrangers et du droit d&#x27;asile, Code général des impôts, annexe IV, Code du tourisme, Livre des procédures fiscales, Code général des impôts, annexe II, Code forestier (nouveau), Code des juridictions financières, Code des douanes, Code des postes et des communications électroniques, Code général de la propriété des personnes publiques, Code de l&#x27;urbanisme, Code de justice administrative, Code des pensions de retraite des marins français du commerce, de pêche ou de plaisance, Code pénal, Code du service national, Code des assurances, Code de la voirie routière, Code de la consommation, Code des procédures civiles d&#x27;exécution, Code des relations entre le public et l&#x27;administration, Code civil, Code pénitentiaire, Code minier (nouveau)</div>
 </div>
 </div>
 </div>
