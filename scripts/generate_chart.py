@@ -96,31 +96,29 @@ def generate_html(yearly_data: list, metadata: dict) -> str:
     total_net = total_add - total_del
 
     # Générer le CSS
+    # Couleurs inversées: rouge pour +, vert pour -
     css = '''
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: monospace; font-size: 14px; line-height: 1; color: #222; background: #fff; padding: 20px; }
-.chart { display: flex; align-items: stretch; }
+.chart { display: flex; align-items: flex-start; }
 .y-axis { display: flex; flex-direction: column; text-align: right; padding-right: 0.5ch; font-size: 11px; color: #666; width: 12ch; }
-.y-axis > div { height: 1.2em; display: flex; align-items: center; justify-content: flex-end; }
-.columns { display: flex; }
+.y-label { height: 1.2em; display: flex; align-items: center; justify-content: flex-end; }
+.columns { display: flex; align-items: flex-start; }
 .col { display: flex; flex-direction: column; width: 2ch; position: relative; }
 .col:hover { background: #eee; }
-.cell { height: 1.2em; text-align: center; }
-.pos { color: #2ea043; }
-.neg { color: #cf222e; }
-.axis-line { border-bottom: 1px solid #222; }
+.cell { height: 1.2em; text-align: center; line-height: 1.2em; }
+.pos { color: #cf222e; }
+.neg { color: #2ea043; }
+.axis { height: 1.2em; border-bottom: 1px solid #222; }
 .year-row { display: flex; margin-left: 12ch; }
 .year-cell { width: 2ch; text-align: center; font-size: 10px; color: #666; }
-.info-area { height: 2.5em; margin-top: 1em; font-size: 13px; color: #666; }
-.info { display: none; position: absolute; left: 0; right: 0; bottom: -4em; white-space: nowrap; background: #fff; z-index: 10; }
+.info-area { margin-top: 1em; font-size: 12px; color: #666; min-height: 1.5em; }
+.info { display: none; position: absolute; left: 0; bottom: -3em; white-space: nowrap; background: #fff; z-index: 10; padding: 2px 0; }
 .col:hover .info { display: block; }
 .title { margin-bottom: 1em; }
-.footer { margin-top: 3em; font-size: 12px; color: #666; }
+.footer { margin-top: 2em; font-size: 12px; color: #666; }
 a { color: #666; }
 '''
-
-    # Générer les barres pour chaque année
-    # Structure: colonnes verticales, chaque colonne = une année
 
     html_parts = []
     html_parts.append('<!DOCTYPE html>')
@@ -141,13 +139,24 @@ a { color: #666; }
     html_parts.append('<div class="y-axis">')
     for i in range(bar_height):
         val = int(max_abs * (bar_height - i) / bar_height)
-        label = f"+{format_number(val)}" if i == 0 or i == bar_height // 2 else ""
-        html_parts.append(f'<div>{label}</div>')
-    html_parts.append('<div class="axis-line">0</div>')
+        if i == 0:
+            label = f"+{format_number(val)}"
+        elif i == bar_height - 1:
+            label = f"+{format_number(int(max_abs / bar_height))}"
+        else:
+            label = ""
+        html_parts.append(f'<div class="y-label">{label}</div>')
+    # Axis line (0)
+    html_parts.append('<div class="y-label axis">0</div>')
     for i in range(bar_height):
         val = int(max_abs * (i + 1) / bar_height)
-        label = f"-{format_number(val)}" if i == bar_height // 2 or i == bar_height - 1 else ""
-        html_parts.append(f'<div>{label}</div>')
+        if i == 0:
+            label = f"-{format_number(int(max_abs / bar_height))}"
+        elif i == bar_height - 1:
+            label = f"-{format_number(val)}"
+        else:
+            label = ""
+        html_parts.append(f'<div class="y-label">{label}</div>')
     html_parts.append('</div>')
 
     # Columns
@@ -155,16 +164,16 @@ a { color: #666; }
     for year_data in yearly_data:
         net = year_data['net']
 
-        # Calculate bar height
-        if max_abs == 0:
+        # Calculate bar height (au moins 1 si non-zéro)
+        if max_abs == 0 or net == 0:
             bar_cells_count = 0
         else:
-            bar_cells_count = int(abs(net) / max_abs * bar_height)
+            bar_cells_count = max(1, round(abs(net) / max_abs * bar_height))
 
         # Generate column cells
         html_parts.append('<div class="col">')
 
-        # Top half (positive values)
+        # Top half (positive values go up)
         for i in range(bar_height):
             pos = bar_height - 1 - i  # Position from bottom of top section
             if net > 0 and pos < bar_cells_count:
@@ -173,20 +182,21 @@ a { color: #666; }
                 html_parts.append('<div class="cell"> </div>')
 
         # Axis line
-        html_parts.append('<div class="cell axis-line"> </div>')
+        html_parts.append('<div class="cell axis"> </div>')
 
-        # Bottom half (negative values)
+        # Bottom half (negative values go down)
         for i in range(bar_height):
             if net < 0 and i < bar_cells_count:
                 html_parts.append('<div class="cell neg">█</div>')
             else:
                 html_parts.append('<div class="cell"> </div>')
 
-        # Info popup
+        # Info popup - liste TOUS les codes
         net_str = f"+{format_number(net)}" if net >= 0 else format_number(net)
-        color = "#2ea043" if net >= 0 else "#cf222e"
-        top_codes = year_data['codes'][:3]
-        codes_str = ', '.join([c['name'] for c in top_codes])
+        color = "#cf222e" if net >= 0 else "#2ea043"
+        # Liste tous les codes modifiés cette année
+        all_codes = year_data['codes']
+        codes_str = ', '.join([c['name'] for c in all_codes])
         info_html = f'<div class="info" style="color:{color}">{year_data["year"]}: {net_str} lignes | {year_data["commits"]} commits | {escape(codes_str)}</div>'
         html_parts.append(info_html)
 
