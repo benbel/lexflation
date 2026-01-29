@@ -88,7 +88,8 @@ def generate_html(yearly_data: list, metadata: dict) -> str:
     max_negative = min((d['net'] for d in yearly_data if d['net'] < 0), default=0)
     max_abs = max(abs(max_positive), abs(max_negative))
 
-    bar_height = 10  # Nombre de lignes par demi-graphe
+    bar_height = 20  # Nombre de lignes par demi-graphe (2x plus haut)
+    col_width = 4    # Largeur des colonnes en ch (2x plus large)
 
     # Totaux
     total_add = sum(d['add'] for d in yearly_data)
@@ -96,28 +97,28 @@ def generate_html(yearly_data: list, metadata: dict) -> str:
     total_net = total_add - total_del
 
     # Générer le CSS
-    # Couleurs inversées: rouge pour +, vert pour -
-    css = '''
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: monospace; font-size: 14px; line-height: 1; color: #222; background: #fff; padding: 20px; }
-.chart { display: flex; align-items: flex-start; }
-.y-axis { display: flex; flex-direction: column; text-align: right; padding-right: 0.5ch; font-size: 11px; color: #666; width: 12ch; }
-.y-label { height: 1.2em; display: flex; align-items: center; justify-content: flex-end; }
-.columns { display: flex; align-items: flex-start; }
-.col { display: flex; flex-direction: column; width: 2ch; position: relative; }
-.col:hover { background: #eee; }
-.cell { height: 1.2em; text-align: center; line-height: 1.2em; }
-.pos { color: #cf222e; }
-.neg { color: #2ea043; }
-.axis { height: 1.2em; border-bottom: 1px solid #222; }
-.year-row { display: flex; margin-left: 12ch; }
-.year-cell { width: 2ch; text-align: center; font-size: 10px; color: #666; }
-.info-area { margin-top: 1em; font-size: 12px; color: #666; min-height: 1.5em; }
-.info { display: none; position: absolute; left: 0; bottom: -3em; white-space: nowrap; background: #fff; z-index: 10; padding: 2px 0; }
-.col:hover .info { display: block; }
-.title { margin-bottom: 1em; }
-.footer { margin-top: 2em; font-size: 12px; color: #666; }
-a { color: #666; }
+    css = f'''
+* {{ margin: 0; padding: 0; box-sizing: border-box; }}
+body {{ font-family: monospace; font-size: 14px; line-height: 1; color: #222; background: #fff; padding: 20px; }}
+.chart-container {{ position: relative; }}
+.columns {{ display: flex; align-items: flex-start; }}
+.col {{ display: flex; flex-direction: column; width: {col_width}ch; position: relative; }}
+.col:hover {{ background: #eee; }}
+.cell {{ height: 1.2em; text-align: center; line-height: 1.2em; }}
+.pos {{ color: #cf222e; }}
+.neg {{ color: #2ea043; }}
+.axis {{ height: 1.2em; border-bottom: 1px solid #222; }}
+.year-row {{ display: flex; }}
+.year-cell {{ width: {col_width}ch; text-align: center; font-size: 11px; color: #666; }}
+.info-container {{ margin-top: 1em; min-height: 20em; }}
+.info {{ display: none; text-align: center; }}
+.col:hover .info {{ display: block; position: fixed; left: 50%; transform: translateX(-50%); text-align: left; background: #fff; padding: 1em; z-index: 10; }}
+.info-header {{ font-weight: bold; margin-bottom: 0.5em; }}
+.info-codes {{ font-size: 12px; color: #444; }}
+.info-codes div {{ padding: 1px 0; }}
+.title {{ margin-bottom: 1em; }}
+.footer {{ margin-top: 2em; font-size: 12px; color: #666; }}
+a {{ color: #666; }}
 '''
 
     html_parts = []
@@ -133,33 +134,9 @@ a { color: #666; }
     html_parts.append('<div class="title">Évolution des codes législatifs français (delta net par an)</div>')
 
     # Chart container
-    html_parts.append('<div class="chart">')
+    html_parts.append('<div class="chart-container">')
 
-    # Y-axis labels
-    html_parts.append('<div class="y-axis">')
-    for i in range(bar_height):
-        val = int(max_abs * (bar_height - i) / bar_height)
-        if i == 0:
-            label = f"+{format_number(val)}"
-        elif i == bar_height - 1:
-            label = f"+{format_number(int(max_abs / bar_height))}"
-        else:
-            label = ""
-        html_parts.append(f'<div class="y-label">{label}</div>')
-    # Axis line (0)
-    html_parts.append('<div class="y-label axis">0</div>')
-    for i in range(bar_height):
-        val = int(max_abs * (i + 1) / bar_height)
-        if i == 0:
-            label = f"-{format_number(int(max_abs / bar_height))}"
-        elif i == bar_height - 1:
-            label = f"-{format_number(val)}"
-        else:
-            label = ""
-        html_parts.append(f'<div class="y-label">{label}</div>')
-    html_parts.append('</div>')
-
-    # Columns
+    # Columns (sans axe Y)
     html_parts.append('<div class="columns">')
     for year_data in yearly_data:
         net = year_data['net']
@@ -191,19 +168,27 @@ a { color: #666; }
             else:
                 html_parts.append('<div class="cell"> </div>')
 
-        # Info popup - liste TOUS les codes
+        # Info popup - centré sous le graphe avec retours à la ligne
         net_str = f"+{format_number(net)}" if net >= 0 else format_number(net)
         color = "#cf222e" if net >= 0 else "#2ea043"
-        # Liste tous les codes modifiés cette année
-        all_codes = year_data['codes']
-        codes_str = ', '.join([c['name'] for c in all_codes])
-        info_html = f'<div class="info" style="color:{color}">{year_data["year"]}: {net_str} lignes | {year_data["commits"]} commits | {escape(codes_str)}</div>'
+
+        # Construire l'info avec retours à la ligne
+        info_lines = []
+        info_lines.append(f'<div class="info-header" style="color:{color}">{year_data["year"]}: {net_str} lignes ({year_data["commits"]} commits)</div>')
+        info_lines.append('<div class="info-codes">')
+        for code in year_data['codes']:
+            code_net = code['add'] - code['del']
+            code_net_str = f"+{format_number(code_net)}" if code_net >= 0 else format_number(code_net)
+            code_color = "#cf222e" if code_net >= 0 else "#2ea043"
+            info_lines.append(f'<div><span style="color:{code_color}">{code_net_str}</span> {escape(code["name"])}</div>')
+        info_lines.append('</div>')
+
+        info_html = f'<div class="info">{"".join(info_lines)}</div>'
         html_parts.append(info_html)
 
         html_parts.append('</div>')  # end col
 
     html_parts.append('</div>')  # end columns
-    html_parts.append('</div>')  # end chart
 
     # Year labels (every 5 years)
     html_parts.append('<div class="year-row">')
@@ -215,8 +200,10 @@ a { color: #666; }
             html_parts.append('<div class="year-cell"></div>')
     html_parts.append('</div>')
 
-    # Info area hint
-    html_parts.append('<div class="info-area">(survoler une colonne)</div>')
+    html_parts.append('</div>')  # end chart-container
+
+    # Info container (espace réservé pour l'affichage)
+    html_parts.append('<div class="info-container"></div>')
 
     # Footer
     net_str = f"+{format_number(total_net)}" if total_net >= 0 else format_number(total_net)
