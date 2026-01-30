@@ -106,7 +106,7 @@ def generate_html(yearly_data: list, metadata: dict) -> str:
     max_negative = min(all_values) if all_values else 0
     max_abs = max(abs(max_positive), abs(max_negative))
 
-    bar_height = 20  # Nombre de lignes par demi-graphe
+    bar_height = 40  # Full height (no negative section needed)
     col_width = 2    # Largeur des colonnes en ch (narrow, no gaps)
 
     # Totaux
@@ -118,25 +118,25 @@ def generate_html(yearly_data: list, metadata: dict) -> str:
     css = f'''
 * {{ margin: 0; padding: 0; box-sizing: border-box; }}
 body {{ font-family: monospace; font-size: 14px; line-height: 1; color: #222; background: #fff; padding: 20px; }}
+.header {{ margin-bottom: 1em; }}
+.title {{ font-weight: bold; }}
+.subtitle {{ font-size: 12px; color: #666; margin-top: 0.3em; }}
+.subtitle a {{ color: #666; }}
 .main-layout {{ display: flex; gap: 2em; }}
 .graph-section {{ flex: 0 0 auto; }}
 .info-section {{ flex: 1 1 auto; min-width: 300px; padding-top: 1em; }}
 .chart-container {{ position: relative; }}
-.columns {{ display: flex; align-items: flex-start; }}
+.columns {{ display: flex; align-items: flex-end; }}
 .col {{ display: flex; flex-direction: column; width: {col_width}ch; position: relative; }}
 .col:hover {{ background: #eee; }}
 .cell {{ height: 1.2em; text-align: center; line-height: 1.2em; }}
 .pos {{ color: #cf222e; }}
 .neg {{ color: #2ea043; }}
-.axis {{ height: 1.2em; border-bottom: 1px solid #222; }}
-.year-row {{ display: flex; }}
-.year-cell {{ width: {col_width}ch; text-align: center; font-size: 10px; color: #666; }}
+.year-label {{ font-size: 10px; color: #666; text-align: center; height: 1.5em; line-height: 1.5em; }}
 .info {{ display: none; }}
 .info-header {{ font-weight: bold; margin-bottom: 0.5em; }}
 .info-codes {{ font-size: 12px; color: #444; }}
 .info-codes div {{ padding: 1px 0; }}
-.title {{ margin-bottom: 1em; }}
-.footer {{ margin-top: 2em; font-size: 12px; color: #666; }}
 a {{ color: #666; }}
 '''
 
@@ -150,7 +150,13 @@ a {{ color: #666; }}
     html_parts.append(f'<style>{css}</style>')
     html_parts.append('</head>')
     html_parts.append('<body>')
-    html_parts.append('<div class="title">Évolution des codes législatifs français (delta net par an)</div>')
+
+    # Header with title and stats
+    net_str = f"+{format_number(total_net)}" if total_net >= 0 else format_number(total_net)
+    html_parts.append('<div class="header">')
+    html_parts.append('<div class="title">Inflation législative</div>')
+    html_parts.append(f'<div class="subtitle">Total: {net_str} lignes | {metadata["total_codes"]} codes | {metadata["total_commits"]} modifications | <a href="https://git.tricoteuses.fr/codes">git.tricoteuses.fr</a></div>')
+    html_parts.append('</div>')
 
     # Main layout: graph on left, info on right
     html_parts.append('<div class="main-layout">')
@@ -161,26 +167,15 @@ a {{ color: #666; }}
     # Chart container
     html_parts.append('<div class="chart-container">')
 
-    # Year labels at top (every 5 years)
-    html_parts.append('<div class="year-row">')
-    for year_data in yearly_data:
-        year = year_data['year']
-        if year % 5 == 0:
-            html_parts.append(f'<div class="year-cell">{year}</div>')
-        else:
-            html_parts.append('<div class="year-cell"></div>')
-    html_parts.append('</div>')
-
-    # Columns - Kagi-style: each year shows cumulative range
+    # Columns - Kagi-style: each column contains year label at top, bars, year label at bottom
     html_parts.append('<div class="columns">')
     for idx, year_data in enumerate(yearly_data):
+        year = year_data['year']
         net = year_data['net']
         cumul_start = year_data['cumul_start']
         cumul_end = year_data['cumul_end']
 
-        # For Kagi-style, we show the bar from cumul_start to cumul_end
-        # Convert cumulative values to cell positions
-        # Position 0 is at the axis (center), positive goes up, negative goes down
+        # Convert cumulative values to cell positions (0 at bottom, bar_height at top)
         if max_abs == 0:
             start_pos = 0
             end_pos = 0
@@ -192,45 +187,39 @@ a {{ color: #666; }}
         fill_min = min(start_pos, end_pos)
         fill_max = max(start_pos, end_pos)
 
-        # Generate column cells
-        html_parts.append(f'<div class="col" data-year="{year_data["year"]}">')
+        # Generate column
+        html_parts.append(f'<div class="col" data-year="{year}">')
 
-        # Top half (positive territory, positions 0 to bar_height from axis up)
+        # Year label at top (every 5 years)
+        if year % 5 == 0:
+            html_parts.append(f'<div class="year-label">{year}</div>')
+        else:
+            html_parts.append('<div class="year-label"></div>')
+
+        # Bar cells (from top to bottom, position bar_height-1 to 0)
         for i in range(bar_height):
-            # Cell represents position (bar_height - i) to (bar_height - i - 1) from top
-            # In terms of value: cell i from top represents position (bar_height - 1 - i) above axis
-            cell_pos = bar_height - 1 - i  # Position above axis (0 at axis, bar_height-1 at top)
+            cell_pos = bar_height - 1 - i  # Position from bottom (0 at bottom)
 
             # Check if this cell is in the filled range
-            if fill_max > 0 and cell_pos >= 0 and fill_min < cell_pos + 1 and fill_max > cell_pos:
+            if fill_min < cell_pos + 1 and fill_max > cell_pos:
                 color_class = "pos" if net >= 0 else "neg"
                 html_parts.append(f'<div class="cell {color_class}">█</div>')
             else:
                 html_parts.append('<div class="cell"> </div>')
 
-        # Axis line
-        html_parts.append('<div class="cell axis"> </div>')
-
-        # Bottom half (negative territory)
-        for i in range(bar_height):
-            # Cell i from axis represents position -(i+1) to -i
-            cell_pos_top = -i  # Top of cell (closer to axis)
-            cell_pos_bottom = -(i + 1)  # Bottom of cell (further from axis)
-
-            # Check if this cell is in the filled range (for negative values)
-            if fill_min < 0 and fill_min < cell_pos_top and fill_max > cell_pos_bottom:
-                color_class = "pos" if net >= 0 else "neg"
-                html_parts.append(f'<div class="cell {color_class}">█</div>')
-            else:
-                html_parts.append('<div class="cell"> </div>')
+        # Year label at bottom (every 5 years)
+        if year % 5 == 0:
+            html_parts.append(f'<div class="year-label">{year}</div>')
+        else:
+            html_parts.append('<div class="year-label"></div>')
 
         # Info popup - will be displayed in right column
-        net_str = f"+{format_number(net)}" if net >= 0 else format_number(net)
+        net_str_year = f"+{format_number(net)}" if net >= 0 else format_number(net)
         color = "#cf222e" if net >= 0 else "#2ea043"
 
         # Build info with line breaks
         info_lines = []
-        info_lines.append(f'<div class="info-header" style="color:{color}">{year_data["year"]}: {net_str} lignes ({year_data["commits"]} commits)</div>')
+        info_lines.append(f'<div class="info-header" style="color:{color}">{year}: {net_str_year} lignes ({year_data["commits"]} modifications)</div>')
         info_lines.append('<div class="info-codes">')
         for code in year_data['codes']:
             code_net = code['add'] - code['del']
@@ -246,16 +235,6 @@ a {{ color: #666; }}
 
     html_parts.append('</div>')  # end columns
 
-    # Year labels at bottom (every 5 years)
-    html_parts.append('<div class="year-row">')
-    for year_data in yearly_data:
-        year = year_data['year']
-        if year % 5 == 0:
-            html_parts.append(f'<div class="year-cell">{year}</div>')
-        else:
-            html_parts.append('<div class="year-cell"></div>')
-    html_parts.append('</div>')
-
     html_parts.append('</div>')  # end chart-container
     html_parts.append('</div>')  # end graph-section
 
@@ -263,15 +242,6 @@ a {{ color: #666; }}
     html_parts.append('<div class="info-section" id="info-display"></div>')
 
     html_parts.append('</div>')  # end main-layout
-
-    # Footer
-    net_str = f"+{format_number(total_net)}" if total_net >= 0 else format_number(total_net)
-    html_parts.append(f'<div class="footer">')
-    html_parts.append(f'Total: {net_str} lignes | ')
-    html_parts.append(f'{metadata["total_codes"]} codes | ')
-    html_parts.append(f'{metadata["total_commits"]} commits | ')
-    html_parts.append(f'<a href="https://git.tricoteuses.fr/codes">git.tricoteuses.fr</a>')
-    html_parts.append('</div>')
 
     # JavaScript to display info in right column on hover
     js_code = '''
