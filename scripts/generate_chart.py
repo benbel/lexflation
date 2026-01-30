@@ -106,11 +106,21 @@ def generate_html(yearly_data: list, metadata: dict) -> str:
     max_negative = min(all_values) if all_values else 0
     max_abs = max(abs(max_positive), abs(max_negative))
 
-    # Target: ~1440px width (3/4 of 1080p), ~800px height
-    # With 56 years: 1440/56 ≈ 25px per column
-    bar_height = 800   # 800px height at 1px per cell
-    cell_width = 25    # 25px per column
-    cell_height = 1    # 1px per cell
+    # Chart dimensions - calculated dynamically based on data
+    num_years = len(yearly_data)
+    target_width = 1400  # Target width in pixels
+    bar_height = 800     # Height in pixels (1px per cell for resolution)
+    cell_width = max(10, min(30, target_width // num_years)) if num_years > 0 else 25
+    cell_height = 1      # 1px per cell
+
+    # Year label frequency - adapt based on number of years and column width
+    # Show fewer labels when columns are narrow to avoid overlap
+    if cell_width < 15:
+        year_label_interval = 10
+    elif cell_width < 20:
+        year_label_interval = 5
+    else:
+        year_label_interval = 5
 
     # Totaux
     total_add = sum(d['add'] for d in yearly_data)
@@ -140,7 +150,8 @@ body {{ font-family: 'JetBrains Mono', monospace; font-size: 14px; line-height: 
 .info {{ display: none; }}
 .info-header {{ font-weight: bold; margin-bottom: 0.5em; }}
 .info-codes {{ font-size: 12px; color: #444; }}
-.info-codes div {{ padding: 1px 0; }}
+.info-codes div {{ padding: 1px 0; display: flex; }}
+.code-delta {{ display: inline-block; min-width: 10ch; text-align: right; margin-right: 0.5em; }}
 a {{ color: #666; }}
 '''
 
@@ -198,8 +209,8 @@ a {{ color: #666; }}
         # Generate column
         html_parts.append(f'<div class="col" data-year="{year}">')
 
-        # Year label at top (every 5 years)
-        if year % 5 == 0:
+        # Year label at top (dynamic interval based on column width)
+        if year % year_label_interval == 0:
             html_parts.append(f'<div class="year-label">{year}</div>')
         else:
             html_parts.append('<div class="year-label"></div>')
@@ -217,8 +228,8 @@ a {{ color: #666; }}
             else:
                 html_parts.append('<div class="cell"></div>')
 
-        # Year label at bottom (every 5 years)
-        if year % 5 == 0:
+        # Year label at bottom (dynamic interval based on column width)
+        if year % year_label_interval == 0:
             html_parts.append(f'<div class="year-label">{year}</div>')
         else:
             html_parts.append('<div class="year-label"></div>')
@@ -235,7 +246,7 @@ a {{ color: #666; }}
             code_net = code['add'] - code['del']
             code_net_str = f"+{format_number(code_net)}" if code_net >= 0 else format_number(code_net)
             code_color = "#cf222e" if code_net >= 0 else "#2ea043"
-            info_lines.append(f'<div><span style="color:{code_color}">{code_net_str}</span> {escape(code["name"])}</div>')
+            info_lines.append(f'<div><span class="code-delta" style="color:{code_color}">{code_net_str}</span><span>{escape(code["name"])}</span></div>')
         info_lines.append('</div>')
 
         info_html = f'<div class="info">{"".join(info_lines)}</div>'

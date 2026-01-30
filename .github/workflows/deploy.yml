@@ -1,4 +1,4 @@
-name: Génération et déploiement
+name: Mise à jour mensuelle et déploiement
 
 on:
   push:
@@ -7,11 +7,11 @@ on:
       - master
   workflow_dispatch:  # Permet de déclencher manuellement
   schedule:
-    # Exécuter tous les lundis à 3h du matin (pour mettre à jour les données)
-    - cron: '0 3 * * 1'
+    # Exécuter le 1er de chaque mois à 3h du matin UTC
+    - cron: '0 3 1 * *'
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -20,8 +20,64 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    # Only fetch fresh data on schedule or manual trigger, not on push
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Récupérer les données fraîches
+        run: |
+          echo "Récupération des données depuis git.tricoteuses.fr..."
+          python3 scripts/fetch_codes_data.py
+          echo "Données récupérées"
+
+      - name: Générer le graphique
+        run: |
+          echo "Génération de l'histogramme..."
+          python3 scripts/generate_chart.py
+          echo "Graphique généré"
+
+      - name: Vérifier les fichiers générés
+        run: |
+          echo "Contenu du dossier docs/"
+          ls -lh docs/
+          du -h docs/index.html
+          du -h docs/data/codes_data.json
+
+      - name: Commit et push des données mises à jour
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add docs/data/codes_data.json docs/index.html
+          # Only commit if there are changes
+          if git diff --staged --quiet; then
+            echo "Aucune modification détectée"
+          else
+            MONTH=$(date +"%B %Y")
+            git commit -m "Mise à jour mensuelle des données - ${MONTH}"
+            git push
+          fi
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './docs'
+
   build:
     runs-on: ubuntu-latest
+    # Run on push events (when data is already up to date)
+    if: github.event_name == 'push'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -56,7 +112,9 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    needs: build
+    needs: [update-data, build]
+    # Run if either update-data or build succeeded (one will be skipped based on trigger)
+    if: always() && (needs.update-data.result == 'success' || needs.build.result == 'success')
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
