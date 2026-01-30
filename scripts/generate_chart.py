@@ -106,9 +106,9 @@ def generate_html(yearly_data: list, metadata: dict) -> str:
     max_negative = min(all_values) if all_values else 0
     max_abs = max(abs(max_positive), abs(max_negative))
 
-    # Target: ~1440px width (3/4 of 1080p), ~400px height
+    # Target: ~1440px width (3/4 of 1080p), ~800px height
     # With 56 years: 1440/56 ≈ 25px per column
-    bar_height = 400   # 400px height at 1px per cell
+    bar_height = 800   # 800px height at 1px per cell
     cell_width = 25    # 25px per column
     cell_height = 1    # 1px per cell
 
