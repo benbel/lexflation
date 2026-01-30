@@ -150,7 +150,8 @@ body {{ font-family: 'JetBrains Mono', monospace; font-size: 14px; line-height: 
 .info {{ display: none; }}
 .info-header {{ font-weight: bold; margin-bottom: 0.5em; }}
 .info-codes {{ font-size: 12px; color: #444; }}
-.info-codes div {{ padding: 1px 0; }}
+.info-codes div {{ padding: 1px 0; display: flex; }}
+.code-delta {{ display: inline-block; min-width: 10ch; text-align: right; margin-right: 0.5em; }}
 a {{ color: #666; }}
 '''
 
@@ -245,7 +246,7 @@ a {{ color: #666; }}
             code_net = code['add'] - code['del']
             code_net_str = f"+{format_number(code_net)}" if code_net >= 0 else format_number(code_net)
             code_color = "#cf222e" if code_net >= 0 else "#2ea043"
-            info_lines.append(f'<div><span style="color:{code_color}">{code_net_str}</span> {escape(code["name"])}</div>')
+            info_lines.append(f'<div><span class="code-delta" style="color:{code_color}">{code_net_str}</span><span>{escape(code["name"])}</span></div>')
         info_lines.append('</div>')
 
         info_html = f'<div class="info">{"".join(info_lines)}</div>'
