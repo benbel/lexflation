@@ -191,6 +191,10 @@ a {{ color: #666; }}
         fill_min = min(start_pos, end_pos)
         fill_max = max(start_pos, end_pos)
 
+        # Ensure at least 1px height for every year
+        if fill_max - fill_min < 1:
+            fill_max = fill_min + 1
+
         # Generate column
         html_parts.append(f'<div class="col" data-year="{year}">')
 
