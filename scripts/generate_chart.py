@@ -77,6 +77,24 @@ def format_number(n: int) -> str:
     return f"{n:,}".replace(',', ' ')
 
 
+# Partial block characters (from 1/8 to 8/8, filled from bottom)
+BLOCKS = [' ', '▁', '▂', '▃', '▄', '▅', '▆', '▇', '█']
+
+
+def get_block_char(fill_fraction: float) -> str:
+    """
+    Returns the appropriate block character for a given fill fraction (0.0 to 1.0).
+    The blocks fill from the bottom of the cell.
+    """
+    if fill_fraction <= 0:
+        return ' '
+    if fill_fraction >= 1:
+        return '█'
+    # Map to 1-7 (partial blocks)
+    index = int(fill_fraction * 8)
+    return BLOCKS[max(1, min(7, index + 1))]
+
+
 def generate_html(yearly_data: list, metadata: dict) -> str:
     """Génère le fichier HTML avec le graphe en block elements"""
 
@@ -114,10 +132,11 @@ def generate_html(yearly_data: list, metadata: dict) -> str:
     total_del = sum(d['del'] for d in yearly_data)
     total_net = total_add - total_del
 
-    # Générer le CSS
+    # Générer le CSS avec police web
     css = f'''
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&display=swap');
 * {{ margin: 0; padding: 0; box-sizing: border-box; }}
-body {{ font-family: monospace; font-size: 14px; line-height: 1; color: #222; background: #fff; padding: 20px; }}
+body {{ font-family: 'JetBrains Mono', monospace; font-size: 14px; line-height: 1; color: #222; background: #fff; padding: 20px; }}
 .header {{ margin-bottom: 1em; }}
 .title {{ font-weight: bold; }}
 .subtitle {{ font-size: 12px; color: #666; margin-top: 0.3em; }}
@@ -129,7 +148,7 @@ body {{ font-family: monospace; font-size: 14px; line-height: 1; color: #222; ba
 .columns {{ display: flex; align-items: flex-end; }}
 .col {{ display: flex; flex-direction: column; width: {col_width}ch; position: relative; }}
 .col:hover {{ background: #eee; }}
-.cell {{ height: 1.2em; text-align: center; line-height: 1.2em; }}
+.cell {{ height: 1em; text-align: center; line-height: 1; }}
 .pos {{ color: #cf222e; }}
 .neg {{ color: #2ea043; }}
 .year-label {{ font-size: 10px; color: #666; text-align: center; height: 1.5em; line-height: 1.5em; }}
@@ -199,11 +218,36 @@ a {{ color: #666; }}
         # Bar cells (from top to bottom, position bar_height-1 to 0)
         for i in range(bar_height):
             cell_pos = bar_height - 1 - i  # Position from bottom (0 at bottom)
+            cell_top = cell_pos + 1
+            cell_bottom = cell_pos
 
-            # Check if this cell is in the filled range
-            if fill_min < cell_pos + 1 and fill_max > cell_pos:
+            # Calculate fill fraction for this cell
+            if fill_max <= cell_bottom or fill_min >= cell_top:
+                # Cell is completely outside the filled range
+                block_char = ' '
+            elif fill_min <= cell_bottom and fill_max >= cell_top:
+                # Cell is completely inside the filled range
+                block_char = '█'
+            else:
+                # Cell is partially filled
+                # Calculate what fraction of the cell is filled
+                overlap_bottom = max(fill_min, cell_bottom)
+                overlap_top = min(fill_max, cell_top)
+                fill_fraction = overlap_top - overlap_bottom
+
+                # Determine if this is a bottom edge or top edge cell
+                if fill_min > cell_bottom:
+                    # Bottom edge: fill from bottom up to fill_min position within cell
+                    # But blocks fill from bottom, so we need the fraction from cell_bottom
+                    fill_fraction = fill_max - cell_bottom if fill_max < cell_top else cell_top - fill_min
+                    block_char = get_block_char(overlap_top - cell_bottom)
+                else:
+                    # Top edge: fill from cell_bottom up to fill_max
+                    block_char = get_block_char(fill_max - cell_bottom)
+
+            if block_char != ' ':
                 color_class = "pos" if net >= 0 else "neg"
-                html_parts.append(f'<div class="cell {color_class}">█</div>')
+                html_parts.append(f'<div class="cell {color_class}">{block_char}</div>')
             else:
                 html_parts.append('<div class="cell"> </div>')
 
