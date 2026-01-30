@@ -106,9 +106,9 @@ def generate_html(yearly_data: list, metadata: dict) -> str:
     max_negative = min(all_values) if all_values else 0
     max_abs = max(abs(max_positive), abs(max_negative))
 
-    # Target: ~1440px width (3/4 of 1080p), ~400px height
+    # Target: ~1440px width (3/4 of 1080p), ~800px height
     # With 56 years: 1440/56 ≈ 25px per column
-    bar_height = 400   # 400px height at 1px per cell
+    bar_height = 800   # 800px height at 1px per cell
     cell_width = 25    # 25px per column
     cell_height = 1    # 1px per cell
 
@@ -190,6 +190,10 @@ a {{ color: #666; }}
         # Determine the range to fill (from min to max of start/end)
         fill_min = min(start_pos, end_pos)
         fill_max = max(start_pos, end_pos)
+
+        # Ensure at least 1px height for every year
+        if fill_max - fill_min < 1:
+            fill_max = fill_min + 1
 
         # Generate column
         html_parts.append(f'<div class="col" data-year="{year}">')
