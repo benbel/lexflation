@@ -77,24 +77,6 @@ def format_number(n: int) -> str:
     return f"{n:,}".replace(',', ' ')
 
 
-# Partial block characters (from 1/8 to 8/8, filled from bottom)
-BLOCKS = [' ', '▁', '▂', '▃', '▄', '▅', '▆', '▇', '█']
-
-
-def get_block_char(fill_fraction: float) -> str:
-    """
-    Returns the appropriate block character for a given fill fraction (0.0 to 1.0).
-    The blocks fill from the bottom of the cell.
-    """
-    if fill_fraction <= 0:
-        return ' '
-    if fill_fraction >= 1:
-        return '█'
-    # Map to 1-7 (partial blocks)
-    index = int(fill_fraction * 8)
-    return BLOCKS[max(1, min(7, index + 1))]
-
-
 def generate_html(yearly_data: list, metadata: dict) -> str:
     """Génère le fichier HTML avec le graphe en block elements"""
 
@@ -124,8 +106,8 @@ def generate_html(yearly_data: list, metadata: dict) -> str:
     max_negative = min(all_values) if all_values else 0
     max_abs = max(abs(max_positive), abs(max_negative))
 
-    bar_height = 40  # Full height (no negative section needed)
-    col_width = 2    # Largeur des colonnes en ch (narrow, no gaps)
+    bar_height = 160  # High resolution (small font = more cells)
+    col_width = 1      # Narrow columns
 
     # Totaux
     total_add = sum(d['add'] for d in yearly_data)
@@ -145,7 +127,7 @@ body {{ font-family: 'JetBrains Mono', monospace; font-size: 14px; line-height: 
 .graph-section {{ flex: 0 0 auto; }}
 .info-section {{ flex: 1 1 auto; min-width: 300px; padding-top: 1em; }}
 .chart-container {{ position: relative; }}
-.columns {{ display: flex; align-items: flex-end; }}
+.columns {{ display: flex; align-items: flex-end; font-size: 1px; line-height: 1; }}
 .col {{ display: flex; flex-direction: column; width: {col_width}ch; position: relative; }}
 .col:hover {{ background: #eee; }}
 .cell {{ height: 1em; text-align: center; line-height: 1; }}
@@ -216,38 +198,15 @@ a {{ color: #666; }}
             html_parts.append('<div class="year-label"></div>')
 
         # Bar cells (from top to bottom, position bar_height-1 to 0)
+        # Only use █ for filled cells, space for empty
         for i in range(bar_height):
             cell_pos = bar_height - 1 - i  # Position from bottom (0 at bottom)
-            cell_top = cell_pos + 1
-            cell_bottom = cell_pos
 
-            # Calculate fill fraction for this cell
-            if fill_max <= cell_bottom or fill_min >= cell_top:
-                # Cell is completely outside the filled range
-                block_char = ' '
-            elif fill_min <= cell_bottom and fill_max >= cell_top:
-                # Cell is completely inside the filled range
-                block_char = '█'
-            else:
-                # Cell is partially filled
-                # Calculate what fraction of the cell is filled
-                overlap_bottom = max(fill_min, cell_bottom)
-                overlap_top = min(fill_max, cell_top)
-                fill_fraction = overlap_top - overlap_bottom
-
-                # Determine if this is a bottom edge or top edge cell
-                if fill_min > cell_bottom:
-                    # Bottom edge: fill from bottom up to fill_min position within cell
-                    # But blocks fill from bottom, so we need the fraction from cell_bottom
-                    fill_fraction = fill_max - cell_bottom if fill_max < cell_top else cell_top - fill_min
-                    block_char = get_block_char(overlap_top - cell_bottom)
-                else:
-                    # Top edge: fill from cell_bottom up to fill_max
-                    block_char = get_block_char(fill_max - cell_bottom)
-
-            if block_char != ' ':
+            # Cell is filled if its center is within the range
+            cell_center = cell_pos + 0.5
+            if fill_min <= cell_center < fill_max:
                 color_class = "pos" if net >= 0 else "neg"
-                html_parts.append(f'<div class="cell {color_class}">{block_char}</div>')
+                html_parts.append(f'<div class="cell {color_class}">█</div>')
             else:
                 html_parts.append('<div class="cell"> </div>')
 
