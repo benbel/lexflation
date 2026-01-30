@@ -55,7 +55,7 @@ def aggregate_by_year(data: dict) -> list:
                 'del': code_data['del'],
                 'commits': code_data['commits']
             })
-        codes_list.sort(key=lambda c: c['add'] + c['del'], reverse=True)
+        codes_list.sort(key=lambda c: c['add'] - c['del'], reverse=True)
 
         total_commits = sum(c['commits'] for c in codes_list)
         net = yearly[year]['add'] - yearly[year]['del']
