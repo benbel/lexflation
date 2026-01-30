@@ -106,8 +106,11 @@ def generate_html(yearly_data: list, metadata: dict) -> str:
     max_negative = min(all_values) if all_values else 0
     max_abs = max(abs(max_positive), abs(max_negative))
 
-    bar_height = 160  # High resolution (small font = more cells)
-    col_width = 1      # Narrow columns
+    # Target: ~1440px width (3/4 of 1080p), ~400px height
+    # With 56 years: 1440/56 ≈ 25px per column
+    bar_height = 400   # 400px height at 1px per cell
+    cell_width = 25    # 25px per column
+    cell_height = 1    # 1px per cell
 
     # Totaux
     total_add = sum(d['add'] for d in yearly_data)
@@ -127,12 +130,12 @@ body {{ font-family: 'JetBrains Mono', monospace; font-size: 14px; line-height: 
 .graph-section {{ flex: 0 0 auto; }}
 .info-section {{ flex: 1 1 auto; min-width: 300px; padding-top: 1em; }}
 .chart-container {{ position: relative; }}
-.columns {{ display: flex; align-items: flex-end; font-size: 1px; line-height: 1; }}
-.col {{ display: flex; flex-direction: column; width: {col_width}ch; position: relative; }}
-.col:hover {{ background: #eee; }}
-.cell {{ height: 1em; text-align: center; line-height: 1; }}
-.pos {{ color: #cf222e; }}
-.neg {{ color: #2ea043; }}
+.columns {{ display: flex; align-items: flex-end; }}
+.col {{ display: flex; flex-direction: column; width: {cell_width}px; position: relative; }}
+.col:hover {{ opacity: 0.7; }}
+.cell {{ height: {cell_height}px; width: {cell_width}px; }}
+.pos {{ background-color: #cf222e; }}
+.neg {{ background-color: #2ea043; }}
 .year-label {{ font-size: 10px; color: #666; text-align: center; height: 1.5em; line-height: 1.5em; }}
 .info {{ display: none; }}
 .info-header {{ font-weight: bold; margin-bottom: 0.5em; }}
@@ -198,7 +201,7 @@ a {{ color: #666; }}
             html_parts.append('<div class="year-label"></div>')
 
         # Bar cells (from top to bottom, position bar_height-1 to 0)
-        # Only use █ for filled cells, space for empty
+        # Use background-color for filled cells
         for i in range(bar_height):
             cell_pos = bar_height - 1 - i  # Position from bottom (0 at bottom)
 
@@ -206,9 +209,9 @@ a {{ color: #666; }}
             cell_center = cell_pos + 0.5
             if fill_min <= cell_center < fill_max:
                 color_class = "pos" if net >= 0 else "neg"
-                html_parts.append(f'<div class="cell {color_class}">█</div>')
+                html_parts.append(f'<div class="cell {color_class}"></div>')
             else:
-                html_parts.append('<div class="cell"> </div>')
+                html_parts.append('<div class="cell"></div>')
 
         # Year label at bottom (every 5 years)
         if year % 5 == 0:
