@@ -1,9 +1,3 @@
-# Données brutes des dépôts clonés
-data/raw/
-
-# Données temporaires
-data/temp/
-
 # Python
 __pycache__/
 *.py[cod]
