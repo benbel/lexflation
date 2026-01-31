@@ -228,7 +228,7 @@ def main():
     print(f"📊 Max deletions: {final_data['metadata']['max_deletions']}\n")
 
     # Sauvegarder le fichier JSON
-    output_dir = Path(__file__).parent.parent / 'docs' / 'data'
+    output_dir = Path(__file__).parent.parent / 'data'
     output_dir.mkdir(parents=True, exist_ok=True)
     output_file = output_dir / 'codes_data.json'
 
