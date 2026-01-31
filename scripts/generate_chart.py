@@ -294,7 +294,7 @@ def main():
     print("Génération de l'histogramme en Block Elements...")
 
     script_dir = Path(__file__).parent
-    data_file = script_dir.parent / 'docs' / 'data' / 'codes_data.json'
+    data_file = script_dir.parent / 'data' / 'codes_data.json'
     html_file = script_dir.parent / 'docs' / 'index.html'
 
     # Charger les données
