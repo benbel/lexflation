@@ -169,7 +169,7 @@ a {{ color: #666; }}
     # Header with title and stats
     net_str = f"+{format_number(total_net)}" if total_net >= 0 else format_number(total_net)
     html_parts.append('<div class="header">')
-    html_parts.append('<div class="title">Inflation législative</div>')
+    html_parts.append('<div class="title">Inflation normative</div>')
     html_parts.append(f'<div class="subtitle">Total: {net_str} lignes | {metadata["total_codes"]} codes | {metadata["total_commits"]} modifications | <a href="https://git.tricoteuses.fr/codes">git.tricoteuses.fr</a></div>')
     html_parts.append('</div>')
 
