@@ -77,7 +77,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     # Run on push events (when data is already up to date)
-    if: github.event_name == 'push'
+    # Skip bot commits to avoid double-deploy after the scheduled data update
+    if: github.event_name == 'push' && github.actor != 'github-actions[bot]'
     steps:
       - name: Checkout
         uses: actions/checkout@v4

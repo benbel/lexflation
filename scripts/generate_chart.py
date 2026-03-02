@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Génère un histogramme en Block Elements (caractères Unicode) à partir des données des codes législatifs.
-Agrège les additions/délétions par année, affiche le delta net.
-Produit: index.html (page autonome, pas de SVG)
+Génère un histogramme SVG à partir des données des codes législatifs.
+Agrège les additions/délétions par année, affiche le delta net cumulatif.
+Produit: index.html (page autonome)
 """
 
 import json
@@ -78,7 +78,7 @@ def format_number(n: int) -> str:
 
 
 def generate_html(yearly_data: list, metadata: dict) -> str:
-    """Génère le fichier HTML avec le graphe en block elements"""
+    """Génère le fichier HTML avec le graphe en SVG"""
 
     if not yearly_data:
         return '<html><body>Aucune donnée</body></html>'
@@ -109,9 +109,9 @@ def generate_html(yearly_data: list, metadata: dict) -> str:
     # Chart dimensions - calculated dynamically based on data
     num_years = len(yearly_data)
     target_width = 1400  # Target width in pixels
-    bar_height = 800     # Height in pixels (1px per cell for resolution)
+    bar_height = 800     # Height in pixels
     cell_width = max(10, min(30, target_width // num_years)) if num_years > 0 else 25
-    cell_height = 1      # 1px per cell
+    label_height = 20    # Vertical space for year labels above and below chart
 
     # Year label frequency - adapt based on number of years and column width
     # Show fewer labels when columns are narrow to avoid overlap
@@ -121,6 +121,9 @@ def generate_html(yearly_data: list, metadata: dict) -> str:
         year_label_interval = 5
     else:
         year_label_interval = 5
+
+    chart_width = num_years * cell_width
+    svg_height = label_height + bar_height + label_height
 
     # Totaux
     total_add = sum(d['add'] for d in yearly_data)
@@ -139,15 +142,7 @@ body {{ font-family: 'JetBrains Mono', monospace; font-size: 14px; line-height: 
 .main-layout {{ display: flex; gap: 2em; }}
 .graph-section {{ flex: 0 0 auto; }}
 .info-section {{ flex: 1 1 auto; min-width: 300px; padding-top: 1em; }}
-.chart-container {{ position: relative; }}
-.columns {{ display: flex; align-items: flex-end; }}
-.col {{ display: flex; flex-direction: column; width: {cell_width}px; position: relative; }}
-.col:hover {{ opacity: 0.7; }}
-.cell {{ height: {cell_height}px; width: {cell_width}px; }}
-.pos {{ background-color: #cf222e; }}
-.neg {{ background-color: #2ea043; }}
-.year-label {{ font-size: 10px; color: #666; text-align: center; height: 1.5em; line-height: 1.5em; }}
-.info {{ display: none; }}
+g.col:hover {{ opacity: 0.7; cursor: default; }}
 .info-header {{ font-weight: bold; margin-bottom: 0.5em; }}
 .info-codes {{ font-size: 12px; color: #444; }}
 .info-codes div {{ padding: 1px 0; display: flex; }}
@@ -175,25 +170,24 @@ a {{ color: #666; }}
 
     # Main layout: graph on left, info on right
     html_parts.append('<div class="main-layout">')
-
-    # Graph section
     html_parts.append('<div class="graph-section">')
 
-    # Chart container
-    html_parts.append('<div class="chart-container">')
+    # SVG chart — one <rect> per year instead of 800 <div class="cell"> per year
+    svg_parts = []
+    svg_parts.append(f'<svg xmlns="http://www.w3.org/2000/svg" width="{chart_width}" height="{svg_height}" viewBox="0 0 {chart_width} {svg_height}">')
 
-    # Columns - Kagi-style: each column contains year label at top, bars, year label at bottom
-    html_parts.append('<div class="columns">')
     for idx, year_data in enumerate(yearly_data):
         year = year_data['year']
         net = year_data['net']
         cumul_start = year_data['cumul_start']
         cumul_end = year_data['cumul_end']
 
-        # Convert cumulative values to cell positions (0 at bottom, bar_height at top)
+        x = idx * cell_width
+
+        # Convert cumulative values to pixel positions (0 at bottom, bar_height at top)
         if max_abs == 0:
-            start_pos = 0
-            end_pos = 0
+            start_pos = 0.0
+            end_pos = 0.0
         else:
             start_pos = cumul_start / max_abs * bar_height
             end_pos = cumul_end / max_abs * bar_height
@@ -206,39 +200,14 @@ a {{ color: #666; }}
         if fill_max - fill_min < 1:
             fill_max = fill_min + 1
 
-        # Generate column
-        html_parts.append(f'<div class="col" data-year="{year}">')
+        # SVG y=0 is at top; chart area is offset by label_height
+        rect_y = label_height + (bar_height - fill_max)
+        rect_h = fill_max - fill_min
 
-        # Year label at top (dynamic interval based on column width)
-        if year % year_label_interval == 0:
-            html_parts.append(f'<div class="year-label">{year}</div>')
-        else:
-            html_parts.append('<div class="year-label"></div>')
-
-        # Bar cells (from top to bottom, position bar_height-1 to 0)
-        # Use background-color for filled cells
-        for i in range(bar_height):
-            cell_pos = bar_height - 1 - i  # Position from bottom (0 at bottom)
-
-            # Cell is filled if its center is within the range
-            cell_center = cell_pos + 0.5
-            if fill_min <= cell_center < fill_max:
-                color_class = "pos" if net >= 0 else "neg"
-                html_parts.append(f'<div class="cell {color_class}"></div>')
-            else:
-                html_parts.append('<div class="cell"></div>')
-
-        # Year label at bottom (dynamic interval based on column width)
-        if year % year_label_interval == 0:
-            html_parts.append(f'<div class="year-label">{year}</div>')
-        else:
-            html_parts.append('<div class="year-label"></div>')
-
-        # Info popup - will be displayed in right column
-        net_str_year = f"+{format_number(net)}" if net >= 0 else format_number(net)
         color = "#cf222e" if net >= 0 else "#2ea043"
 
-        # Build info with line breaks
+        # Build info HTML (same content as before, stored in data-info; read by JS on hover)
+        net_str_year = f"+{format_number(net)}" if net >= 0 else format_number(net)
         info_lines = []
         info_lines.append(f'<div class="info-header" style="color:{color}">{year}: {net_str_year} lignes ({year_data["commits"]} modifications)</div>')
         info_lines.append('<div class="info-codes">')
@@ -248,15 +217,27 @@ a {{ color: #666; }}
             code_color = "#cf222e" if code_net >= 0 else "#2ea043"
             info_lines.append(f'<div><span class="code-delta" style="color:{code_color}">{code_net_str}</span><span>{escape(code["name"])}</span></div>')
         info_lines.append('</div>')
+        info_html = ''.join(info_lines)
 
-        info_html = f'<div class="info">{"".join(info_lines)}</div>'
-        html_parts.append(info_html)
+        svg_parts.append(f'<g class="col" data-year="{year}" data-info="{escape(info_html)}">')
 
-        html_parts.append('</div>')  # end col
+        # Transparent rect covering the full column height ensures hover works in empty areas
+        svg_parts.append(f'<rect x="{x}" y="{label_height}" width="{cell_width}" height="{bar_height}" fill="transparent"/>')
 
-    html_parts.append('</div>')  # end columns
+        # The bar
+        svg_parts.append(f'<rect x="{x}" y="{rect_y:.4f}" width="{cell_width}" height="{rect_h:.4f}" fill="{color}"/>')
 
-    html_parts.append('</div>')  # end chart-container
+        # Year labels at top and bottom
+        if year % year_label_interval == 0:
+            text_x = x + cell_width / 2
+            svg_parts.append(f'<text x="{text_x:.1f}" y="{label_height - 5}" text-anchor="middle" font-size="10" font-family="JetBrains Mono, monospace" fill="#666">{year}</text>')
+            svg_parts.append(f'<text x="{text_x:.1f}" y="{label_height + bar_height + 14}" text-anchor="middle" font-size="10" font-family="JetBrains Mono, monospace" fill="#666">{year}</text>')
+
+        svg_parts.append('</g>')
+
+    svg_parts.append('</svg>')
+    html_parts.append('\n'.join(svg_parts))
+
     html_parts.append('</div>')  # end graph-section
 
     # Info section (right side) - container for tooltip display
@@ -267,12 +248,11 @@ a {{ color: #666; }}
     # JavaScript to display info in right column on hover
     js_code = '''
 <script>
-document.querySelectorAll('.col').forEach(col => {
-    const info = col.querySelector('.info');
+document.querySelectorAll('g.col').forEach(col => {
     const display = document.getElementById('info-display');
-    if (info && display) {
+    if (display) {
         col.addEventListener('mouseenter', () => {
-            display.innerHTML = info.innerHTML;
+            display.innerHTML = col.dataset.info;
         });
         col.addEventListener('mouseleave', () => {
             display.innerHTML = '';
@@ -291,7 +271,7 @@ document.querySelectorAll('.col').forEach(col => {
 
 def main():
     """Fonction principale"""
-    print("Génération de l'histogramme en Block Elements...")
+    print("Génération de l'histogramme SVG...")
 
     script_dir = Path(__file__).parent
     data_file = script_dir.parent / 'docs' / 'data' / 'codes_data.json'
