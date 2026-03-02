@@ -54,7 +54,10 @@ class ForgejoAPIClient:
             url = f"{self.BASE_URL}/orgs/codes/repos?limit=50&page={page}"
             repos = self._make_request(url)
 
-            if not repos:
+            if repos is None:
+                print(f"  ❌ Échec de la requête pour la page {page} — abandon")
+                sys.exit(1)
+            if not repos:  # empty list = no more pages
                 break
 
             all_repos.extend(repos)
@@ -64,8 +67,8 @@ class ForgejoAPIClient:
         print(f"✅ {len(all_repos)} codes législatifs trouvés\n")
         return all_repos
 
-    def fetch_repo_commits(self, repo_name: str) -> List[Dict]:
-        """Récupère tous les commits d'un dépôt"""
+    def fetch_repo_commits(self, repo_name: str) -> Optional[List[Dict]]:
+        """Récupère tous les commits d'un dépôt. Retourne None si une page échoue."""
         all_commits = []
         page = 1
 
@@ -73,7 +76,10 @@ class ForgejoAPIClient:
             url = f"{self.BASE_URL}/repos/codes/{repo_name}/commits?limit=100&page={page}"
             commits = self._make_request(url)
 
-            if not commits:
+            if commits is None:
+                # Network failure mid-pagination: returning partial data would be silently wrong
+                return None
+            if not commits:  # empty list = no more pages
                 break
 
             all_commits.extend(commits)
@@ -212,6 +218,9 @@ def main():
         print(f"  [{i}/{len(repos)}] {repo.get('description', repo_name)}...", end=' ')
 
         commits = client.fetch_repo_commits(repo_name)
+        if commits is None:
+            print(f"✗ Échec — abandon")
+            sys.exit(1)
         commits_by_repo[repo_name] = commits
 
         print(f"✓ {len(commits)} commits")
