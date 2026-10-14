@@ -10,7 +10,7 @@ from unittest.mock import MagicMock, patch
 
 # Allow importing from the scripts directory
 sys.path.insert(0, str(Path(__file__).parent.parent / 'scripts'))
-from fetch_codes_data import DataProcessor, ForgejoAPIClient  # noqa: E402
+from fetch_codes_data import DataProcessor, ForgejoAPIClient, without_empty_repos  # noqa: E402
 
 
 # ---------------------------------------------------------------------------
@@ -285,6 +285,22 @@ class TestFetchRepoCommits(unittest.TestCase):
         client._make_request = MagicMock(return_value=[])
         result = client.fetch_repo_commits('code-civil')
         self.assertEqual(result, [])
+
+
+class TestWithoutEmptyRepos(unittest.TestCase):
+
+    def test_empty_repos_are_dropped(self):
+        repos = [
+            dict(_make_repo(name='code-civil'), empty=False),
+            dict(_make_repo(name='code-de-procedure-civile-1807'), empty=True),
+        ]
+        with patch('builtins.print'):
+            kept = without_empty_repos(repos)
+        self.assertEqual([repo['name'] for repo in kept], ['code-civil'])
+
+    def test_repos_without_empty_field_are_kept(self):
+        repos = [_make_repo(name='code-civil')]
+        self.assertEqual(without_empty_repos(repos), repos)
 
 
 if __name__ == '__main__':
