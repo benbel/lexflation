@@ -23,3 +23,7 @@ env/
 # OS
 .DS_Store
 Thumbs.db
+
+# Produits par run.sh, publiés par la CI
+docs/index.html
+docs/data/

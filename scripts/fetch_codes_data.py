@@ -187,6 +187,14 @@ class DataProcessor:
         }
 
 
+def without_empty_repos(repos: List[Dict]) -> List[Dict]:
+    """Écarte les dépôts vides, pour lesquels Forgejo répond 409 à la liste des commits"""
+    empty_names = [repo['name'] for repo in repos if repo.get('empty')]
+    if empty_names:
+        print(f"⏭️  Dépôts vides ignorés : {', '.join(empty_names)}\n")
+    return [repo for repo in repos if not repo.get('empty')]
+
+
 def main():
     """Fonction principale"""
     print("=" * 60)
@@ -203,6 +211,8 @@ def main():
     if not repos:
         print("❌ Aucun dépôt trouvé")
         sys.exit(1)
+
+    repos = without_empty_repos(repos)
 
     # Option: limiter aux N premiers codes pour les tests
     # Décommenter la ligne suivante pour tester avec 5 codes
